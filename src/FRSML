@@ -1,0 +1,32 @@
+#pragma once
+
+#include "Config.h"
+
+#ifdef INCLUDE_CPUID
+    #include "CPUId.h"
+#endif
+
+#include "FRSVar.h"
+#include "AssertSSE.h"
+#include "Vector4i.h"
+#include "Vector4f.h"
+#include "VectorAnt.h"
+#include "StandardMathSSE4.h"
+#include "Matrix4x4.h"
+
+
+#ifdef _WIN32
+	#ifdef FRSML_EXPORTS_EXPORTS
+		#define TFAPI __declspec(dllexport)
+	#else
+		#define TFAPI __declspec(dllimport)
+	#endif
+#endif
+
+#ifdef INCLUDE_CPUID
+    bool CheckLibSupport() {
+	if (!CPUID::FRS_SSE41) { return false; }
+	return true;
+}
+#endif
+

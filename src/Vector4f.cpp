@@ -1,0 +1,92 @@
+#include "Vector4f.h"
+
+namespace FRSML {
+
+		vec4::vec4(float ant) {
+			mainVec = _mm_set_ps1(ant);
+
+		}
+
+		vec4::vec4(float x, float y, float z, float w) {
+			mainVec = _mm_set_ps(x, y, z, w);
+		}
+
+		__m128 &vec4::MainVector() {
+			return mainVec;
+		}
+
+		vec4::vec4(__m128 _set) {
+			mainVec = _set;
+		}
+
+		void vec4::operator =(vec4 ant) {
+			mainVec = ant.mainVec;
+		}
+
+		bool vec4::operator ==(vec4 ant) {
+			__m128 _eua = _mm_cmpeq_ps(this->mainVec, ant.mainVec);
+			return _mm_movemask_ps(_eua);
+		}
+
+		vec4 vec4::operator +(vec4 ant) {
+			return vec4(_mm_add_ps(this->mainVec, ant.mainVec));
+		}
+
+
+		vec4 vec4::operator -(vec4 ant) {
+			return vec4(_mm_sub_ps(this->mainVec, ant.mainVec));
+		}
+
+		vec4 vec4::operator *(vec4 ant) {
+			return vec4(_mm_mul_ps(this->mainVec, ant.mainVec));
+		}
+
+		vec4 vec4::operator /(vec4 ant) {
+			return vec4(_mm_div_ps(this->mainVec, ant.mainVec));
+		}
+
+		vec4 vec4::operator +(float ant) {
+			return vec4(_mm_add_ps(this->mainVec, _mm_set1_ps(ant)));
+		}
+
+		vec4 vec4::operator -(float ant) {
+			return vec4(_mm_sub_ps(this->mainVec, _mm_set1_ps(ant)));
+		}
+
+		vec4 vec4::operator *(float ant) {
+			return vec4(_mm_mul_ps(this->mainVec, _mm_set1_ps(ant)));
+		}
+
+		vec4 vec4::operator /(float ant) {
+			return vec4(_mm_div_ps(this->mainVec, _mm_set1_ps(ant)));
+		}
+
+		float vec4::X() {
+			return mainVec.m128_f32[3];
+		}
+
+		float vec4::Y() {
+			return mainVec.m128_f32[2];
+		}
+
+		float vec4::Z() {
+			return mainVec.m128_f32[1];
+		}
+
+		float vec4::W() {
+			return mainVec.m128_f32[0];
+		}
+
+		float vec4::Length() {
+			return _mm_cvtss_f32(_mm_sqrt_ss(_mm_dp_ps(mainVec, mainVec, 0xF1)));
+		}
+
+		vec4 vec4::Normalize() {
+			__m128 inverse_normalize = _mm_rsqrt_ps(_mm_dp_ps(mainVec, mainVec, 0xFF));
+			return vec4(_mm_mul_ps(mainVec, inverse_normalize));
+		}
+
+		vec4::vec4(float* as) {
+			this->mainVec = _mm_load_ps(as);
+		}
+}

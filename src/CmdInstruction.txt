@@ -1,0 +1,45 @@
+1. bool CPUID::HasCPUDetectionStarted() 
+- Check if CPU detection whether has been started, to check information about
+CPU extensions
+
+2. void CPUID::StartDetectCPUFeaturesAndExtensions()
+- Start check CPU extensions
+
+- All extensions check in CPUID:
+static bool FRS_MMX;
+	static bool FRS_x64;
+	static bool FRS_ABM;
+	static bool FRS_RDRAND;
+	static bool FRS_BMI1;
+	static bool FRS_BMI2;
+	static bool FRS_ADX;
+	static bool FRS_PREFETCHWT1;
+
+	static bool FRS_SSE;
+	static bool FRS_SSE2;
+	static bool FRS_SSE3;
+	static bool FRS_SSSE3;
+	static bool FRS_SSE41;
+	static bool FRS_SSE42;
+	static bool FRS_SSE4A;
+	static bool FRS_AES;
+	static bool FRS_SHA;
+
+	static bool FRS_AVX;
+	static bool FRS_XOP;
+	static bool FRS_FMA3;
+	static bool FRS_FMA4;
+	static bool FRS_AVX2;
+
+	static bool FRS_AVX512F;
+	static bool FRS_AVX512CD;
+	static bool FRS_AVX512PF;
+	static bool FRS_AVX512ER;
+	static bool FRS_AVX512VL;
+	static bool FRS_AVX512BW;
+	static bool FRS_AVX512DQ;
+	static bool FRS_AVX512IFMA;
+	static bool FRS_AVX512VBMI;
+
+3. bool CheckLibSupport()
+- Check if SSE4 lib section support or not
