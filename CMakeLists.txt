@@ -24,6 +24,7 @@ project (FRSML)
 
 set (FRSML_VERSION_MAJOR_PUBLIC 1)
 set (FRSML_VERSION_MINOR_PUBLIC 0)
+set (FRSML_WORKINGCODE 2017212104_V5_36)
 
 message(STATUS "Starting generated projekt")
 
