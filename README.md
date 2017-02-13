@@ -6,7 +6,7 @@ A small linear math library using SSE4 technology and upper.
 
 | Complier      | Architecture       
 | ------------- |:-------------:   
-| MSVC2015      | x86_x64
+| MSVC2015      | x86_64
 | MinGW         | -
 | GCC           | -
 | Clang         | -
