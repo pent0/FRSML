@@ -48,6 +48,9 @@ A small linear math library using SSE4 technology and upper.
              
       >I don't know if CMake have a gui version on linuxz, but probally it does.
              
+ - Using the library
+ 
+     + Link the library with the project you like, and take all the headers in the src file to work with. I'm sorry, this is uncomfortable, but I'm having a plan to move the FRSML header to only one file in the end of the Febuary.
    
   ###WISH SOMEONE CAN CONTRIBUTE WITH ME. IF GIVE ME SOME ISSUE BENTOKUN NEED ERRORS AND BUGS TO SMASH.
      + I mean if you want to contribute, hit me up with something (pull request, maybe?). And bentokun sorry, bentokun don't speak English.
