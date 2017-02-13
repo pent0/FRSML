@@ -60,6 +60,19 @@ namespace FRSML {
 
 	namespace nmmintrin {
 
+		__m128 _Pow(__m128 x, __m128 y) {
+
+			__m128 tmp = nmmintrin::_Log(x);
+			__m128 tmp2 = _mm_mul_ss(x, y);
+
+			__m128d result = _mm_cvtss_sd(result, tmp2);
+			result = nmmintrin::_Exp(result);
+
+			__m128 result2 = _mm_cvtsd_ss(result2, result);
+
+			return result2;
+		}
+
 		//Use fast convert, may leak mem
 		//Conversation take from grunttthepeon.
 		__m128 _Log(__m128 _para) {
@@ -247,7 +260,7 @@ namespace FRSML {
 				t3 = _mm_add_ps(t3, t5);
 			}
 
-			FRSML_ASSERT_WV(-PI < t3.m128_f32[0] < PI, "THE BALANCED VALUE IS OUT OF RANGE", t3.m128_f32[0], 0);
+			FRSML_ASSERT_WV(-PI > t3.m128_f32[0] || t3.m128_f32[0]> PI, "THE BALANCED VALUE IS OUT OF RANGE", t3.m128_f32[0], 0);
 			return t3;
 		}
 
@@ -626,6 +639,7 @@ namespace FRSML {
 
 		return _mm_cvtss_f32(tmp);
 	}
+
 
 	float Pow(float x, float y) {
 		__m128 tmp = _mm_set_ss(x);

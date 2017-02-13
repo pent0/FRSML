@@ -7,7 +7,6 @@ set(HEADERS
 	FRSML
 	FRSVar.h
 	Matrix4x4.h
-	Quaternion.h
 	QuickMathSSE4.h
 	StandardMathSSE4.h
 	Vector4f.h
@@ -17,7 +16,6 @@ set(HEADERS
 set(SRCS
 	FRSVar.cpp
 	Matrix4x4.cpp
-	Quaternion.cpp
 	QuickMathSSE4.cpp
 	StandardMathSSE4.cpp
 	Vector4f.cpp
@@ -27,6 +25,11 @@ set(SRCS
 if (INCLUDE_CPUID)
 	set (SRCS ${SRCS}
 		CPUId.cpp)
+endif()
+
+if (DEBUG_FEAUTURE)
+	set (HEADERS ${HEADERS} Quaternion.h)
+	set (SRCS ${SRCS} Quaternion.cpp)
 endif()
 
 add_library(FRSML MODULE ${SRCS} ${HEADERS})

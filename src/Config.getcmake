@@ -4,4 +4,3 @@
 #define FRSML_VERSION_CODE @FRSML_WORKINGCODE@
 
 #cmakedefine INCLUDE_CPUID
-

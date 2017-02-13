@@ -4,6 +4,9 @@
 
 #ifdef INCLUDE_CPUID
     #include "CPUId.h"
+#else
+#ifdef _FRSML_SSE4_DEBUG
+	#include "Quaternion.h"
 #endif
 
 #include "FRSVar.h"
@@ -13,6 +16,7 @@
 #include "VectorAnt.h"
 #include "StandardMathSSE4.h"
 #include "Matrix4x4.h"
+#include "Quaternion.h"
 
 
 #ifdef _WIN32

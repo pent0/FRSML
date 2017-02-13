@@ -1,6 +1,7 @@
 #pragma once
 
 #include <smmintrin.h>
+#include <iostream>
 
 #include "FRSVar.h"
 #include "Vector4f.h"
@@ -18,11 +19,8 @@ namespace FRSML {
 		bool IsMatrixIndentiy();
 
 	
-
 		Matrix4 Transpose();
 		float Determinant();
-
-		
 
 		//Wrapper to return the member number of Matrix
 		struct Matrix4Proxy
@@ -75,4 +73,7 @@ namespace FRSML {
 	};
 
 	static Matrix4 ZeroMatrix = Matrix4{ 0.0f };
+
+
+	TFAPI std::ostream& operator <<(std::ostream&, Matrix4);
 };

@@ -362,6 +362,15 @@ namespace FRSML {
 		return Matrix4(cols[0], cols[1], cols[2], cols[3]);
 	}
 
+	std::ostream& operator <<(std::ostream& stream, Matrix4 matrix) {
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < 4; j++)
+				stream << matrix[i][j] << " ";
+			stream << "/n";
+		}
+
+		return stream;
+	}
 
 	Matrix4 Matrix4::operator +(Matrix4 _para) {
 		Matrix4 temp;
