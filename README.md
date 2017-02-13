@@ -49,8 +49,8 @@ A small linear math library using SSE4 technology and upper.
       >I don't know if CMake have a gui version on linuxz, but probally it does.
              
    
-  ###WISH SOMEONE CAN CONTRIBUTE WITH ME. IF GIVE ME SOME ISSUE BENTOCHAN NEED ERRORS AND BUGS TO SMASH.
-     + I mean if you want to contribute, hit me up with something (pull request, maybe?)
+  ###WISH SOMEONE CAN CONTRIBUTE WITH ME. IF GIVE ME SOME ISSUE BENTOKUN NEED ERRORS AND BUGS TO SMASH.
+     + I mean if you want to contribute, hit me up with something (pull request, maybe?). And bentokun sorry, bentokun don't speak English.
               
       
                      
