@@ -1,26 +1,16 @@
-cmake_minimum_required (VERSION 3.2)
+cmake_minimum_required (VERSION 3.2 FATAL_ERROR)
 
-include(CheckSymbolExists)
+set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
-function(detect_architecture symbol arch)
-	if (NOT DEFINED ARCHITECTURE)
-		set(CMAKE_REQUIRED_QUIET 1)
-		check_symbol_exists("${symbol}" "" ARCHITECTURE_${arch})
-		unset(CMAKE_REQUIRED_QUIET)
-	
-
-		if (ARCHITECTURE_${arch})
-			set(ARCHITECTURE "${arch}" PARENT_SCOPE)
-			set(ARCHITECTURE_${arch} 1 PARENT_SCOPE)
-			add_definitions(-DARCHITECTURE_${arch}=1)
-
-		endif()
-
-	endif()
-
-endfunction()
+message(STATUS "Authors IDE is VS2017-RC")
 
 project (FRSML)
+
+set(CMAKE_CXX_STANDARD 14)
+
+message(STATUS "Loading include file!!")
+
+include (ComplierTarget)
 
 set (FRSML_VERSION_MAJOR_PUBLIC 1)
 set (FRSML_VERSION_MINOR_PUBLIC 0)
@@ -33,9 +23,9 @@ configure_file(
 	"${PROJECT_BINARY_DIR}/src/Config.h")
 
 option(INCLUDE_CPUID "Include CPUID file" ON)
-option(INCLUDE_ASSERTCHECK "Include Assert check, if you like wink wink" ON)
+option(DEBUG_FEAUTURE "Include debug feautures, if you like wink wink" ON)
 
-if (INCLUDE_ASSERTCHECK)
+if (DEBUG_FEAUTURE)
 	add_definitions(-D_FRSML_SSE4_DEBUG)
 endif()
 
@@ -55,8 +45,10 @@ if (NOT DEFINED ARCHITECTURE)
 	add_definitions(-DARCHITECTURE_GENERIC = 1)
 endif()
 
-message(STATUS "The target architure going to is: ${ARCHITECTURE}")
+if (DEFINED ARCHITURE_x86)
+	message(WARNING "x86 version hadn't been revised yet!")
+endif()
 
-set(CMAKE_CXX_STANDARD 14)
+message(STATUS "The target architure going to is: ${ARCHITECTURE}")
 
 add_subdirectory (src)
