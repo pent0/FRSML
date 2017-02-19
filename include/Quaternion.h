@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../include/Config.h"
+#include "Config.h"
 #include <smmintrin.h>
-#include "Matrix4x4.h"
+#include "FMatrix4x4.h"
 #include "Standard.h"
 
 namespace FRSML {
@@ -19,7 +19,7 @@ namespace FRSML {
 			mainQuat = quatVal;
 		}
 		
-#ifdef _FRSML_SSE4_DEBUG
+
 		operator Matrix4() {
 			Quaternion tmp = Normalize();
 			__m128 quatX = _mm_shuffle_ps(mainQuat, mainQuat, _MM_SHUFFLE(2, 2, 2, 2));
@@ -116,11 +116,7 @@ namespace FRSML {
 
 			
 		}
-#endif
 
-		__m128& MainQuat() {
-			return mainQuat;
-		}
 
 		float& X(); float& Y(); float& Z(); float& W();
 
@@ -138,9 +134,11 @@ namespace FRSML {
 		__m128 mainQuat;
 	};
 
-	//Get the dot product of two quat
+
+	//Get the dot product of two Quaternion
 	TFAPI Quaternion Dot(Quaternion _para1, Quaternion _para2);
 
-	//Get the angle create between two vec4
+	//Get the angle create between two Quaternion
 	TFAPI Quaternion Angle(Quaternion _para1, Quaternion _para2);
+
 }

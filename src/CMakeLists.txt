@@ -2,31 +2,28 @@ include_directories("${PROJECT_SOURCE_DIR}/src")
 
 set(HEADERS
 	AssertSSE.h
-	Config.h
 	CPUId.h
-	FRSML
 	FRSVar.h
 	Matrix4x4.h
-	QuickMathSSE4.h
-	StandardMathSSE4.h
-	Vector4f.h
-	Vector4i.h
-	VectorAnt.h)
+	Standard.h
+	Vector.h)
 
 set(SRCS
 	FRSVar.cpp
 	Matrix4x4.cpp
-	QuickMathSSE4.cpp
-	StandardMathSSE4.cpp
+	Standard.cpp
 	Vector4f.cpp
 	Vector4i.cpp
-	VectorAnt.cpp)
+	Vector3.cpp
+	Vector2.cpp)
 
 if (INCLUDE_CPUID)
 	set (SRCS ${SRCS}
 		CPUId.cpp)
 endif()
 
+#Quaternion havent suitable yet
+#I still need to revise the euler things
 if (DEBUG_FEAUTURE)
 	set (HEADERS ${HEADERS} Quaternion.h)
 	set (SRCS ${SRCS} Quaternion.cpp)

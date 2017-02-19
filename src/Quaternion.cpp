@@ -10,7 +10,7 @@ namespace FRSML {
 		return Quaternion(_mm_add_ps(this->mainQuat, tar1.mainQuat));
 	}
 
-	Quaternion Quaternion::CreateQuat(vec3 euler) {
+	Quaternion Quaternion::Euler(vec3 euler) {
 
 		//return (float)(FRS_float(radians)*HALFWISEANGLE / PI)
 
@@ -53,7 +53,7 @@ namespace FRSML {
 		return Quaternion(x, y, z, w);
 	}
 
-	Quaternion Quaternion::CreateQuat(vec3 axis, float angle) {
+	Quaternion Quaternion::Rotate(vec3 axis, float angle) {
 		vec3 tmp = axis.Normalize();
 
 		__m128 tmp2 = (_mm_div_ps(_mm_set1_ps(angle), _mm_set1_ps(2)));
@@ -126,5 +126,16 @@ namespace FRSML {
 
 
 		return Quaternion(grand0);
+	}
+
+	Quaternion Dot(Quaternion _para1, Quaternion _para2) {
+		return  _mm_dp_ps(_para1.MainQuat(), _para2.MainQuat(), 0xFF);
+	}	
+	
+	Quaternion Angle(Quaternion _para1, Quaternion _para2) {
+		Quaternion _t1 = _para1.Normalize();
+		Quaternion _t2 = _para2.Normalize();
+		_t1 = Dot(_t1, _t2);
+		return nmmintrin::_Acos(_t1.MainQuat());
 	}
 }

@@ -1,31 +1,32 @@
 #include "Matrix4x4.h"
 
 namespace FRSML {
+
 	Matrix4::Matrix4(float* row1, float* row2, float* row3, float* row4) {
 		this->rows[0] = row1;
 		this->rows[1] = row2;
 		this->rows[2] = row3;
 		this->rows[3] = row4;
 
-		cols[0] = _mm_set_ps(_mm_extract_ps(this->rows[0].MainVector(), 3),
-			_mm_extract_ps(this->rows[1].MainVector(), 3),
-			_mm_extract_ps(this->rows[2].MainVector(), 3),
-			_mm_extract_ps(this->rows[3].MainVector(), 3));
+		cols[0] = _mm_set_ps(_mm_extract_psn(this->rows[0].MainVector(), 3),
+			_mm_extract_psn(this->rows[1].MainVector(), 3),
+			_mm_extract_psn(this->rows[2].MainVector(), 3),
+			_mm_extract_psn(this->rows[3].MainVector(), 3));
 
-		cols[1] = _mm_set_ps(_mm_extract_ps(this->rows[0].MainVector(), 2),
-			_mm_extract_ps(this->rows[1].MainVector(), 2),
-			_mm_extract_ps(this->rows[2].MainVector(), 2),
-			_mm_extract_ps(this->rows[3].MainVector(), 2));
+		cols[1] = _mm_set_ps(_mm_extract_psn(this->rows[0].MainVector(), 2),
+			_mm_extract_psn(this->rows[1].MainVector(), 2),
+			_mm_extract_psn(this->rows[2].MainVector(), 2),
+			_mm_extract_psn(this->rows[3].MainVector(), 2));
 
-		cols[2] = _mm_set_ps(_mm_extract_ps(this->rows[0].MainVector(), 1),
-			_mm_extract_ps(this->rows[1].MainVector(), 1),
-			_mm_extract_ps(this->rows[2].MainVector(), 1),
-			_mm_extract_ps(this->rows[3].MainVector(), 1));
+		cols[2] = _mm_set_ps(_mm_extract_psn(this->rows[0].MainVector(), 1),
+			_mm_extract_psn(this->rows[1].MainVector(), 1),
+			_mm_extract_psn(this->rows[2].MainVector(), 1),
+			_mm_extract_psn(this->rows[3].MainVector(), 1));
 
-		cols[3] = _mm_set_ps(_mm_extract_ps(this->rows[0].MainVector(), 0),
-			_mm_extract_ps(this->rows[1].MainVector(), 0),
-			_mm_extract_ps(this->rows[2].MainVector(), 0),
-			_mm_extract_ps(this->rows[3].MainVector(), 0));
+		cols[3] = _mm_set_ps(_mm_extract_psn(this->rows[0].MainVector(), 0),
+			_mm_extract_psn(this->rows[1].MainVector(), 0),
+			_mm_extract_psn(this->rows[2].MainVector(), 0),
+			_mm_extract_psn(this->rows[3].MainVector(), 0));
 
 	}
 
@@ -36,25 +37,25 @@ namespace FRSML {
 		this->rows[2] = content[2];
 		this->rows[3] = content[3];
 
-		cols[0] = _mm_set_ps(_mm_extract_ps(this->rows[0].MainVector(), 3),
-			_mm_extract_ps(this->rows[1].MainVector(), 3),
-			_mm_extract_ps(this->rows[2].MainVector(), 3),
-			_mm_extract_ps(this->rows[3].MainVector(), 3));
+		cols[0] = _mm_set_ps(_mm_extract_psn(this->rows[0].MainVector(), 3),
+			_mm_extract_psn(this->rows[1].MainVector(), 3),
+			_mm_extract_psn(this->rows[2].MainVector(), 3),
+			_mm_extract_psn(this->rows[3].MainVector(), 3));
 
-		cols[1] = _mm_set_ps(_mm_extract_ps(this->rows[0].MainVector(), 2),
-			_mm_extract_ps(this->rows[1].MainVector(), 2),
-			_mm_extract_ps(this->rows[2].MainVector(), 2),
-			_mm_extract_ps(this->rows[3].MainVector(), 2));
+		cols[1] = _mm_set_ps(_mm_extract_psn(this->rows[0].MainVector(), 2),
+			_mm_extract_psn(this->rows[1].MainVector(), 2),
+			_mm_extract_psn(this->rows[2].MainVector(), 2),
+			_mm_extract_psn(this->rows[3].MainVector(), 2));
 
-		cols[2] = _mm_set_ps(_mm_extract_ps(this->rows[0].MainVector(), 1),
-			_mm_extract_ps(this->rows[1].MainVector(), 1),
-			_mm_extract_ps(this->rows[2].MainVector(), 1),
-			_mm_extract_ps(this->rows[3].MainVector(), 1));
+		cols[2] = _mm_set_ps(_mm_extract_psn(this->rows[0].MainVector(), 1),
+			_mm_extract_psn(this->rows[1].MainVector(), 1),
+			_mm_extract_psn(this->rows[2].MainVector(), 1),
+			_mm_extract_psn(this->rows[3].MainVector(), 1));
 
-		cols[3] = _mm_set_ps(_mm_extract_ps(this->rows[0].MainVector(), 0),
-			_mm_extract_ps(this->rows[1].MainVector(), 0),
-			_mm_extract_ps(this->rows[2].MainVector(), 0),
-			_mm_extract_ps(this->rows[3].MainVector(), 0));
+		cols[3] = _mm_set_ps(_mm_extract_psn(this->rows[0].MainVector(), 0),
+			_mm_extract_psn(this->rows[1].MainVector(), 0),
+			_mm_extract_psn(this->rows[2].MainVector(), 0),
+			_mm_extract_psn(this->rows[3].MainVector(), 0));
 	}
 
 	Matrix4::Matrix4(float n ) {
@@ -63,25 +64,25 @@ namespace FRSML {
 		this->rows[2] = n;
 		this->rows[3] = n;
 
-		cols[0] = _mm_set_ps(_mm_extract_ps(this->rows[0].MainVector(), 3),
-			_mm_extract_ps(this->rows[1].MainVector(), 3),
-			_mm_extract_ps(this->rows[2].MainVector(), 3),
-			_mm_extract_ps(this->rows[3].MainVector(), 3));
+		cols[0] = _mm_set_ps(_mm_extract_psn(this->rows[0].MainVector(), 3),
+			_mm_extract_psn(this->rows[1].MainVector(), 3),
+			_mm_extract_psn(this->rows[2].MainVector(), 3),
+			_mm_extract_psn(this->rows[3].MainVector(), 3));
 
-		cols[1] = _mm_set_ps(_mm_extract_ps(this->rows[0].MainVector(), 2),
-			_mm_extract_ps(this->rows[1].MainVector(), 2),
-			_mm_extract_ps(this->rows[2].MainVector(), 2),
-			_mm_extract_ps(this->rows[3].MainVector(), 2));
+		cols[1] = _mm_set_ps(_mm_extract_psn(this->rows[0].MainVector(), 2),
+			_mm_extract_psn(this->rows[1].MainVector(), 2),
+			_mm_extract_psn(this->rows[2].MainVector(), 2),
+			_mm_extract_psn(this->rows[3].MainVector(), 2));
 
-		cols[2] = _mm_set_ps(_mm_extract_ps(this->rows[0].MainVector(), 1),
-			_mm_extract_ps(this->rows[1].MainVector(), 1),
-			_mm_extract_ps(this->rows[2].MainVector(), 1),
-			_mm_extract_ps(this->rows[3].MainVector(), 1));
+		cols[2] = _mm_set_ps(_mm_extract_psn(this->rows[0].MainVector(), 1),
+			_mm_extract_psn(this->rows[1].MainVector(), 1),
+			_mm_extract_psn(this->rows[2].MainVector(), 1),
+			_mm_extract_psn(this->rows[3].MainVector(), 1));
 
-		cols[3] = _mm_set_ps(_mm_extract_ps(this->rows[0].MainVector(), 0),
-			_mm_extract_ps(this->rows[1].MainVector(), 0),
-			_mm_extract_ps(this->rows[2].MainVector(), 0),
-			_mm_extract_ps(this->rows[3].MainVector(), 0));
+		cols[3] = _mm_set_ps(_mm_extract_psn(this->rows[0].MainVector(), 0),
+			_mm_extract_psn(this->rows[1].MainVector(), 0),
+			_mm_extract_psn(this->rows[2].MainVector(), 0),
+			_mm_extract_psn(this->rows[3].MainVector(), 0));
 	}
 
 	Matrix4::Matrix4(vec4 row1, vec4 row2, vec4 row3, vec4 row4) {
@@ -90,25 +91,25 @@ namespace FRSML {
 		this->rows[2] = row3;
 		this->rows[3] = row4;
 
-		cols[0] = _mm_set_ps(_mm_extract_ps(this->rows[0].MainVector(), 3),
-			_mm_extract_ps(this->rows[1].MainVector(), 3),
-			_mm_extract_ps(this->rows[2].MainVector(), 3),
-			_mm_extract_ps(this->rows[3].MainVector(), 3));
+		cols[0] = _mm_set_ps(_mm_extract_psn(this->rows[0].MainVector(), 3),
+			_mm_extract_psn(this->rows[1].MainVector(), 3),
+			_mm_extract_psn(this->rows[2].MainVector(), 3),
+			_mm_extract_psn(this->rows[3].MainVector(), 3));
 
-		cols[1] = _mm_set_ps(_mm_extract_ps(this->rows[0].MainVector(), 2),
-			_mm_extract_ps(this->rows[1].MainVector(), 2),
-			_mm_extract_ps(this->rows[2].MainVector(), 2),
-			_mm_extract_ps(this->rows[3].MainVector(), 2));
+		cols[1] = _mm_set_ps(_mm_extract_psn(this->rows[0].MainVector(), 2),
+			_mm_extract_psn(this->rows[1].MainVector(), 2),
+			_mm_extract_psn(this->rows[2].MainVector(), 2),
+			_mm_extract_psn(this->rows[3].MainVector(), 2));
 
-		cols[2] = _mm_set_ps(_mm_extract_ps(this->rows[0].MainVector(), 1),
-			_mm_extract_ps(this->rows[1].MainVector(), 1),
-			_mm_extract_ps(this->rows[2].MainVector(), 1),
-			_mm_extract_ps(this->rows[3].MainVector(), 1));
+		cols[2] = _mm_set_ps(_mm_extract_psn(this->rows[0].MainVector(), 1),
+			_mm_extract_psn(this->rows[1].MainVector(), 1),
+			_mm_extract_psn(this->rows[2].MainVector(), 1),
+			_mm_extract_psn(this->rows[3].MainVector(), 1));
 
-		cols[3] = _mm_set_ps(_mm_extract_ps(this->rows[0].MainVector(), 0),
-			_mm_extract_ps(this->rows[1].MainVector(), 0),
-			_mm_extract_ps(this->rows[2].MainVector(), 0),
-			_mm_extract_ps(this->rows[3].MainVector(), 0));
+		cols[3] = _mm_set_ps(_mm_extract_psn(this->rows[0].MainVector(), 0),
+			_mm_extract_psn(this->rows[1].MainVector(), 0),
+			_mm_extract_psn(this->rows[2].MainVector(), 0),
+			_mm_extract_psn(this->rows[3].MainVector(), 0));
 
 	}
 
@@ -122,7 +123,7 @@ namespace FRSML {
 		return false;
 	}
 
-	Matrix4 Matrix4::CreatePerspectiveMatrix(float zoom,
+	Matrix4 CreatePerspectiveMatrix(float zoom,
 		vec2 extent,
 		float zNear,
 		float zFar) {
@@ -136,29 +137,56 @@ namespace FRSML {
 		__m128 t4 = _mm_set1_ps(zFar);
 		__m128 t5 = _mm_sub_ps(t3, t4);
 
-		__m128 grand1 = _mm_div_ps(t0, _mm_mul_ps(t2, nmmintrin::_Tan(t1)));
-		__m128 grand2 = _mm_div_ps(t0, nmmintrin::_Tan(t1));
+		__m128 grand1 = _mm_div_ps(t0, nmmintrin::_Tan(t1));
+		__m128 grand2 = _mm_mul_ps(_mm_div_ps(t0, t2), grand1);
 
-		__m128 grand3 = _mm_sub_ps(_mm_set1_ps(0), _mm_add_ps(t4, t3));
-		grand3 = _mm_div_ps(grand3, t5);
+		__m128 grand3 = _mm_sub_ps(t4,t3);
+		grand3 = _mm_div_ps(t4,grand3);
 		
-		__m128 grand4 = _mm_mul_ps(_mm_set1_ps(2), _mm_mul_ps(t3, t4));
-		grand4 = _mm_div_ps(grand4, t5);
+		__m128 grand4 = _mm_sub_ps(t4,t3);
+		grand4 = _mm_div_ps(_mm_mul_ps(t4, _mm_mul_ps(_mm_set1_ps(-1), t3)), grand4);
 
-		float fn1 = _mm_extract_ps(grand1, 3);
-		float fn2 = _mm_extract_ps(grand2, 3);
-		float fn3 = _mm_extract_ps(grand3, 3);
-		float fn4 = _mm_extract_ps(grand4, 3);
+		float fn1 = _mm_extract_psn(grand1, 3);
+		float fn2 = _mm_extract_psn(grand2, 3);
+		float fn3 = _mm_extract_psn(grand3, 3);
+		float fn4 = _mm_extract_psn(grand4, 3);
 
 		return Matrix4{
 			{fn1,0,0,0},
 			{0,fn2,0,0},
-			{0,0,fn3,fn4},
-			{0,0,1,0}
+			{0,0,fn3,1},
+			{0,0,fn4,0}
 		};
 	}
 
-	Matrix4 Matrix4::CreateOrthoMatrix(float left,
+
+	Matrix4 LookAt(vec3 camPos, vec3 camTarget) {
+		//CamDirection equals to the z yaw.
+		vec3 camDir = (camTarget - camPos).Normalize();
+		//Cam roll - x
+		vec3 camRight = Cross(vec3::Up, camDir);
+		vec3 camUp = Cross(camDir, camRight);
+
+		vec4 row1{ camDir,0 };
+		vec4 row2{ camRight,0 };
+		vec4 row3{ camUp,0 };
+		vec4 row4{ 0,0,0,1 };
+
+		vec4 col1{ 1,0,0,0 };
+		vec4 col2{ 0,1,0,0 };
+		vec4 col3{ 0,0,1,0 };
+		vec4 col4{ camPos, -1 };
+
+		col4.MainVector() = _mm_sub_ps(_mm_set_ps1(0), col4.MainVector());
+
+		Matrix4 mat1{ row1,row2,row3,row4 };
+		Matrix4 mat2{ col1,col2,col3,col4 };
+		mat2 = mat2.Transpose();
+
+		return mat1*mat2;
+	}
+
+	Matrix4 CreateOrthoMatrix(float left,
 		float right, float bottom,
 		float top, float zNear, float zFar) {
 
@@ -178,8 +206,9 @@ namespace FRSML {
 
 	}
 
-	Matrix4 Matrix4::Inverse(Matrix4 protector) {
+	Matrix4 Matrix4::Inverse() {
 
+		Matrix4 protector = *this;
 		//I personally want to avoid loop in optimazation library
 		/*
 		
@@ -248,7 +277,12 @@ namespace FRSML {
 		
 		return identity; */
 		
-		Matrix4 identity = IndentityMatrix;
+		Matrix4 identity{
+			{1,0,0,0},
+			{0,1,0,0},
+			{0,0,1,0},
+			{0,0,0,1}
+		};
 
 #pragma region STEP1
 		__m128 t1 = _mm_shuffle_ps(protector.rows[0].MainVector(), protector.rows[0].MainVector(), _MM_SHUFFLE(3, 3, 3, 3));
@@ -328,7 +362,7 @@ namespace FRSML {
 	}
 
 	Matrix4 Matrix4::operator*(Matrix4 _para){
-		__m128 newRow[3];
+		__m128 newRow[4];
 
 		__m128 row1 = _para.rows[0].MainVector();
 		__m128 row2 = _para.rows[1].MainVector();
@@ -366,8 +400,10 @@ namespace FRSML {
 		for (int i = 0; i < 4; i++) {
 			for (int j = 0; j < 4; j++)
 				stream << matrix[i][j] << " ";
-			stream << "/n";
+			stream << "\n";
 		}
+
+		stream << "\n";
 
 		return stream;
 	}

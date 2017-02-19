@@ -13,17 +13,19 @@ message(STATUS "Loading include file!!")
 include (ComplierTarget)
 
 set (FRSML_VERSION_MAJOR_PUBLIC 1)
-set (FRSML_VERSION_MINOR_PUBLIC 1)
-set (FRSML_WORKINGCODE 2017213099_V5_72)
+set (FRSML_VERSION_MINOR_PUBLIC 2)
+set (FRSML_WORKINGCODE 2017021965M_V11_03)
 
 message(STATUS "Starting generated projekt")
 
 configure_file(
-	"${PROJECT_SOURCE_DIR}/src/Config.getcmake"
-	"${PROJECT_BINARY_DIR}/src/Config.h")
+	"${PROJECT_SOURCE_DIR}/include/Config.h.in"
+	"${PROJECT_BINARY_DIR}/include/Config.h")
 
 option(INCLUDE_CPUID "Include CPUID file" ON)
 option(DEBUG_FEAUTURE "Include debug feautures, if you like wink wink" ON)
+
+option(USE_DECREPATED "Use decrepated feautures" OFF)
 
 if (DEBUG_FEAUTURE)
 	add_definitions(-D_FRSML_SSE4_DEBUG)

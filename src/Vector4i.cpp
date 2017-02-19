@@ -1,4 +1,4 @@
-#include "Vector4i.h"
+#include "Vector.h"
 
 namespace FRSML {
 
@@ -13,9 +13,10 @@ namespace FRSML {
 		mainVec = _gene;
 	}
 
+	/*
 	vec4i::vec4i(FRS_int ant) {
 		mainVec = ant.MainNum();
-	}
+	}*/
 
 
 	vec4i::vec4i(int x, int y, int w, int z) {

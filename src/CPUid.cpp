@@ -1,4 +1,4 @@
-#include "CPUId.h"
+#include "CPUID.h"
 
 #pragma region _VAR_REDEFINITION
 

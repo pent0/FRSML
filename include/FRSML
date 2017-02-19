@@ -1,0 +1,18 @@
+#pragma once
+
+#include "Config.h"
+
+#ifdef INCLUDE_CPUID
+#include "CPUID.h"
+#endif
+
+#ifdef USE_DECREPATED
+#include "FRSVar.h"
+#endif
+
+#include "FMatrix4x4.h"
+#include "Standard.h"
+#include "Quaternion.h"
+#include "FVector.h"
+
+#include "AssertSSE.h"

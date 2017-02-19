@@ -1,7 +1,6 @@
 #include "FRSVar.h"
 #include "AssertSSE.h"
-#include "Vector4i.h"
-
+#include "Vector.h"
 
 FRS_float ConvertToFloat(FRS_int ant) {
 	__m128 temp = _mm_cvtepi32_ps(ant.MainNum());

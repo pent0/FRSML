@@ -1,6 +1,7 @@
-#include "Vector4f.h"
+#include "Vector.h"
 
 namespace FRSML {
+
 
 		vec4::vec4(float ant) {
 			mainVec = _mm_set_ps1(ant);
@@ -17,6 +18,17 @@ namespace FRSML {
 
 		vec4::vec4(__m128 _set) {
 			mainVec = _set;
+		}
+		
+		
+		vec4::vec4(vec3 _para, float _para2) {
+			__m128 tmp = _para.MainVector();
+			__m128 tmp2 = _mm_set_ps(_para2, 0, 0, 0);
+			tmp = _mm_xor_ps(tmp, tmp2);
+			tmp = _mm_shuffle_ps(tmp, tmp, _MM_SHUFFLE(2, 1, 0, 3));
+
+			mainVec = tmp;
+
 		}
 
 		void vec4::operator =(vec4 ant) {
