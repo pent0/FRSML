@@ -2,18 +2,6 @@
 
 A small linear math library using SSE4 technology and upper.
 
-###STATUS
-
-| Complier      | Architecture       
-| ------------- |:-------------:   
-| MSVC2015      | x86_64
-| MinGW         | -
-| GCC           | -
-| Clang         | -
-
- 
- 
-
 ##- What is FRSML
  
 ![alt tag](https://raw.githubusercontent.com/bentokun/FRSML/master/pupa.png)
@@ -53,7 +41,7 @@ A small linear math library using SSE4 technology and upper.
  
 ##- Using the library
  
-  + Link the library with the project you like, and take all the headers in the src file to work with. I'm sorry, this is uncomfortable, but I'm having a plan to move the FRSML header to only one file in the end of the Febuary.
+  + Link the library with the project you like, and take all the headers in the include folder to work with.
    
 ****************
 ##WISH SOMEONE CAN CONTRIBUTE WITH ME. IF GIVE ME SOME ISSUE BENTOKUN NEED ERRORS AND BUGS TO SMASH.
