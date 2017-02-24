@@ -30,7 +30,7 @@
         <FormatVersion Value="1"/>
       </local>
     </RunParams>
-    <Units Count="2">
+    <Units Count="6">
       <Unit0>
         <Filename Value="FRSML.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -40,6 +40,25 @@
         <Filename Value="src\vector.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit1>
+      <Unit2>
+        <Filename Value="src\standard.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="Standard"/>
+      </Unit2>
+      <Unit3>
+        <Filename Value="src\matrix4.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="matrix4x4"/>
+      </Unit3>
+      <Unit4>
+        <Filename Value="src\matrix.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="Matrix"/>
+      </Unit4>
+      <Unit5>
+        <Filename Value="src\nmmintrin.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit5>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -53,6 +72,9 @@
       <OtherUnitFiles Value="src"/>
       <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
+    <Parsing>
+      <Style Value="1"/>
+    </Parsing>
   </CompilerOptions>
   <Debugging>
     <Exceptions Count="3">

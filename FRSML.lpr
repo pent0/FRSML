@@ -6,7 +6,7 @@ uses
   {$IFDEF UNIX}{$IFDEF UseCThreads}
   cthreads,
   {$ENDIF}{$ENDIF}
-  Classes, SysUtils, CustApp, vector;
+  Classes, SysUtils, CustApp, vector, Standard, nmmintrin;
   { you can add units after this }
 
 type
@@ -28,8 +28,7 @@ type
 procedure FRSML.DoRun;
 var
   ErrorMsg: String;
-  t, t2: Tvec2;
-
+  t2, t3: floatp4;
 begin
 
   // quick check parameters
@@ -48,15 +47,21 @@ begin
   end;
 
   { add your program here }
-  t := Tvec2.Create(3,4);
-  t2 := Tvec2.Create(4,9);
+  //t := Tvec3.Create(3,4,5);
 
+  //t1:= Tvec2.Create;
+  //t1:= Reflect(vec2(0,87),vec2(5,7));
 
-  writeln(t.Length:0:4,' ');
+  t2:= set_floatp4(1,2,3,4);
+  t3:= set_floatp4(2,3,4,5);
 
-  t :=t+t2;
+  t2:= t2 + t3;
+  t2:= t2 - t3;
 
-  writeln(t.X:0:4, ' ', t.Y:0:4);
+  writeln(t2.n0);
+
+  //writeln(t1.X:0:4, ' ', t1.Y:0:4,' ',t1.Z:0:4);
+  //writeln(t1.X:0:4,' ',t1.Y:0:4);
   readln;
 
   // stop program loop
