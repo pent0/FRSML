@@ -7,6 +7,9 @@ A small linear math library using SSE4 technology and upper.
  
  23-2-2017 5:34 PM
     Basic Vector complete.
+    
+ 2-3-2108 7:24 PM
+    Intended 1 finish.
 
 ##- What is FRSML
  
