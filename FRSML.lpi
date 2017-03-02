@@ -37,26 +37,26 @@
         <UnitName Value="FRSMLO"/>
       </Unit0>
       <Unit1>
-        <Filename Value="src\vector.pas"/>
+        <Filename Value="objpas\vector.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit1>
       <Unit2>
-        <Filename Value="src\standard.pas"/>
+        <Filename Value="objpas\standard.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="Standard"/>
       </Unit2>
       <Unit3>
-        <Filename Value="src\matrix4.pas"/>
+        <Filename Value="objpas\matrix4.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="matrix4x4"/>
       </Unit3>
       <Unit4>
-        <Filename Value="src\matrix.pas"/>
+        <Filename Value="objpas\matrix.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="Matrix"/>
       </Unit4>
       <Unit5>
-        <Filename Value="src\nmmintrin.pas"/>
+        <Filename Value="objpas\SSE42.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit5>
     </Units>
