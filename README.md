@@ -11,7 +11,7 @@ A small linear math library using SSE4 technology and upper.
 
 **************************
 
-## Example code in C++:
+## Example code in C++
 
 ```C++
 std::cout << "FRSML Vulkan Math Library ~_^" << std::endl;
@@ -65,6 +65,8 @@ std::cout << "FRSML Vulkan Math Library ~_^" << std::endl;
 		<< "of y mag in two surface are the same, bentokun said ^-^)" << std::endl;
 ```
 
+ **************************
+ 
 ## Example code in Pascal (not finished)
 
 ```pascal
@@ -79,11 +81,15 @@ std::cout << "FRSML Vulkan Math Library ~_^" << std::endl;
 	end.
 ```
 
+ **************************
+
 # NEWS:
 
 A branch contains Pascal implementation of FRSML is available at the objfpc-FRSML branch. 
 
-## Build project:
+ **************************
+
+## Build project (C++):
 
   + Windows: Current solution
     
@@ -112,12 +118,16 @@ A branch contains Pascal implementation of FRSML is available at the objfpc-FRSM
    
  **************************
  
-##- Using the library
+## Building the library (Pascal)
+
+- You don't have to build it in Pascal, just use it right away like you should in C#. Making a library in Pascal will only makes thing messier.
+ 
+## Using the library
  
   + Link the library with the project you like, and take all the headers in the include folder to work with.
    
 ****************
-##WISH SOMEONE CAN CONTRIBUTE WITH ME. IF GIVE ME SOME ISSUE BENTOKUN NEED ERRORS AND BUGS TO SMASH.
+## WISH SOMEONE CAN CONTRIBUTE WITH ME. IF GIVE ME SOME ISSUE BENTOKUN NEED ERRORS AND BUGS TO SMASH.
   + I mean if you want to contribute, hit me up with something (pull request, maybe?). And bentokun sorry, bentokun don't speak English.
               
       
