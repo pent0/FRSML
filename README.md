@@ -4,7 +4,8 @@ A small linear math library using SSE4 technology and upper.
 
 # NEWS:
 
-A branch contains Pascal implementation of FRSML is available at the objfpc-FRSML branch. 
+- Development of Pascal port delayed to 20/3/2017 or sooner
+- A branch contains Pascal implementation of FRSML is available at the objfpc-FRSML branch. 
 
 ##- What is FRSML
  
