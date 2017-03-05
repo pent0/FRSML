@@ -16,6 +16,11 @@ A small linear math library using SSE4 technology and upper.
 ```C++
 std::cout << "FRSML Vulkan Math Library ~_^" << std::endl;
 
+	FRSML::vec2 gltest{5.0f, 7.0f};
+
+       //Can be used with OpenGl
+       glUniform2fv(pos, 1, FRSML::value_ptr(gltest));
+
 	FRSML::Matrix4 mat{
 		{5,3,4,6},
 		{12,13,15,17},
@@ -58,13 +63,6 @@ std::cout << "FRSML Vulkan Math Library ~_^" << std::endl;
 	std::cout << "Reflect of vec is: " << vec.X() <<" "<< vec.Y()<<" " << vec.Z() << std::endl;
 	std::cout << "(The y value is reflect by 90 degrees, which means the length"
 		<< "of y mag in two surface are the same, bentokun said ^-^)" << std::endl;
-
-  FRSML::vec2 gltest{5.0f, 7.0f}
-
-  //Can be used with OpenGl
-  glUniform2fv(pos, 1, FRSML::value_ptr(gltest));
-
-	 std::getchar();
 ```
 
 
