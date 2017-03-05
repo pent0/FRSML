@@ -2,11 +2,7 @@
 
 A small linear math library using SSE4 technology and upper.
 
-# NEWS:
-
-A branch contains Pascal implementation of FRSML is available at the objfpc-FRSML branch. 
-
-##- What is FRSML
+## What is FRSML
  
 ![alt tag](https://raw.githubusercontent.com/bentokun/FRSML/master/pupa.png)
 >I'm sorry
@@ -15,7 +11,68 @@ A branch contains Pascal implementation of FRSML is available at the objfpc-FRSM
 
 **************************
 
-##- Build project:
+## Example code:
+
+```C++
+std::cout << "FRSML Vulkan Math Library ~_^" << std::endl;
+
+	FRSML::Matrix4 mat{
+		{5,3,4,6},
+		{12,13,15,17},
+		{12,13,16,14},
+		{1,26,15,1}
+	};
+
+	FRSML::Matrix4 mat2{
+		{ 8,7,1,2 },
+		{ 2,9,1,7 },
+		{ 2,6,5,4 },
+		{ 4,7,5,3 }
+	};
+
+	FRSML::vec3 vec{
+		3,4,5
+	};
+
+	FRSML::vec4 vec2{ vec, 1.0f };
+
+	FRSML::Quaternion quat = FRSML::Quaternion::Rotate(FRSML::vec3(1, 1, 1), 90);
+
+	std::cout << "Determinant: " << mat.Determinant()<<"\n" << std::endl;
+	std::cout << "Quaternion" << "\n"<<quat << std::endl;
+	std::cout << "Perspective Matrix with Para: fov (zoom) = 45, aspect = 800/600, nad zNear and zFar betwwen 0 and 100" << std::endl;
+	std::cout << CreatePerspectiveMatrix(45, FRSML::vec2(800, 600), 0,100) <<std::endl;
+	std::cout << "Mul of mat1 and mat2" << std::endl;
+	std::cout << mat*mat2 << std::endl;
+	std::cout << "Inverse of mat1" << std::endl;
+	std::cout << mat.Inverse() << std::endl;
+	std::cout << "Transpose Matrix1: " << std::endl;
+	std::cout << mat.Transpose() << std::endl;
+	std::cout << vec2.X() << " " << vec2.Y() << " " << vec2.Z() << " " << vec2.W() << std::endl;
+	std::cout << "Vector Magnitude: " << vec.Length() << std::endl;
+	std::cout << "Log(10) is: " << FRSML::Log(10) << std::endl;
+	std::cout << "Log(10) in cmath: "<< log(10) << std::endl;
+
+	vec = FRSML::Reflect(vec, FRSML::vec3(0, 90, 0));
+
+	std::cout << "Reflect of vec is: " << vec.X() <<" "<< vec.Y()<<" " << vec.Z() << std::endl;
+	std::cout << "(The y value is reflect by 90 degrees, which means the length"
+		<< "of y mag in two surface are the same, bentokun said ^-^)" << std::endl;
+
+  FRSML::vec2 gltest{5.0f, 7.0f}
+
+  //Can be used with OpenGl
+  glUniform2fv(pos, 1, FRSML::value_ptr(gltest));
+
+	 std::getchar();
+```
+
+
+# NEWS:
+
+A branch contains Pascal implementation of FRSML is available at the objfpc-FRSML branch. 
+
+## Build project:
 
   + Windows: Current solution
     
