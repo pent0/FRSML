@@ -10,6 +10,14 @@ namespace FRSML {
 	vec2 vec2::Left = vec2(-1,0);
 	vec2 vec2::Right = vec2(1, 0);
 
+	float* value_ptr(vec2 vec) {
+		float* value;
+		value[0] = vec.X();
+		value[1] = vec.Y();
+		
+		return value;
+	}
+
 	float vec2::Length() {
 		//0x31 = 0011 0001
 		//0011 represents 0,0,x,y

@@ -72,6 +72,8 @@ namespace FRSML{
 		static vec2 Left;
 		static vec2 Right;
 
+		friend float* value_ptr(vec2 vec);
+
 		inline vec2 Normalize();
 
 	private:
@@ -154,7 +156,7 @@ namespace FRSML{
 		static vec3 Left;
 		static vec3 Right;
 
-
+		friend float* value_ptr(vec3 vec);
 		//@ Return the length of a Vector3 vec
 		//Using dot product with mask = 0x71 = 0111 0001, 
 		//we can dot 3 floats with themselves and put it in the lowest bit.
@@ -208,7 +210,7 @@ namespace FRSML{
 			*this = *this / ant;
 		}
 
-
+		friend float* value_ptr(vec4 vec);
 
 		float X();
 		float Y();
@@ -223,6 +225,7 @@ namespace FRSML{
 
 	};
 
+	/*Decrepated, but still in use*/
 	class TFAPI vec4i {
 	public:
 

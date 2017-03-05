@@ -111,4 +111,13 @@ namespace FRSML {
 	float& vec3::Z() {
 		return mainVec.m128_f32[0];
 	}
+
+	float* value_ptr(vec3 vec) {
+		float* value;
+		value[0] = vec.X();
+		value[1] = vec.Y();
+		value[2] = vec.Z();
+
+		return value;
+	}
 }

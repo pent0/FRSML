@@ -2,6 +2,15 @@
 
 namespace FRSML {
 
+		float* value_ptr(vec4 vec) {
+			float* value;
+			value[0] = vec.X();
+			value[1] = vec.Y();
+			value[2] = vec.Z();
+			value[3] = vec.W();
+
+			return value;
+		}
 
 		vec4::vec4(float ant) {
 			mainVec = _mm_set_ps1(ant);
