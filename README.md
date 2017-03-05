@@ -2,14 +2,9 @@
 
 A small linear math library using SSE4 technology and upper.
 
-- This branch:
- Contains new pascal header of the library. 
- 
- 23-2-2017 5:34 PM
-    Basic Vector complete.
-    
- 2-3-2108 7:24 PM
-    Intended 1 finish.
+# NEWS:
+
+A branch contains Pascal implementation of FRSML is available at the objfpc-FRSML branch. 
 
 ##- What is FRSML
  
@@ -35,9 +30,10 @@ A small linear math library using SSE4 technology and upper.
     
       * Open terminal and get to the directory of the git (downloaded, using cd)
       
-                - If you haven't download yet,
+                - If you haven't download yet, download git
                      : git clone --recursive https://github.com/bentokun/FRSML
                      : cd FRSML
+                - Or just download on github. 
                       
       * Make a folder to put the build result 
       * Using "cmake ." to generate the gcc project
