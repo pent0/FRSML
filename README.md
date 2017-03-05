@@ -76,7 +76,7 @@ std::cout << "FRSML Vulkan Math Library ~_^" << std::endl;
 	
 	begin
 		ex:= vec3(5,5);
-		ex:= ex.Cross(ex,ex);
+		ex:= Cross(ex,ex);
 		writeln(ex.X,' ',ex.Y,' ',ex.Z);
 	end.
 ```
