@@ -11,7 +11,7 @@ A small linear math library using SSE4 technology and upper.
 
 **************************
 
-## Example code:
+## Example code in C++:
 
 ```C++
 std::cout << "FRSML Vulkan Math Library ~_^" << std::endl;
@@ -65,6 +65,19 @@ std::cout << "FRSML Vulkan Math Library ~_^" << std::endl;
 		<< "of y mag in two surface are the same, bentokun said ^-^)" << std::endl;
 ```
 
+## Example code in Pascal (not finished)
+
+```pascal
+	uses Vector, Standard;
+	
+	var ex: TVec3;
+	
+	begin
+		ex:= vec3(5,5);
+		ex:= ex.Cross(ex,ex);
+		writeln(ex.X,' ',ex.Y,' ',ex.Z);
+	end.
+```
 
 # NEWS:
 
