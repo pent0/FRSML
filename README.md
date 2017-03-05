@@ -98,10 +98,14 @@ A branch contains Pascal implementation of FRSML is available at the objfpc-FRSM
              + Debug: using in-dev version of some headers and enable assert 
                     
       * Build the project as DLL
+      
+      * Or you could use MinGW. 
               
               
   + Unix:    
     
+      * Sponsor: Cmake Terminal and GCC
+      
       * Open terminal and get to the directory of the git (downloaded, using cd)
       
                 - If you haven't download yet, download git
@@ -113,8 +117,7 @@ A branch contains Pascal implementation of FRSML is available at the objfpc-FRSM
       * Using "cmake ." to generate the gcc project
       * Using "make" to complie gcc project
              
-      >I don't know if CMake have a gui version on linuxz, but probally it does.
-        
+      ~~>I don't know if CMake have a gui version on linuxz, but probally it does.~~      
    
  **************************
  
