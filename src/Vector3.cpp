@@ -6,8 +6,8 @@ namespace FRSML {
 	vec3 vec3::Forward = vec3(0, 0, 1);
 	vec3 vec3::Backward = vec3(0, 0, -1);
 	vec3 vec3::Up = vec3(0, 1, 0);
-	vec3 Left = vec3(-1, 0, 0);
-	vec3 Right = vec3(1, 0, 0);
+	vec3 vec3::Left = vec3(-1, 0, 0);
+	vec3 vec3::Right = vec3(1, 0, 0);
 
 
 	float vec3::Length() {

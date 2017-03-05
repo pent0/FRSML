@@ -9,6 +9,7 @@
 namespace FRSML {
 	class TFAPI Matrix4 {
 	public:
+
 		Matrix4(float** rowContent);
 		Matrix4(float* row1, float* row2, float* row3, float* row4);
 		Matrix4(float n = 0);
@@ -40,11 +41,26 @@ namespace FRSML {
 			return Matrix4Proxy(this, i);
 		}
 
+		friend Matrix4 Translate(Matrix4 base, vec3 trans);
+
+		//Rotate a matrix with axis
+		//You can use Quaternion instead. I'm also provide an converter of Euler vector
+		friend Matrix4 Rotate(Matrix4 base, float rot, vec3 dir);
+
+		friend Matrix4 Scale(Matrix4 base, float scale);
+
+		friend float** value_ptr(Matrix4 mat);
+
 		//Very sad that this method is o(n^3), but i can just understand this max.
 		Matrix4 Inverse();
 		
 		
 		inline Matrix4 operator *(Matrix4 _para);
+
+		inline void operator *= (Matrix4 _para) {
+			*this = *this*_para;
+		}
+
 		inline Matrix4 operator +(Matrix4 _para);
 		inline Matrix4 operator -(Matrix4 _para);
 
@@ -54,7 +70,6 @@ namespace FRSML {
 
 
 	};
-
 
 	static Matrix4 Identity{
 		{ 1,0,0,0 },
@@ -83,4 +98,8 @@ namespace FRSML {
 	TFAPI Matrix4 LookAt(vec3 camPos, vec3 camTarget);
 
 	TFAPI std::ostream& operator <<(std::ostream&, Matrix4);
+
+	
 };
+
+

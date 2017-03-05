@@ -206,6 +206,19 @@ namespace FRSML {
 
 	}
 
+	float** value_ptr(Matrix4 mat) {
+		float** valueptr;
+
+		for (short i = 0; i <= 3; i++) {
+			for (short j = 0; j <= 3; j++)
+			{
+				valueptr[i][j] = _mm_extract_psn(mat.rows[i].MainVector(), 3);
+			}
+		}
+
+		return valueptr;
+	}
+
 	Matrix4 Matrix4::Inverse() {
 
 		Matrix4 protector = *this;
@@ -483,4 +496,63 @@ namespace FRSML {
 
 		return _mm_cvtss_f32(m1);
 	}
+
+	Matrix4 Translate(Matrix4 base, vec3 trans) {
+		
+		Matrix4 temp = Identity;
+
+		temp.rows[0].W() = trans.X();
+		temp.rows[1].W() = trans.Y();
+		temp.rows[3].W() = trans.Z();
+
+		temp *= base;
+
+		return temp;
+	}
+
+	Matrix4 Rotate(Matrix4 base, float rot, vec3 dir) {
+
+		Matrix4 temp = Identity;
+
+		float t = Cos(rot);
+		float t2 = Sin(rot);
+
+		if (dir == vec3::Left) {
+			temp[2][2] = t;
+			temp[2][3] = -t2;
+			temp[3][2] = t2;
+			temp[3][3] = t;
+		}
+		else if (dir == vec3::Up) {
+			temp[1][1] = t;
+			temp[1][3] = t2;
+			temp[3][1] = -t2;
+			temp[3][3] = t;
+		}
+		else if (dir == vec3::Forward) {
+			temp[1][1] = t;
+			temp[1][2] = -t2;
+			temp[2][1] = t2;
+			temp[2][2] = t;
+		}
+
+		temp *= base;
+
+		return temp;
+
+	}
+
+	Matrix4 Scale(Matrix4 base, float scale) {
+
+		Matrix4 temp = Identity;
+
+		temp.rows[0].X() = scale;
+		temp.rows[1].Y() = scale;
+		temp.rows[3].Z() = scale;
+
+		temp *= base;
+
+		return temp;
+	}
+
 }
