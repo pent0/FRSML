@@ -14,12 +14,15 @@ A small linear math library using SSE4 technology and upper.
 ## Example code in C++
 
 ```C++
-std::cout << "FRSML Vulkan Math Library ~_^" << std::endl;
+	
+     #include <FRSML>
+	
+     std::cout << "FRSML Vulkan Math Library ~_^" << std::endl;
 
-	FRSML::vec2 gltest{5.0f, 7.0f};
+     FRSML::vec2 gltest{5.0f, 7.0f};
 
-       //Can be used with OpenGl
-       glUniform2fv(pos, 1, FRSML::value_ptr(gltest));
+     //Can be used with OpenGl
+     glUniform2fv(pos, 1, FRSML::value_ptr(gltest));
 
 	FRSML::Matrix4 mat{
 		{5,3,4,6},
