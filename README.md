@@ -128,6 +128,10 @@ A branch contains Pascal implementation of FRSML is available at the objfpc-FRSM
 ## Using the library
  
   + Link the library with the project you like, and take all the headers in the include folder to work with.
+  + Detail:
+      - Compile the project and link the library with the porject you want.
+      - Use the header "FRSML" in the include folder to interface with dll function
+      - Put the FRSML.dll in your executable folder or in System32 (if you are in Windows)
    
 ****************
 ## WISH SOMEONE CAN CONTRIBUTE WITH ME. IF GIVE ME SOME ISSUE BENTOKUN NEED ERRORS AND BUGS TO SMASH.
