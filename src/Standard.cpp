@@ -42,7 +42,7 @@ __m128 _mm_not_ps(__m128 _A) {
 }
 
 __m128i _mm_div_epi32(__m128i _para1, __m128i _para) {
-	int divisor = _mm_cvtss_f32(_mm_cvtepi32_ps(_para));
+	int divisor = (int)(_mm_cvtss_f32(_mm_cvtepi32_ps(_para)));
 	__m128i mt, m1, ms = {};
 	const int32_t divisorabs = (divisor < 0) ? -divisor : divisor;
 	int32_t sh, m;
@@ -260,6 +260,7 @@ namespace FRSML {
 			return _mm_cvtps_epi32(t2);
 		}
 
+
 		__m128 _Signf(__m128 _para) {
 			//return _mm_cvtepi32_ps(_mm_sign_epi32(_mm_set1_epi32(1), _mm_cvtps_epi32(_para)));
 			const __m128i MASK = _mm_set1_epi32(0xffffffff);
@@ -270,7 +271,8 @@ namespace FRSML {
 			__m128i i = _mm_castps_si128(f);
 			i = _mm_srai_epi32(i, 31); i = _mm_xor_si128(i, MASK);
 			f = _mm_cvtepi32_ps(i);
-			return _mm_mul_ps(f, _mm_set1_ps(1));
+
+			return _mm_mul_ps(f, _mm_set1_ps(-1));
 
 		}
 
