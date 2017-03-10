@@ -15,6 +15,8 @@ const PI = 3.14159265358979323846264338327950288;
 function TAbs(para: Tvec2): Tvec2;
 function TAbs(para2: Tvec3): Tvec3;
 
+procedure Register;
+
 function ClampLength(para: Tvec2; maxLength: real): Tvec2;
 function ClampLength(para: Tvec3; maxLength: real): Tvec3;
 
@@ -29,6 +31,11 @@ function Lerp(a, b: Tvec2; t: real): Tvec2;
 function Lerp(a,b: Tvec3; t:real): Tvec3;
 
 implementation
+
+       procedure Register;
+       begin
+
+       end;
 
      function ToRadians(Degrees: real): real;
      begin

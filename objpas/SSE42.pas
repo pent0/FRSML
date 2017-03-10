@@ -14,6 +14,7 @@ type
 
   TArr1Single = array[0..3] of Single;
   TArr1Word = array[0..3] of DWord;
+  TArr1Double = array[0..3] of Double;
 
   //Work like C++ header. Damn!
   //Also, unaligned.
@@ -60,6 +61,26 @@ type
 
   end;
 
+    doublep4 = class(TObject)
+    private
+        mainPack: TArr1Double;
+
+    public
+
+        class constructor Create;
+        constructor Crt5198(a: TArr1Double);
+
+        property ps: TArr1Double read mainPack write mainPack;
+
+        constructor v2(a,b,c,d: double);
+
+        property n0: double read mainPack[0] write mainPack[0];
+        property n1: double read mainPack[1] write mainPack[1];
+        property n2: double read mainPack[2] write mainPack[2];
+        property n3: double read mainPack[3] write mainPack[3];
+
+  end;
+
 function set_floatp4(a,b,c,d: single): floatp4;
 
 operator + (para1, para2: floatp4) add: floatp4;
@@ -78,6 +99,7 @@ operator < (para1, para2: floatp4) less: boolean;
 operator >= (para1, para2: floatp4) bige: boolean;
 operator <= (para1, para2: floatp4) lesse: boolean;
 
+//Will only once
 function ArrEqual(para1, para2: floatp4): boolean;
 
 function set_floatp4_ss(a: single): floatp4;
@@ -91,11 +113,24 @@ function Reserve_Sqrt(para1, para2: floatp4): floatp4;
 function Sign(para1: floatp4): floatp4;
 function Floor(para1: floatp4): floatp4;
 function Ceil(para1: floatp4): floatp4;
-function Round(para1: floatp4; a: shortint): floatp4;
+function Round(para1: floatp4): floatp4;
+
+function Dot(para1,para2: doublep4): double;
+function Max(para1,para2: doublep4): doublep4;
+function Min(para1,para2: doublep4): doublep4;
+function Sqrt(para1, para2: doublep4): doublep4;
+function Sign(para1: doublep4): doublep4;
+function Floor(para1: doublep4): doublep4;
+function Ceil(para1: doublep4): doublep4;
+function Round(para1: doublep4): doublep4;
 
 function Shuffle(para1, para2: floatp4; np3, np2, np1, np0: byte): floatp4;
 
 function set_dwordp4(a,b,c,d: Dword): dwordp4;
+function set_dwordp4(a: TArr1Word): dwordp4;
+
+function set_doublep4(a: TArr1Double): doublep4;
+function set_doublep4(a,b,c,d: Double): doublep4;
 
 operator + (para1, para2: dwordp4) add: dwordp4;
 operator - (para1, para2: dwordp4) sub: dwordp4;
@@ -111,6 +146,8 @@ operator or (para1, para2: dwordp4) orv: dwordp4;
 operator xor (para1, para2: dwordp4) xorv: dwordp4;
 operator not (para1: dwordp4) notv: dwordp4;
 
+procedure Register;
+
 operator > (para1, para2: dwordp4) big: boolean;
 operator < (para1, para2: dwordp4) less: boolean;
 operator >= (para1, para2: dwordp4) bige: boolean;
@@ -119,7 +156,37 @@ operator <= (para1, para2: dwordp4) lesse: boolean;
 function Max(para1,para2: dwordp4): dwordp4;
 function Min(para1,para2: dwordp4): dwordp4;
 
+operator + (para1, para2: doublep4) add: doublep4;
+operator - (para1, para2: doublep4) sub: doublep4;
+operator * (para1, para2: doublep4) mul: doublep4;
+operator / (para1, para2: doublep4) divide: doublep4;
+
+operator and (para1, para2: doublep4) andv: doublep4;
+operator or (para1, para2: doublep4) orv: doublep4;
+operator xor (para1, para2: doublep4) xorv: doublep4;
+operator not (para1: doublep4) notv: doublep4;
+
+operator > (para1, para2: doublep4) big: boolean;
+operator < (para1, para2: doublep4) less: boolean;
+operator >= (para1, para2: doublep4) bige: boolean;
+operator <= (para1, para2: doublep4) lesse: boolean;
+
 implementation
+
+              procedure Register;
+              begin
+
+              end;
+
+              function set_doublep4(a: TArr1Double): doublep4;
+              begin
+                     set_doublep4:= doublep4.Crt5198(a);
+              end;
+
+              function set_doublep4(a,b,c,d: Double): doublep4;
+              begin
+                     set_doublep4:= doublep4.v2(a,b,c,d);
+              end;
 
               function ArrEqual(para1, para2: floatp4): boolean;
               var t1, t2, t3: TArr1Single;
@@ -468,7 +535,7 @@ implementation
                  mul.ps := t3;
             end;
 
-              operator / (para1, para2: floatp4) divide: floatp4;
+            operator / (para1, para2: floatp4) divide: floatp4;
             var t1, t2, t3: TArr1Single;
             begin
                  divide:= floatp4.Create;
@@ -485,7 +552,7 @@ implementation
                  divide.ps := t3;
             end;
 
-              operator or (para1, para2: floatp4) orv: floatp4;
+            operator or (para1, para2: floatp4) orv: floatp4;
             var t1, t2, t3: TArr1Single;
             begin
                  orv:= floatp4.Create;
@@ -502,7 +569,7 @@ implementation
                  orv.ps := t3;
             end;
 
-              operator xor (para1, para2: floatp4) xorv: floatp4;
+            operator xor (para1, para2: floatp4) xorv: floatp4;
             var t1, t2, t3: TArr1Single;
             begin
                  xorv:= floatp4.Create;
@@ -519,7 +586,7 @@ implementation
                  xorv.ps := t3;
             end;
 
-              operator and (para1, para2: floatp4) andv: floatp4;
+            operator and (para1, para2: floatp4) andv: floatp4;
             var t1,t2,t3: TArr1Single;
             begin
                  andv:= floatp4.Create;
@@ -846,111 +913,528 @@ implementation
               end;
 
 
-              //Credit to stephani, which i adopted the theory from
-              //http://dss.stephanierct.com/DevBlog/?p=8
-              //Since i cant find floor instric
-
-              function Floor(para1: floatp4): floatp4;
+              function Round(para1: floatp4): floatp4;
               var t1: array[0..3] of longint;
-                  t2: TArr1Single;
-              begin
-
-                     t2:= para1.mainPack;
-
-                     t1[0] := 0; t1[1]:= 0; t1[2]:= 0;
-                     t1[3]:= 0;
-
-                     //First, get a vector 1
-                     //Then round it by convert to word
-                     //Then check if it's negative or not and sub by one
-                     //The theory is very good, depends on the rounding func of
-                     //the SIMD
-
-                     asm
-                          movdqu xmm0, t1
-                          pcmpeqd xmm0, xmm0
-
-                          psrldq xmm0, 25
-                          pslldq xmm0, 23
-
-                          cvtdq2ps xmm1, xmm0
-                          movups xmm3, xmm1
-
-                          cvtps2dq xmm2, [t2]
-                          cvtdq2ps xmm2, xmm2
-
-                          movups xmm4, xmm2
-
-                          cmpps xmm1, xmm2, 5
-
-                          andps xmm3, xmm1
-
-                          subps xmm4, xmm3
-                     end;
-              end;
-
-              function Ceil(para1: floatp4): floatp4;
-              var t1: array[0..3] of longint;
-                  t2: TArr1Single;
-              begin
-
-                     t2:= para1.mainPack;
-
-                     t1[0] := 0; t1[1]:= 0; t1[2]:= 0;
-                     t1[3]:= 0;
-
-
-                     asm
-                          movdqu xmm0, t1
-                          pcmpeqd xmm0, xmm0
-
-                          psrldq xmm0, 25
-                          pslldq xmm0, 23
-
-                          cvtdq2ps xmm1, xmm0
-                          movups xmm3, xmm1
-
-                          cvtps2dq xmm2, [t2]
-                          cvtdq2ps xmm2, xmm2
-
-                          movups xmm4, xmm2
-
-                          cmpps xmm1, xmm2, 1
-
-                          andps xmm3, xmm1
-
-                          addps xmm4, xmm3
-                     end;
-              end;
-
-              function Round(para1: floatp4; a: shortint): floatp4;
-              var
                   t2, t3: TArr1Single;
               begin
 
                      t2:= para1.mainPack;
 
-                     if (a = 0) then
+                     t1[0] := 0; t1[1]:= 0; t1[2]:= 0;
+                     t1[3]:= 0;
+
                      asm
-                        movups xmm0, [t2]
+                          movdqu xmm0, [t1]
+                          pcmpeqd xmm0, xmm0
 
-                        roundps xmm0, xmm0, 0
+                          psrldq  xmm0, 25
+                          pslldq  xmm0, 23
 
-                        movups [t3], xmm0
-                     end
-                     else
-                     if (a = 1) then
-                       asm
-                          movups xmm0, [t2]
+                          cvtdq2ps xmm1, xmm0
 
-                          roundps xmm0, xmm0, 0
+                          movups xmm4, [t2]
 
-                          movups [t3], xmm0
-                       end;
+                          cvtps2dq xmm2, [t2]
+
+                          cvtdq2ps xmm2, xmm2
+
+                          movups xmm4, xmm2
+
+                          cmpps xmm2, xmm4, 5
+
+                          andps xmm1, xmm2
+
+                          subps xmm4, xmm1
+
+                          movups [t3], xmm4
+                     end;
 
                      Round:= set_floatp4(t3);
               end;
 
+              function Ceil(para1: floatp4): floatp4;
+               var t1: array[0..3] of longint;
+                  t2, t3: TArr1Single;
+              begin
+
+                     t2:= para1.mainPack;
+
+                     t1[0] := 0; t1[1]:= 0; t1[2]:= 0;
+                     t1[3]:= 0;
+
+
+                     asm
+                          movups xmm0, [t2]
+                          roundps xmm0, xmm0, 2
+                          movups [t3], xmm0
+                     end;
+
+                     Ceil:= set_floatp4(t3);
+              end;
+
+
+
+              function set_dwordp4(a: TArr1Word): dwordp4;
+              begin
+                     set_dwordp4 := dwordp4.Crt5198(a);
+              end;
+
+              class constructor doublep4.Create;
+              begin
+                     Create.mainPack[0]:= 0;  Create.mainPack[1]:= 0;
+                     Create.mainPack[2]:= 0;  Create.mainPack[3]:= 0;
+              end;
+
+              constructor doublep4.v2(a,b,c,d: double);
+              begin
+                    mainPack[3]:= a; mainPack[2]:= b;
+                    mainPack[1]:= c; mainPack[0]:= d;
+              end;
+
+              constructor doublep4.Crt5198(a: TArr1Double);
+              begin
+                     mainPack:= a;
+              end;
+
+              operator + (para1, para2: doublep4) add: doublep4;
+              var t1, t2, t3: TArr1Double;
+              begin
+                   add:= doublep4.Create;
+                   t1:= para1.ps;
+                   t2:= para2.ps;
+
+                   asm
+                      movupd xmm0, [t1]
+                      movupd xmm1, [t2]
+                      addpd xmm0, xmm1
+                      movupd [t3], xmm0
+                   end;
+
+                   add.ps := t3;
+              end;
+
+              operator - (para1, para2: doublep4) sub: doublep4;
+              var t1, t2, t3: TArr1Double;
+              begin
+                   sub:= doublep4.Create;
+                   t1:= para1.ps;
+                   t2:= para2.ps;
+
+                   asm
+                      movupd xmm0, [t1]
+                      movupd xmm1, [t2]
+                      subpd xmm0, xmm1
+                      movupd [t3], xmm0
+                   end;
+
+                   sub.ps := t3;
+              end;
+
+            operator * (para1, para2: doublep4) mul: doublep4;
+            var t1, t2, t3: TArr1Double;
+            begin
+                 mul:= doublep4.Create;
+                 t1:= para1.ps;
+                 t2:= para2.ps;
+
+                 asm
+                    movupd xmm0, [t1]
+                    movupd xmm1, [t2]
+                    mulpd xmm0, xmm1
+                    movupd [t3], xmm0
+                 end;
+
+                 mul.ps := t3;
+            end;
+
+            operator / (para1, para2: doublep4) divide: doublep4;
+            var t1, t2, t3: TArr1Double;
+            begin
+                 divide:= doublep4.Create;
+                 t1:= para1.ps;
+                 t2:= para2.ps;
+
+                 asm
+                    movupd xmm0, [t1]
+                    movupd xmm1, [t2]
+                    divpd xmm0, xmm1
+                    movupd [t3], xmm0
+                 end;
+
+                 divide.ps := t3;
+            end;
+
+            operator or (para1, para2: doublep4) orv: doublep4;
+            var t1, t2, t3: TArr1Double;
+            begin
+                 orv:= doublep4.Create;
+                 t1:= para1.ps;
+                 t2:= para2.ps;
+
+                 asm
+                    movupd xmm0, [t1]
+                    movupd xmm1, [t2]
+                    orpd xmm0, xmm1
+                    movupd [t3], xmm0
+                 end;
+
+                 orv.ps := t3;
+            end;
+
+            operator xor (para1, para2: doublep4) xorv: doublep4;
+            var t1, t2, t3: TArr1Double;
+            begin
+                 xorv:= doublep4.Create;
+                 t1:= para1.ps;
+                 t2:= para2.ps;
+
+                 asm
+                    movupd xmm0, [t1]
+                    movupd xmm1, [t2]
+                    xorpd xmm0, xmm1
+                    movupd [t3], xmm0
+                 end;
+
+                 xorv.ps := t3;
+            end;
+
+            operator and (para1, para2: doublep4) andv: doublep4;
+            var t1,t2,t3: TArr1Double;
+            begin
+                 andv:= doublep4.Create;
+                 t1:= para1.ps;
+                 t2:= para2.ps;
+
+                 asm
+                    movupd xmm0, [t1]
+                    movupd xmm1, [t2]
+                    andpd xmm0, xmm1
+                    movupd [t3], xmm0
+                 end;
+
+                 andv.ps := t3;
+            end;
+
+              operator not (para1: doublep4) notv: doublep4;
+              var t1,t2: TArr1Double;
+              begin
+                 notv:= doublep4.Create;
+                 t1:= para1.ps;
+
+                 asm
+                    movupd xmm0, [t1]
+                    movupd xmm1, [t1]
+
+                    cmppd xmm1, xmm1, 0
+
+                    xorpd xmm0, xmm1
+
+                    movupd [t2], xmm0
+                 end;
+
+                 notv.ps := t2;
+            end;
+
+              operator mod (para1, para2: doublep4) modq: doublep4;
+              var t1, t2, t3: TArr1Double;
+              begin
+                  t1:= para1.mainPack;
+                  t2:= para2.mainPack;
+
+                  asm
+                     movupd xmm0, [t1]
+                     movupd xmm1, [t2]
+                     movupd xmm2, xmm0
+
+                     divpd xmm0, xmm1
+                     mulpd xmm0, xmm1
+
+                     subpd xmm2, xmm0
+
+                     movupd [t3], xmm2
+                  end;
+
+                  modq:= set_doublep4(t3);
+
+              end;
+
+              operator > (para1, para2: doublep4) big: boolean;
+              var t1, t2: TArr1Double;
+                  t3: array [0..3] of longint;
+              begin
+                     t1:= para1.mainPack;
+                     t2:= para2.mainPack;
+
+                     asm
+                        movupd xmm0, [t1]
+                        movupd xmm1, [t2]
+
+                        cmppd xmm0, xmm1, 5
+
+                        movupd [t3],xmm0
+                     end;
+
+                     big:= (t3[0] = -1);
+              end;
+
+              operator < (para1, para2: doublep4) less: boolean;
+              var t1, t2: TArr1Double;
+                  t3: array [0..3] of longint;
+              begin
+                     t1:= para1.mainPack;
+                     t2:= para2.mainPack;
+
+                     asm
+                        movupd xmm0, [t1]
+                        movupd xmm1, [t2]
+
+                        cmppd xmm0, xmm1, 1
+
+                        movupd [t3],xmm0
+                     end;
+
+                     less:= (t3[0] = -1);
+              end;
+
+              operator >= (para1, para2: doublep4) bige: boolean;
+              var t1, t2: TArr1Double;
+                  t3: array [0..3] of longint;
+              begin
+                     t1:= para1.mainPack;
+                     t2:= para2.mainPack;
+
+                     asm
+                        movupd xmm0, [t1]
+                        movupd xmm1, [t2]
+
+                        cmppd xmm0, xmm1, 6
+
+                        movupd [t3],xmm0
+                     end;
+
+                     bige:= (t3[0] = -1);
+              end;
+
+              operator <= (para1, para2: doublep4) lesse: boolean;
+              var t1, t2: TArr1Double;
+                  t3: array [0..3] of longint;
+              begin
+                     t1:= para1.mainPack;
+                     t2:= para2.mainPack;
+
+                     asm
+                        movupd xmm0, [t1]
+                        movupd xmm1, [t2]
+
+                        cmppd xmm0, xmm1, 2
+
+                        movupd [t3],xmm0
+                     end;
+
+                     lesse:= (t3[0] = -1);
+              end;
+
+
+              function Max(para1, para2: doublep4): doublep4;
+              var t1,t2,t3: TArr1Double;
+              begin
+                   t1:= para1.mainPack;
+                   t2:= para2.mainPack;
+
+                   asm
+                        movupd xmm0, [t1]
+                        movupd xmm1, [t2]
+                        maxpd xmm0, xmm1
+                        movupd [t3], xmm0
+                   end;
+
+                   Max:= doublep4.Crt5198(t3);
+              end;
+
+              function Min(para1, para2: doublep4): doublep4;
+              var t1,t2,t3: TArr1Double;
+              begin
+
+                   t1:= para1.mainPack;
+                   t2:= para2.mainPack;
+
+                   asm
+                        movupd xmm0, [t1]
+                        movupd xmm1, [t2]
+                        minpd xmm0, xmm1
+                        movupd [t3], xmm0
+                   end;
+
+                   Min:= doublep4.Crt5198(t3);
+              end;
+
+              function Sqrt(para1, para2: doublep4): doublep4;
+              var t1,t2,t3: TArr1Double;
+              begin
+
+                   t1:= para1.mainPack;
+                   t2:= para2.mainPack;
+
+                   asm
+                        movupd xmm0, [t1]
+                        movupd xmm1, [t2]
+                        sqrtpd xmm0, xmm1
+                        movupd [t3], xmm0
+                   end;
+
+                   Sqrt:= doublep4.Crt5198(t3);
+
+              end;
+
+              function Floor(para1: doublep4): doublep4;
+              var t1: array[0..3] of longint;
+                  t2, t3: TArr1double;
+              begin
+
+                     t2:= para1.mainPack;
+
+                     asm
+                        movups xmm0, [t2]
+                        roundps xmm0, xmm0, 1
+                        movups [t3], xmm0
+                     end;
+
+                     Floor:= set_doublep4(t3);
+              end;
+
+              function Ceil(para1: doublep4): doublep4;
+              var t1: array[0..3] of longint;
+                  t2, t3: TArr1double;
+              begin
+
+                     t2:= para1.mainPack;
+
+                     asm
+                        movups xmm0, [t2]
+                        roundps xmm0, xmm0, 2
+                        movups [t3], xmm0
+                     end;
+
+                     Ceil:= set_doublep4(t3);
+              end;
+
+              function Round(para1: doublep4): doublep4;
+              var t1: array[0..3] of longint;
+                  t2, t3: TArr1Double;
+              begin
+
+                     t2:= para1.mainPack;
+
+                     t1[0] := 0; t1[1]:= 0; t1[2]:= 0;
+                     t1[3]:= 0;
+
+                     asm
+                          movdqu xmm0, [t1]
+                          pcmpeqd xmm0, xmm0
+
+                          psrldq  xmm0, 25
+                          pslldq  xmm0, 23
+
+                          cvtdq2pd xmm1, xmm0
+
+                          movupd xmm4, [t2]
+
+                          cvtpd2dq xmm2, [t2]
+
+                          cvtdq2pd xmm2, xmm2
+
+                          movupd xmm4, xmm2
+
+                          cmppd xmm2, xmm4, 5
+
+                          andpd xmm1, xmm2
+
+                          subpd xmm4, xmm1
+
+                          movupd [t3], xmm4
+                     end;
+
+                     Round:= set_doublep4(t3);
+              end;
+
+              function Sign(para1: doublep4): doublep4;
+              var t1: array [0..3] of DWord;
+                  t2, t3, t4: TArr1Double;
+
+              begin
+                  t1[0]:= $ffffffff; t1[2]:= $ffffffff;
+                  t1[1]:= $ffffffff; t1[3]:= $ffffffff;
+
+                  t2[0]:=1; t2[1]:=1; t2[2]:=1; t2[3]:=1;
+                  t4[0]:=-1; t4[1]:=-1; t4[2]:=-1; t4[3]:=-1;
+
+                  asm
+                     movupd xmm0, [para1]
+                     movupd xmm1, [t2]
+                     xorpd xmm0, xmm1
+
+                     cvtpd2dq xmm2, xmm0
+                     movdqu xmm3, [t1]
+
+                     psrldq xmm2, 31
+
+                     xorpd xmm2, xmm3
+
+                     cvtdq2pd xmm4, xmm2
+
+                     movupd xmm5, [t4]
+
+                     mulpd xmm4, xmm5
+
+                     movupd [t3], xmm4
+                  end;
+;
+                  Sign:= set_doublep4(t3);
+              end;
+
+              //Dot product of two floatp4
+              function Dot(para1,para2: doublep4): double;
+              const dotsize1 = 5;
+              var t1,t2,t3, arr1, arr2: TArr1Double;
+                  i: shortint;
+              begin
+
+                   t1:= para1.ps;
+                   t2:= para2.ps;
+
+                   asm
+                      movupd xmm0, [t1]
+                      movupd xmm1, [t2]
+
+                      mulpd xmm0, xmm1
+
+                      haddpd xmm0, xmm0
+                      haddpd xmm0, xmm0
+
+                      movupd [t3], xmm0
+                   end;
+
+                   Dot:= t3[0];
+
+              end;
+
+
+              function Floor(para1: floatp4): floatp4;
+               var t1: array[0..3] of longint;
+                  t2, t3: TArr1Single;
+              begin
+
+                     t2:= para1.mainPack;
+
+                     asm
+                        movups xmm0, [t2]
+                        roundps xmm0, xmm0, 1
+                        movups [t3], xmm0
+                     end;
+
+                     Floor:= set_floatp4(t3);
+
+              end;
 
 end.
 
