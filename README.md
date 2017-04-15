@@ -9,10 +9,13 @@ A small linear math library using SSE4 technology and upper.
  
   + FRSML (FranceSnack Math Library) is a projekt which targets Vulkan developers (so do I). The library does some linear math, and contains basic class for linear math like Vector3, Matrix4, Quaternion, and so on. All the math are done in SSE4.2, which I can confirm that my library would support Linux and Windows platform. In the feauture, the project may implement a easy way for devs to buffering indices, vertices, ... The library gets to the point where it stable now, but not so good, since many feautures i dream for haven't still been implemented.
   
-  +Bad news: Sorry, because of my design, the library won't work well with vertex input, since i don't intent it to be a GLSL mirror.
-  The design affects pretty much on that vertex input on Vulkan, but on OpenGl, you can just go with another option like float. For me, working like this is pretty much doom, i will try create a wrapper function, convert into array then return binding and attribute description to reattack this disavantage. Pretty much with i expected, uniform still work well lol.
+  +  Bad news: Sorry, because of my design, the library won't work well with vertex input, since i don't intent it to be a GLSL mirror.
+  The design affects pretty much on that vertex input on Vulkan, but on OpenGl, you can just go with another option like float. For me, working like this is pretty much doom,  ~~i will try create a wrapper function, convert into array then return binding and attribute description to reattack this disavantage~~, but just use float[]. Pretty much with i expected, uniform still work well lol.
   
-  - For now, with Vulkan, bind per vertex, and use the * sizeof thing to get the offset.
+  - For now, with Vulkan, bind per vertex via float. I still think float is suitable, since it size is small and we pretty much don't do
+  anything with it. Vertex born as static.
+  
+  - If anyone curious about what i am doing, i am doing Vulkan stuff, of course. Have written a allocator and memory management, now just image and mipmap, so do depth buffering. Hope will finish its core soon.
 
 **************************
 
@@ -64,7 +67,8 @@ A small linear math library using SSE4 technology and upper.
 	std::cout << vec2.X() << " " << vec2.Y() << " " << vec2.Z() << " " << vec2.W() << std::endl;
 	std::cout << "Vector Magnitude: " << vec.Length() << std::endl;
 	std::cout << "Log(10) is: " << FRSML::Log(10) << std::endl;
-	std::cout << "Log(10) in cmath: "<< log(10) << std::endl;
+
+std::cout << "Log(10) in cmath: "<< log(10) << std::endl;
 
 	vec = FRSML::Reflect(vec, FRSML::vec3(0, 90, 0));
 
@@ -120,7 +124,7 @@ A branch contains Pascal implementation of FRSML is available at the objfpc-FRSM
                      : git clone --recursive https://github.com/bentokun/FRSML
                      : cd FRSML
                 - Or just download on github. 
-                      
+                     
       * Make a folder to put the build result 
       * Using "cmake ." to generate the gcc project
       * Using "make" to complie gcc project
