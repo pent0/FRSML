@@ -8,6 +8,11 @@ A small linear math library using SSE4 technology and upper.
 >I'm sorry
  
   + FRSML (FranceSnack Math Library) is a projekt which targets Vulkan developers (so do I). The library does some linear math, and contains basic class for linear math like Vector3, Matrix4, Quaternion, and so on. All the math are done in SSE4.2, which I can confirm that my library would support Linux and Windows platform. In the feauture, the project may implement a easy way for devs to buffering indices, vertices, ... The library gets to the point where it stable now, but not so good, since many feautures i dream for haven't still been implemented.
+  
+  +Bad news: Sorry, because of my design, the library won't work well with vertex input, since i don't intent it to be a GLSL mirror.
+  The design affects pretty much on that vertex input on Vulkan, but on OpenGl, you can just go with another option like float. For me, working like this is pretty much doom, i will try create a wrapper function, convert into array then return binding and attribute description to reattack this disavantage. Pretty much with i expected, uniform still work well lol.
+  
+  - For now, with Vulkan, bind per vertex, and use the * sizeof thing to get the offset.
 
 **************************
 
