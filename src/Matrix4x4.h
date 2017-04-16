@@ -15,6 +15,8 @@ namespace FRSML {
 		Matrix4(float n = 0);
 		Matrix4(vec4 row1, vec4 row2, vec4 row3, vec4 row4);
 
+		vec4 cols[4] = {};
+
 		bool IsMatrixIndentiy();
 
 		Matrix4 Transpose();
@@ -53,8 +55,9 @@ namespace FRSML {
 
 		//Very sad that this method is o(n^3), but i can just understand this max.
 		Matrix4 Inverse();
-		
-		
+
+		friend vec4 operator * (vec4 _para1, Matrix4 _para2);
+
 		inline Matrix4 operator *(Matrix4 _para);
 
 		inline void operator *= (Matrix4 _para) {
@@ -66,9 +69,6 @@ namespace FRSML {
 
 	private:
 		vec4 rows[4] = {};
-		vec4 cols[4] = {};
-
-
 	};
 
 	static Matrix4 Identity{
