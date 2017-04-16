@@ -15,11 +15,13 @@ A small linear math library using SSE4 technology and upper.
   + Good news:
   	* I have studied a little bit and now the vector is compatible with Vulkan mapping! Now you can do a struct like this
 		
+		```C++
 		struct Vertex{
 			FRSML::vec2 pos;
 			FRSML::vec3 color;
 			FRSML::vec3 normal;
 		}
+		```
 		
 	* The noticeable thing is the size per struct is very huge. The reason is its contains a __m128, which is 32 bit total, adds up is the property thing that x,y which also cost 24 bit, so it is bigger than normal. So cant compete with another math library, but at least some function still fast!
 	
