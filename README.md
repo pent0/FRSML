@@ -34,7 +34,7 @@ A small linear math library using SSE4 technology and upper.
 		
 	* However, col_type is just the same as row_type. There are confusion draws here:
 		- Will it take the rows or cols value: I dont even know? It's poorly documented
-		- Therefore, i put the cols value public. When i test the uniform (which i lost my precious time because of the math library throw exception that took 5 hours to figure out the error that make fstream fck failed), i will dive into it and can edit the struct.
+		- Therefore, i put the cols value public. ~~When i test the uniform (which i lost my precious time because of the math library throw exception that took 5 hours to figure out the error that make fstream fck failed), i will dive into it and can edit the struct.~~ Confirm that it take the public value first.
 		
 		
 	* Also, MSVS 2017 has a really nice logo! ^_^
