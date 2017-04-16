@@ -19,15 +19,18 @@ namespace FRSML {
 
 	vec3::vec3(__m128 _para) {
 		this->mainVec = _para;
+		SetRealXY(mainVec);
 	}
 
 	vec3::vec3(float x, float y, float z) {
-		this->mainVec = _mm_set_ps(0, x, y, z);;
+		this->mainVec = _mm_set_ps(0, x, y, z);
+		SetRealXY(x,y,z);
 	}
 
 
 	vec3::vec3(float n) {
 		this->mainVec = _mm_set_ps(0, n, n, n);
+		SetRealXY(n,n,n);
 	}
 
 
@@ -100,23 +103,12 @@ namespace FRSML {
 	}
 
 
-	float& vec3::X() {
-		return mainVec.m128_f32[2];
-	}
-
-	float& vec3::Y() {
-		return mainVec.m128_f32[1];
-	}
-
-	float& vec3::Z() {
-		return mainVec.m128_f32[0];
-	}
-
 	float* value_ptr(vec3 vec) {
 		float* value;
-		value[0] = vec.X();
-		value[1] = vec.Y();
-		value[2] = vec.Z();
+
+		value[0] = vec.X;
+		value[1] = vec.Y;
+		value[2] = vec.Z;
 
 		return value;
 	}

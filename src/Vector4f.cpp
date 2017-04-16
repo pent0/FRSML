@@ -4,21 +4,22 @@ namespace FRSML {
 
 		float* value_ptr(vec4 vec) {
 			float* value;
-			value[0] = vec.X();
-			value[1] = vec.Y();
-			value[2] = vec.Z();
-			value[3] = vec.W();
+			value[0] = vec.X;
+			value[1] = vec.Y;
+			value[2] = vec.Z;
+			value[3] = vec.W;
 
 			return value;
 		}
 
 		vec4::vec4(float ant) {
 			mainVec = _mm_set_ps1(ant);
-
+			SetRealXY(ant, ant, ant, ant);
 		}
 
 		vec4::vec4(float x, float y, float z, float w) {
 			mainVec = _mm_set_ps(x, y, z, w);
+			SetRealXY(x,y,z,w);
 		}
 
 		__m128 &vec4::MainVector() {
@@ -27,10 +28,12 @@ namespace FRSML {
 
 		vec4::vec4(__m128 _set) {
 			mainVec = _set;
+			SetRealXY(mainVec);
 		}
 		
 		
 		vec4::vec4(vec3 _para, float _para2) {
+
 			__m128 tmp = _para.MainVector();
 			__m128 tmp2 = _mm_set_ps(_para2, 0, 0, 0);
 			tmp = _mm_xor_ps(tmp, tmp2);
@@ -38,10 +41,12 @@ namespace FRSML {
 
 			mainVec = tmp;
 
+			SetRealXY(mainVec);
 		}
 
 		void vec4::operator =(vec4 ant) {
 			mainVec = ant.mainVec;
+			SetRealXY(mainVec);
 		}
 
 		bool vec4::operator ==(vec4 ant) {
@@ -82,22 +87,6 @@ namespace FRSML {
 			return vec4(_mm_div_ps(this->mainVec, _mm_set1_ps(ant)));
 		}
 
-		float vec4::X() {
-			return mainVec.m128_f32[3];
-		}
-
-		float vec4::Y() {
-			return mainVec.m128_f32[2];
-		}
-
-		float vec4::Z() {
-			return mainVec.m128_f32[1];
-		}
-
-		float vec4::W() {
-			return mainVec.m128_f32[0];
-		}
-
 		float vec4::Length() {
 			return _mm_cvtss_f32(_mm_sqrt_ss(_mm_dp_ps(mainVec, mainVec, 0xF1)));
 		}
@@ -109,5 +98,6 @@ namespace FRSML {
 
 		vec4::vec4(float* as) {
 			this->mainVec = _mm_load_ps(as);
+			SetRealXY(mainVec);
 		}
 }

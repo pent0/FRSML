@@ -12,8 +12,8 @@ namespace FRSML {
 
 	float* value_ptr(vec2 vec) {
 		float* value;
-		value[0] = vec.X();
-		value[1] = vec.Y();
+		value[0] = vec.X;
+		value[1] = vec.Y;
 		
 		return value;
 	}
@@ -26,17 +26,20 @@ namespace FRSML {
 	}
 
 
-	vec2::vec2(__m128 _para) {
+	vec2::vec2(__m128 _para){
 		this->mainVec = _para;
+		SetRealXY(_para);
 	}
 
 	vec2::vec2(float x, float y) {
-		this->mainVec = _mm_set_ps(0, 0, x, y);;
+		this->mainVec = _mm_set_ps(0, 0, x, y);
+		SetRealXY(x,y);
 	}
 
 
 	vec2::vec2(float n) {
 		this->mainVec = _mm_set_ps(0, 0, n, n);
+		SetRealXY(n, n);
 	}
 
 	bool vec2::operator ==(vec2 ant) {
@@ -105,50 +108,60 @@ namespace FRSML {
 
 	void vec2::operator +=(vec2 ant) {
 		*this = *this + ant;
+		SetRealXY(mainVec);
 	}
 
 
 	void vec2::operator -=(vec2 ant) {
 		*this = *this - ant;
+		SetRealXY(mainVec);
 	}
 
 
 	void vec2::operator *=(vec2 ant) {
 		*this = *this * ant;
+		SetRealXY(mainVec);
 	}
 
 
 	void vec2::operator /=(vec2 ant) {
 		*this = *this / ant;
+		SetRealXY(mainVec);
 	}
 
 
 
 	void vec2::operator +=(float ant) {
 		*this = *this + ant;
+		SetRealXY(mainVec);
 	}
 
 
 	void  vec2::operator -=(float ant) {
 		*this = *this - ant;
+		SetRealXY(mainVec);
 	}
 
 
 	void vec2::operator *=(float ant) {
 		*this = *this * ant;
+		SetRealXY(mainVec);
 	}
 
 
 	void vec2::operator /=(float ant) {
 		*this = *this / ant;
+		SetRealXY(mainVec);
 	}
 
 	void vec2::operator ++() {
 		*this = *this + 1;
+		SetRealXY(mainVec);
 	}
 
 	void vec2::operator --() {
 		*this = *this - 1;
+		SetRealXY(mainVec);
 	}
 
 	vec2 vec2::operator& (vec2 _para) {
@@ -164,28 +177,21 @@ namespace FRSML {
 		return vec2(_mm_or_ps(this->mainVec, _para.mainVec));
 	}
 
-
-	float& vec2::X() {
-		return mainVec.m128_f32[1];
-	}
-
-
-	float& vec2::Y() {
-		return mainVec.m128_f32[0];
-	}
-
 	void vec2::operator |=(vec2 ant) {
 		*this = *this | ant;
+		SetRealXY(mainVec);
 	}
 
 
 	void vec2::operator &=(vec2 ant) {
 		*this = *this & ant;
+		SetRealXY(mainVec);
 	}
 
 
 	void vec2::operator ^=(vec2 ant) {
 		*this = *this ^ ant;
+		SetRealXY(mainVec);
 	}
 
 }
