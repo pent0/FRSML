@@ -9,6 +9,24 @@ A small linear math library using SSE4 technology and upper.
  
   + FRSML (FranceSnack Math Library) is a projekt which targets Vulkan developers (so do I). The library does some linear math, and contains basic class for linear math like Vector3, Matrix4, Quaternion, and so on. All the math are done in SSE4.2, which I can confirm that my library would support Linux and Windows platform. In the feauture, the project may implement a easy way for devs to buffering indices, vertices, ... The library gets to the point where it stable now, but not so good, since many feautures i dream for haven't still been implemented.
   
+## UPDATE:
+  
+### 16/4/2017 :) -------------------
+  + Good news:
+  	* I have studied a little bit and now the vector is compatible with Vulkan mapping! Now you can do a struct like this
+		
+		struct Vertex{
+			FRSML::vec2 pos;
+			FRSML::vec3 color;
+			FRSML::vec3 normal;
+		}
+		
+	* The noticeable thing is the size per struct is very huge. The reason is its contains a __m128, which is 32 bit total, adds up is the property thing that x,y which also cost 24 bit, so it is bigger than normal. So cant compete with another math library, but at least some function still fast!
+	
+	* Compatible matrix will going up asap when i studied about matrix data struct in GLSL. I have only found the vector,i think i didnt dig deep enough. Good news anyways!
+  
+### 15/4/2017 ................
+  
   +  Bad news:
       * Sorry, because of my design, the library won't work well with vertex input, since i don't intent it to be a GLSL mirror.
   The design affects pretty much on that vertex input on Vulkan, but on OpenGl, you can just go with another option like float. For me, working like this is pretty much doom,  ~~i will try create a wrapper function, convert into array then return binding and attribute description to reattack this disavantage~~, but just use float[]. Pretty much with i expected, uniform still work well lol.
@@ -67,15 +85,15 @@ A small linear math library using SSE4 technology and upper.
 	std::cout << mat.Inverse() << std::endl;
 	std::cout << "Transpose Matrix1: " << std::endl;
 	std::cout << mat.Transpose() << std::endl;
-	std::cout << vec2.X() << " " << vec2.Y() << " " << vec2.Z() << " " << vec2.W() << std::endl;
+	std::cout << vec2.X << " " << vec2.Y << " " << vec2.Z << " " << vec2.W << std::endl;
 	std::cout << "Vector Magnitude: " << vec.Length() << std::endl;
 	std::cout << "Log(10) is: " << FRSML::Log(10) << std::endl;
 
-std::cout << "Log(10) in cmath: "<< log(10) << std::endl;
+        std::cout << "Log(10) in cmath: "<< log(10) << std::endl;
 
 	vec = FRSML::Reflect(vec, FRSML::vec3(0, 90, 0));
 
-	std::cout << "Reflect of vec is: " << vec.X() <<" "<< vec.Y()<<" " << vec.Z() << std::endl;
+	std::cout << "Reflect of vec is: " << vec.X <<" "<< vec.Y<<" " << vec.Z << std::endl;
 	std::cout << "(The y value is reflect by 90 degrees, which means the length"
 		<< "of y mag in two surface are the same, bentokun said ^-^)" << std::endl;
 ```
