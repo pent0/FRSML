@@ -23,15 +23,27 @@ A small linear math library using SSE4 technology and upper.
 		}
 		```
 		
-	* The noticeable thing is the size per struct is very huge. The reason is its contains a __m128, which is 32 bit total, adds up is the property thing that x,y which also cost 24 bit, so it is bigger than normal. So cant compete with another math library, but at least some function still fast!
+	* The noticeable thing is the size per struct is very huge. The reason is its contains a "m128", which is 32 bit total, adds up is the property thing that x,y which also cost 24 bit, so it is bigger than normal. So cant compete with another math library, but at least some function still fast!
 	
-	* Compatible matrix will going up asap when i studied about matrix data struct in GLSL. I have only found the vector,i think i didnt dig deep enough. Good news anyways!
+	* ~~Compatible matrix will going up asap when i studied about matrix data struct in GLSL. I have only found the vector,i think i didnt dig deep enough. Good news anyways~~ Compatible Matrix is up! It's just simple 4 cols of vec4. It will get the cols but not rows, however i handle all of it before by return the Matrix value, and the constructor generated the cols so it doesnt so big.
+	
+	* Diving in glm's massive hardcore code, i find out that glsl take an array of vec4 or float[16] or float[4][4]. the responsible line:
+		```c++
+			col_type value[4];
+		```
+		
+	* However, col_type is just the same as row_type. There are confusion draws here:
+		- Will it take the rows or cols value: I dont even know? It's poorly documented
+		- Therefore, i put the cols value public. When i test the uniform (which i lost my precious time because of the math library throw exception that took 5 hours to figure out the error that make fstream fck failed), i will dive into it and can edit the struct.
+		
+		
+	* Also, MSVS 2017 has a really nice logo! ^_^
   
 ### 15/4/2017 ................
   
   +  Bad news:
       * Sorry, because of my design, the library won't work well with vertex input, since i don't intent it to be a GLSL mirror.
-  The design affects pretty much on that vertex input on Vulkan, but on OpenGl, you can just go with another option like float. For me, working like this is pretty much doom,  ~~i will try create a wrapper function, convert into array then return binding and attribute description to reattack this disavantage~~, but just use float[]. Pretty much with i expected, uniform still work well lol.
+  The design affects pretty much on that vertex input on Vulkan, but on OpenGl, you can just go with another option like float. For me, working like this is pretty much doom,  ~~i will try create a wrapper function, convert into array then return binding and attribute description to reattack this disavantage~~, but just use float[]. Pretty much with i expected, ~~uniform still work well lol~~ it's doom.
  
       * The Pascal version is abondoned. When i have inspration, i might do it, cause i am despreted of making the graphic engine done in C++. Pascal make object developing very hard, **must manually call constructor on every object created is fucked**.
   
