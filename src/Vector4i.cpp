@@ -70,7 +70,7 @@ namespace FRSML {
 			vec4 _c1(_mm_castsi128_ps(this->mainVec));
 			vec4 _c2(_mm_castsi128_ps(ant.mainVec));
 			vec4 _c3 = _c1 / _c2;
-			__m128i n = _mm_cvtps_epi32(_c3.MainVector());
+			__m128i n = _mm_cvtps_epi32(_c3.GenerateXYZW());
 			return vec4i(n);
 	}
 

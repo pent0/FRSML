@@ -226,7 +226,6 @@ namespace FRSML {
 		__m128 _Absf(__m128 m)
 		{
 			__m128 sign = _mm_castsi128_ps(_mm_set1_epi32(0x80000000));
-			FRSML_ASSERT_WV(_mm_andnot_ps(sign, m).m128_f32[0] == m.m128_f32[0], "CACULATE ABS WRONG", _mm_andnot_ps(sign, m).m128_f32[0], m.m128_f32[0]);
 			return _mm_andnot_ps(sign, m);
 		}
 
@@ -272,6 +271,10 @@ namespace FRSML {
 			i = _mm_srai_epi32(i, 31); i = _mm_xor_si128(i, MASK);
 			f = _mm_cvtepi32_ps(i);
 
+			if (_mm_extract_ps(f,3) == 0) {
+				return _mm_set1_ps(-1);
+			}
+
 			return _mm_mul_ps(f, _mm_set1_ps(-1));
 
 		}
@@ -301,8 +304,16 @@ namespace FRSML {
 
 #pragma region CACULATE_SINCOSTAN_ASIN_ACOS_ATAN
 		inline __m128 _Sin(__m128 _para) {
-			__m128 sign = _Signf(_para);
+
 			__m128 t0 = BalanceToPiDistance(_para);
+
+			/*
+			__m128 sign = _Signf(_para);
+	
+			if (_mm_extract_psn(sign, 3) == 1) {
+				sign = _mm_mul_ps(_mm_set1_ps(-1), sign);
+			}
+		
 			__m128 t1 = _mm_mul_ps(t0, t0);
 			__m128 t2 = _mm_set1_ps(MGNBR1);
 			__m128 t3 = _mm_set1_ps(MGNBR2);
@@ -316,7 +327,24 @@ namespace FRSML {
 			t7 = _mm_mul_ps(t7, t0);
 			__m128 t8 = _mm_div_ps(t7, t5);
 			t8 = _mm_mul_ps(sign, t8);
-			return t8;
+			return t8;*/
+
+			__m128 t1 = _mm_div_ps(_mm_set1_ps(4), _mm_set1_ps(PI));
+			__m128 t2 = _mm_div_ps(_mm_set1_ps(-4), _mm_mul_ps(_mm_set1_ps(PI), _mm_set1_ps(PI)));
+
+			__m128 t3 = _mm_set1_ps(0.225);
+			__m128 t4 = _mm_mul_ps(t1, t0);
+			__m128 t5 = _mm_mul_ps(t2, _mm_mul_ps(t0, _Absf(t0)));
+
+			__m128 t6 = _mm_add_ps(t4, t5);
+			__m128 t7 = _mm_mul_ps(t6, _Absf(t6));
+			t7 = _mm_sub_ps(t7, t6);
+			t7 = _mm_mul_ps(t3, t7);
+			t7 = _mm_add_ps(t7, t6);
+
+			return t7;
+		
+
 		}
 
 
@@ -461,24 +489,24 @@ namespace FRSML {
 	}
 
 	vec2 Dot(vec2 _para1, vec2 _para2) {
-		return _mm_dp_ps(_para1.MainVector(), _para2.MainVector(), 0x33);
+		return _mm_dp_ps(_para1.GenerateXYZW(), _para2.GenerateXYZW(), 0x33);
 	}
 
 	vec3 Dot(vec3 _para1, vec3 _para2) {
-		return  _mm_dp_ps(_para1.MainVector(), _para2.MainVector(), 0x77);
+		return  _mm_dp_ps(_para1.GenerateXYZW(), _para2.GenerateXYZW(), 0x77);
 	}
 
 
 
 	vec4 Dot(vec4 _para1, vec4 _para2) {
-		return _mm_dp_ps(_para1.MainVector(), _para2.MainVector(), 0xFF);
+		return _mm_dp_ps(_para1.GenerateXYZW(), _para2.GenerateXYZW(), 0xFF);
 	}
 
 	vec2 Angle(vec2 _para1, vec2 _para2) {
 		vec2 _t1 = _para1.Normalize();
 		vec2 _t2 = _para2.Normalize();
 		_t1 = Dot(_t1, _t2);
-		return nmmintrin::_Acos(_t1.MainVector());
+		return nmmintrin::_Acos(_t1.GenerateXYZW());
 	}
 
 
@@ -486,14 +514,14 @@ namespace FRSML {
 		vec3 _t1 = _para1.Normalize();
 		vec3 _t2 = _para2.Normalize();
 		_t1 = Dot(_t1, _t2);
-		return nmmintrin::_Acos(_t1.MainVector());
+		return nmmintrin::_Acos(_t1.GenerateXYZW());
 	}
 
 	vec4 Angle(vec4 _para1, vec4 _para2) {
 		vec4 _t1 = _para1.Normalize();
 		vec4 _t2 = _para2.Normalize();
 		_t1 = Dot(_t1,_t2);
-		return nmmintrin::_Acos(_t1.MainVector());
+		return nmmintrin::_Acos(_t1.GenerateXYZW());
 	}
 
 	//Reflect a vector with in and norm dir
@@ -519,12 +547,17 @@ namespace FRSML {
 
 
 	vec3 Cross(vec3 _para1, vec3 _para2) {
-		__m128 t1 = _para1.MainVector();
-		__m128 t2 = _para2.MainVector();
-		__m128 c1 = _mm_mul_ps(_mm_shuffle_ps(t1, t1, _MM_SHUFFLE(3, 1, 2, 0)),
-			_mm_shuffle_ps(t2, t2, _MM_SHUFFLE(3, 2, 0, 1)));
-		__m128 c2 = _mm_mul_ps(_mm_shuffle_ps(t1, t1, _MM_SHUFFLE(3, 2, 0, 1)),
-			_mm_shuffle_ps(t2, t2, _MM_SHUFFLE(3, 1, 2, 0)));
+
+		__m128 t1 = _para1.GenerateXYZW();
+		__m128 t2 = _para2.GenerateXYZW();
+
+		__m128 t3 = _mm_shuffle_ps(t1, t1, _MM_SHUFFLE(3, 1, 0, 2));
+		__m128 t4 = _mm_shuffle_ps(t2, t2, _MM_SHUFFLE(3, 0, 2, 1));
+		__m128 t5 = _mm_shuffle_ps(t1, t1, _MM_SHUFFLE(3, 0, 2, 1));
+		__m128 t6 = _mm_shuffle_ps(t2, t2, _MM_SHUFFLE(3, 1, 0, 2));
+
+		__m128 c1 = _mm_mul_ps(t3, t4);
+		__m128 c2 = _mm_mul_ps(t5, t6);
 
 		return _mm_sub_ps(c1, c2);
 	}

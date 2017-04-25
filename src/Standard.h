@@ -1,6 +1,8 @@
 #ifndef STANARDMATHSSE4_H
 #define STANARDMATHSSE4_H
 
+#pragma warning(disable: 4838 4305 4244)
+
 #include <smmintrin.h>
 #include <functional>
 
@@ -130,11 +132,11 @@ namespace FRSML {
 	}
 
 	template <class T> T _funcWrp1p(TF_MATH_FUNC func, T _para) {
-		return T(func(_para.MainVector()));
+		return T(func(_para.GenerateXYZW()));
 	}
 
 	template <class T> T _funcWrp2p(TF_MATH_FUNC2 func, T _para1, T _para2) {
-		return T(func(_para1.MainVector(), _para2.MainVector()));
+		return T(func(_para1.GenerateXYZW(), _para2.GenerateXYZW()));
 	}
 
 	//Get the absolute value of a vec2

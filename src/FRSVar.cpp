@@ -34,8 +34,7 @@ FRS_int ConvertToInt(FRS_float ant) {
 
 }
 
-
- void FRS_float::operator |=(FRS_float ant) {
+void FRS_float::operator |=(FRS_float ant) {
 	*this = *this | ant;
 }
 

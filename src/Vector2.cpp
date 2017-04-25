@@ -12,8 +12,8 @@ namespace FRSML {
 
 	float* value_ptr(vec2 vec) {
 		float* value;
-		value[0] = vec.X;
-		value[1] = vec.Y;
+		value[0] = vec.x;
+		value[1] = vec.y;
 		
 		return value;
 	}
@@ -22,44 +22,51 @@ namespace FRSML {
 		//0x31 = 0011 0001
 		//0011 represents 0,0,x,y
 		//0001 represents the place to store the result - the lowest bit
+		__m128 mainVec = GenerateXYZW();
+		
 		return _mm_cvtss_f32(_mm_sqrt_ss(_mm_dp_ps(mainVec, mainVec, 0x31)));
 	}
 
 
-	vec2::vec2(__m128 _para){
-		this->mainVec = _para;
-		SetRealXY(_para);
-	}
-
 	vec2::vec2(float x, float y) {
-		this->mainVec = _mm_set_ps(0, 0, x, y);
-		SetRealXY(x,y);
+		this->x = x;
+		this->y = y;
 	}
 
 
 	vec2::vec2(float n) {
-		this->mainVec = _mm_set_ps(0, 0, n, n);
-		SetRealXY(n, n);
+		this->x = n;
+		this->y = n;
 	}
 
 	bool vec2::operator ==(vec2 ant) {
 		//Test all one ps but long written
-		return (_mm_movemask_ps(_mm_cmpeq_ps(this->mainVec, ant.mainVec)) == 1);
+		return (x == ant.x
+			&& y == ant.y);
 	}
 
 
 	bool vec2::operator !=(vec2 ant) {
 		//Test all one ps but long written
-		return (_mm_movemask_ps(_mm_cmpeq_ps(this->mainVec, ant.mainVec)) != 1);
+		return (_mm_movemask_ps(_mm_cmpeq_ps(GenerateXYZW()
+			, ant.GenerateXYZW())) != 0xF);
 	}
 
 	vec2 vec2::Normalize() {
+		__m128 mainVec = GenerateXYZW();
+
 		__m128 inverse_normalize = _mm_rsqrt_ps(_mm_dp_ps(mainVec, mainVec, 0x33));
-		return vec2(_mm_mul_ps(mainVec, inverse_normalize));
+		inverse_normalize.m128_f32[3] = inverse_normalize.m128_f32[2] = 0;
+		return vec2(
+			_mm_mul_ps(mainVec, inverse_normalize));
 	}
 
 	vec3 vec3::Normalize() {
+		__m128 mainVec = GenerateXYZW();
+
 		__m128 inverse_normalize = _mm_rsqrt_ps(_mm_dp_ps(mainVec, mainVec, 0x77));
+		//Quick dirty way to prevent inf
+		inverse_normalize.m128_f32[3] = 0;
 		return vec3(_mm_mul_ps(mainVec, inverse_normalize));
 	}
 
@@ -67,131 +74,161 @@ namespace FRSML {
 #pragma region ORIGINAL_MATH_OPERATOR
 
 	vec2 vec2::operator +(vec2 ant) {
-		return _mm_add_ps(this->mainVec, ant.mainVec);
+		vec2 temp{};
+
+		temp.x = x + ant.x;
+		temp.y = y + ant.y;
+
+		return temp;
 	}
 
 	vec2 vec2::operator -(vec2 ant) {
-		return _mm_sub_ps(this->mainVec, ant.mainVec);
+		vec2 temp{};
+
+		temp.x = x - ant.x;
+		temp.y = y - ant.y;
+
+		return temp;
 	}
 
 
 	vec2 vec2::operator *(vec2 ant) {
-		return _mm_mul_ps(this->mainVec, ant.mainVec);
+		vec2 temp{};
+
+		temp.x = x * ant.x;
+		temp.y = y * ant.y;
+
+		return temp;
 	}
 
 
 	vec2 vec2::operator /(vec2 ant) {
-		return _mm_div_ps(this->mainVec, ant.mainVec);
+		vec2 temp{};
+
+		temp.x = x / ant.x;
+		temp.y = y / ant.y;
+
+		return temp;
 	}
 
 #pragma endregion
 
 	vec2 vec2::operator +(float ant) {
-		return _mm_add_ps(this->mainVec, _mm_set1_ps(ant));
+		vec2 temp{};
+
+		temp.x = x + ant;
+		temp.y = y + ant;
+
+		return temp;
 	}
 
 
 	vec2 vec2::operator -(float ant) {
-		return _mm_sub_ps(this->mainVec, _mm_set1_ps(ant));
+		vec2 temp{};
+
+		temp.x = x - ant;
+		temp.y = y - ant;
+
+		return temp;
 	}
 
 
 	vec2 vec2::operator *(float ant) {
-		return _mm_mul_ps(this->mainVec, _mm_set1_ps(ant));
+		vec2 temp{};
+
+		temp.x = x * ant;
+		temp.y = y * ant;
+
+		return temp;
 	}
 
 
 	vec2 vec2::operator /(float ant) {
-		return _mm_div_ps(this->mainVec, _mm_set1_ps(ant));
+		vec2 temp{};
+
+		temp.x = x / ant;
+		temp.y = y / ant;
+
+		return temp;
 	}
 
 
 	void vec2::operator +=(vec2 ant) {
 		*this = *this + ant;
-		SetRealXY(mainVec);
 	}
 
 
 	void vec2::operator -=(vec2 ant) {
 		*this = *this - ant;
-		SetRealXY(mainVec);
 	}
 
 
 	void vec2::operator *=(vec2 ant) {
 		*this = *this * ant;
-		SetRealXY(mainVec);
 	}
 
 
 	void vec2::operator /=(vec2 ant) {
 		*this = *this / ant;
-		SetRealXY(mainVec);
 	}
 
 
 
 	void vec2::operator +=(float ant) {
 		*this = *this + ant;
-		SetRealXY(mainVec);
 	}
 
 
 	void  vec2::operator -=(float ant) {
 		*this = *this - ant;
-		SetRealXY(mainVec);
 	}
 
 
 	void vec2::operator *=(float ant) {
 		*this = *this * ant;
-		SetRealXY(mainVec);
 	}
 
 
 	void vec2::operator /=(float ant) {
 		*this = *this / ant;
-		SetRealXY(mainVec);
 	}
 
 	void vec2::operator ++() {
 		*this = *this + 1;
-		SetRealXY(mainVec);
 	}
 
 	void vec2::operator --() {
 		*this = *this - 1;
-		SetRealXY(mainVec);
 	}
 
 	vec2 vec2::operator& (vec2 _para) {
-		return vec2(_mm_and_ps(this->mainVec, _para.mainVec));
+		return vec2(_mm_and_ps(GenerateXYZW(), 
+			_para.GenerateXYZW()));
 	}
 
 
 	vec2 vec2::operator^ (vec2 _para) {
-		return vec2(_mm_xor_ps(this->mainVec, _para.mainVec));
+		return vec2(_mm_xor_ps(GenerateXYZW(),
+			_para.GenerateXYZW()));
 	}
 
 	vec2 vec2::operator| (vec2 _para) {
-		return vec2(_mm_or_ps(this->mainVec, _para.mainVec));
+		return vec2(_mm_or_ps(GenerateXYZW(),
+			_para.GenerateXYZW()));
 	}
 
 	void vec2::operator |=(vec2 ant) {
 		*this = *this | ant;
-		SetRealXY(mainVec);
 	}
 
 
 	void vec2::operator &=(vec2 ant) {
 		*this = *this & ant;
-		SetRealXY(mainVec);
 	}
 
 
 	void vec2::operator ^=(vec2 ant) {
 		*this = *this ^ ant;
-		SetRealXY(mainVec);
 	}
 
 }

@@ -7,6 +7,7 @@
 #include "Vector.h"
 
 namespace FRSML {
+
 	class TFAPI Matrix4 {
 	public:
 
@@ -15,7 +16,7 @@ namespace FRSML {
 		Matrix4(float n = 0);
 		Matrix4(vec4 row1, vec4 row2, vec4 row3, vec4 row4);
 
-		vec4 cols[4] = {};
+		vec4 rows[4] = {};
 
 		bool IsMatrixIndentiy();
 
@@ -47,7 +48,7 @@ namespace FRSML {
 
 		//Rotate a matrix with axis
 		//You can use Quaternion instead. I'm also provide an converter of Euler vector
-		friend Matrix4 Rotate(Matrix4 base, float rot, vec3 dir);
+		friend TFAPI Matrix4 Rotate(Matrix4 base, float rot, vec3 dir);
 
 		friend Matrix4 Scale(Matrix4 base, float scale);
 
@@ -68,7 +69,8 @@ namespace FRSML {
 		inline Matrix4 operator -(Matrix4 _para);
 
 	private:
-		vec4 rows[4] = {};
+
+		vec4 cols[4] = {};
 	};
 
 	static Matrix4 Identity{
@@ -95,7 +97,7 @@ namespace FRSML {
 		float top, float zNear, float zFar);
 
 	//I have the up vector already.
-	TFAPI Matrix4 LookAt(vec3 camPos, vec3 camTarget);
+	TFAPI Matrix4 LookAt(vec3 camPos, vec3 camTarget, vec3 up);
 
 	TFAPI std::ostream& operator <<(std::ostream&, Matrix4);
 

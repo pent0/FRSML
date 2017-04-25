@@ -157,56 +157,6 @@ private:
 };
 
 
-struct FRS_uint {
-
-};
-
-struct FRS_long {
-public:
-
-	FRS_long(__m128i n) {
-		mainLong = n;
-	}
-
-	void operator = (long& a) {
-		long* n= (long*)(&mainLong);
-		a = n[1];
-	}
-
-	FRS_long& operator + (FRS_long f1);
-	FRS_long& operator - (FRS_long f1);
-	FRS_long& operator * (FRS_long f1);
-	FRS_long& operator / (FRS_long f1);
-	FRS_long& operator += (long n);
-	FRS_long& operator -= (long n);
-	FRS_long& operator++();
-	FRS_long& operator--();
-private:
-	//Rarely use long
-	__m128i mainLong;
-};
-
-
-struct FRS_string {
-public:
-	void ConvertToChar(char* to) {
-		to = (char*)(_aligned_malloc(GetLength() * sizeof(char), 16));
-	}
-
-	float GetLength() {
-		return (float)count;
-	}
-
-
-	
-
-private:
-	FRS_float count;
-	__m128i* mainString;
-};
-
-
-
 
 #endif
 TFAPI std::ostream& operator <<(std::ostream& para, const FRS_float& a);

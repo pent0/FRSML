@@ -1,6 +1,8 @@
 #ifndef VECTORANT_H
 #define VECTORANT_H
 
+#pragma warning (disable: 4700)
+
 #include <nmmintrin.h>
 #include <functional>
 #include <intrin.h>
@@ -24,15 +26,44 @@ namespace FRSML{
 	class TFAPI vec2 {
 	public:
 
-		vec2(__m128 _para);
+		float x, y = 0;
+
+		vec2(const vec2& ot) {
+			x = ot.x;
+			y = ot.y;
+		}
+
+		vec2(__m128 at) {
+			__m128 t1 = _mm_shuffle_ps(at, at, _MM_SHUFFLE(1, 1, 1, 1));
+			__m128 t2 = _mm_shuffle_ps(at, at, _MM_SHUFFLE(0, 0, 0, 0));
+
+			x = _mm_cvtss_f32(t1);
+			y = _mm_cvtss_f32(t2);
+
+		}
+
 		vec2(float x, float y);
 		vec2(float n = 0);
 
-		__m128& MainVector() {
-			return mainVec;
+		float& operator [](std::size_t matrixIndex2)
+		{
+			switch (matrixIndex2) {
+			case 0:
+				return x;
+				break;
+			case 1:
+				return y;
+				break;
+			default:
+				break;
+			}
+
 		}
 
-		float X, Y;
+		__m128 GenerateXYZW() {
+			return _mm_set_ps(0,0,x,y);
+		} 
+
 
 		inline bool operator == (vec2 ant);
 		inline bool operator != (vec2 ant);
@@ -73,11 +104,12 @@ namespace FRSML{
 		static vec2 Left;
 		static vec2 Right;
 
-		operator float*() const {
+		explicit operator float*() const {
 
-			float* value;
-			value[0] = mainVec.m128_f32[3];
-			value[1] = mainVec.m128_f32[2];
+			float value[2];
+
+			value[0] = x;
+			value[1] = y;
 
 			return value;
 		}
@@ -88,17 +120,6 @@ namespace FRSML{
 
 	private:
 
-		void SetRealXY(float newX, float newY) {
-			X = newX;
-			Y = newY;
-		}
-
-		void SetRealXY(__m128 _para) {
-			X = _para.m128_f32[1];
-			Y = _para.m128_f32[0];
-		}
-
-		__m128 mainVec;
 	};
 
 	//A Vector3 class SIMD
@@ -108,79 +129,62 @@ namespace FRSML{
 		vec3(float x, float y, float Z);
 		vec3(float n = 0);
 
-		__m128& MainVector() {
-			return mainVec;
-		}
-
-		float X, Y, Z = 0;
+		float x, y, z = 0;
 
 		inline bool operator == (vec3 ant);
 		inline bool operator != (vec3 ant);
 		inline vec3 operator +(vec3 ant);
-
 		inline void operator +=(vec3 ant) {
-			mainVec = _mm_add_ps(mainVec, ant.mainVec);
-			SetRealXY(mainVec);
+			*this = *this + ant;
 		}
 
 		inline vec3 operator + (float ant);
 		inline void operator += (float ant) {
-			mainVec = _mm_sub_ps(mainVec, _mm_set1_ps(ant));
-			SetRealXY(mainVec);
+			*this = *this + ant;
 		}
+
 		inline void operator ++() {
-			mainVec = _mm_add_ps(mainVec, _mm_set1_ps(1));
-			SetRealXY(mainVec);
+			*this = *this + 1;
 		}
 		inline vec3 operator -(vec3 ant);
 		inline vec3 operator -(float ant);
 		inline void operator -=(vec3 ant) {
-			mainVec = _mm_sub_ps(mainVec, ant.mainVec);
-			SetRealXY(mainVec);
+			*this = *this - ant;
 		}
 		inline void operator -=(float ant) {
-			mainVec = _mm_sub_ps(mainVec, _mm_set1_ps(ant));
-			SetRealXY(mainVec);
+			*this = *this - ant;
 		}
 		inline void operator --() {
-			mainVec = _mm_sub_ps(mainVec, _mm_set1_ps(1));
-			SetRealXY(mainVec);
+			*this = *this - 1;
 		}
 		inline vec3 operator *(vec3 ant);
 		inline vec3 operator *(float ant);
 		inline void operator *=(vec3 ant) {
-			mainVec = _mm_mul_ps(mainVec, ant.mainVec);
-			SetRealXY(mainVec);
+			*this = *this * ant;
 		}
 		inline void operator *=(float ant) {
-			mainVec = _mm_mul_ps(mainVec, _mm_set1_ps(ant));
-			SetRealXY(mainVec);
+			*this = *this * ant;
 		}
 		inline vec3 operator /(vec3 ant);
 		inline vec3 operator /(float ant);
 		inline void operator /=(vec3 ant) {
-			mainVec = _mm_div_ps(mainVec, ant.mainVec);
-			SetRealXY(mainVec);
+			*this = *this / ant;
 		}
 		inline void operator /=(float ant) {
-			mainVec = _mm_div_ps(mainVec, _mm_set1_ps(ant));
-			SetRealXY(mainVec);
+			*this = *this / ant;
 		}
 
 		inline vec3 operator &(vec3 ant);
 		inline void operator &=(vec3 ant) {
-			mainVec = _mm_and_ps(mainVec, ant.mainVec);
-			SetRealXY(mainVec);
+			*this = *this & ant;
 		}
 		inline vec3 operator ^(vec3 ant);
 		inline void operator ^=(vec3 ant) {
-			mainVec = _mm_xor_ps(mainVec, ant.mainVec);
-			SetRealXY(mainVec);
+			*this = *this ^ ant;
 		}
 		inline vec3 operator |(vec3 ant);
 		inline void operator |=(vec3 ant) {
-			mainVec = _mm_or_ps(mainVec, ant.mainVec);
-			SetRealXY(mainVec);
+			*this = *this | ant;
 		}
 
 		static vec3 Down;
@@ -198,35 +202,28 @@ namespace FRSML{
 
 		inline vec3 Normalize();
 
-		operator float*() const {
+		explicit operator float*() const {
 
-			float* value;
-			value[0] = mainVec.m128_f32[3];
-			value[1] = mainVec.m128_f32[2];
-			value[2] = mainVec.m128_f32[1];
+			float value[3];
+
+			value[0] = x;
+			value[1] = y;
+			value[2] = z;
 
 			return value;
 		}
 
+		__m128 GenerateXYZW() {
+			return _mm_set_ps(0, x, y, z);
+		}
+
 	private:
-		__m128 mainVec;
-
-		void SetRealXY(float newX, float newY, float newZ) {
-			X = newX;
-			Y = newY;
-			Z = newZ;
-		}
-
-		void SetRealXY(__m128 _para) {
-			X = _para.m128_f32[2];
-			Y = _para.m128_f32[1];
-			Z = _para.m128_f32[0];
-		}
+	
 
 	};
 
 
-	class TFAPI vec4 {
+	struct TFAPI vec4 {
 	public:
 
 		vec4(float ant = 0);
@@ -234,7 +231,6 @@ namespace FRSML{
 		vec4(float* as);
 		vec4(vec3 _para, float _para2);
 
-		__m128& MainVector();
 		vec4(__m128 _set);
 		void operator =(vec4 ant);
 		bool operator ==(vec4 ant);
@@ -242,22 +238,18 @@ namespace FRSML{
 		vec4 operator -(vec4 ant);
 		void operator -=(vec4 ant) {
 			*this = *this - ant;
-			SetRealXY(mainVec);
 		}
 
 		void operator +=(vec4 ant) {
 			*this = *this - ant;
-			SetRealXY(mainVec);
 		}
 
 		void operator *=(vec4 ant) {
 			*this = *this * ant;
-			SetRealXY(mainVec);
 		}
 
 		void operator /=(vec4 ant) {
 			*this = *this / ant;
-			SetRealXY(mainVec);
 		}
 
 		vec4 operator *(vec4 ant);
@@ -268,43 +260,52 @@ namespace FRSML{
 		vec4 operator /(float ant);
 		void operator /=(float ant) {
 			*this = *this / ant;
-			SetRealXY(mainVec);
 		}
 
 		friend float* value_ptr(vec4 vec);
 
-		float X, Y, Z, W = 0;
+		float x, y, z, w = 0;
 
 		float Length();
 		vec4 Normalize();
 
-		operator float*() const {
+		explicit operator float*() const {
 
-			float* value;
-			value[0] = mainVec.m128_f32[3];
-			value[1] = mainVec.m128_f32[2];
-			value[2] = mainVec.m128_f32[1];
-			value[3] = mainVec.m128_f32[0];
+			float* value = (float*)malloc(sizeof(float) * 4);
+			value[0] = x;
+			value[1] = y;
+			value[2] = z;
+			value[3] = w;
 
 			return value;
 		}
 
+		float& operator [](std::size_t matrixIndex2)
+		{
+			switch (matrixIndex2) {
+			case 0:
+				return x;
+				break;
+			case 1:
+				return y;
+				break;
+			case 2:
+				return z;
+				break;
+			case 3:
+				return w;
+				break;
+			default:
+				break;
+			}
+
+		}
+
+		__m128 GenerateXYZW() {
+			return _mm_set_ps(x, y, z, w);
+		}
+
 	private:
-		__m128 mainVec;
-
-		void SetRealXY(float newX, float newY, float newZ, float newW) {
-			X = newX;
-			Y = newY;
-			Z = newZ;
-			W = newW;
-		}
-
-		void SetRealXY(__m128 _para) {
-			X = _para.m128_f32[3];
-			Y = _para.m128_f32[2];
-			Z = _para.m128_f32[1];
-			W = _para.m128_f32[0];
-		}
 
 	};
 

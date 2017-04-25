@@ -114,10 +114,10 @@ namespace FRSML {
 	}
 
 	bool Matrix4::IsMatrixIndentiy() {
-		if (this->rows[0].X() == 1 &&
-			this->rows[1].Y() == 1 &&
-			this->rows[2].Z() == 1 &&
-			this->rows[3].W() == 1)
+		if (this->rows[0].X == 1 &&
+			this->rows[1].Y == 1 &&
+			this->rows[2].Z == 1 &&
+			this->rows[3].W == 1)
 			return true;
 
 		return false;
@@ -128,48 +128,52 @@ namespace FRSML {
 		float zNear,
 		float zFar) {
 
-		float aspect = extent.X() / extent.Y();
+		float aspect = extent.Y/extent.X;
 
-		__m128 t0 = _mm_set1_ps(1);
-		__m128 t1 = _mm_set1_ps(zoom / 2);
-		__m128 t2 = _mm_set1_ps(aspect);
-		__m128 t3 = _mm_set1_ps(zNear);
-		__m128 t4 = _mm_set1_ps(zFar);
-		__m128 t5 = _mm_sub_ps(t3, t4);
+		__m128 t1 = _mm_set1_ps(1);
+		__m128 t2 = _mm_set1_ps(zoom / 2);
+		//__m128 t3 = _mm_set1_ps(PI / 180);
+		__m128 t4 = _mm_mul_ps(t2, /*t3*/ t1);
+		t4 = nmmintrin::_Tan(t4);
+		t4 = _mm_div_ps(t1, t4);
+		__m128 t5 = _mm_set1_ps(zFar - zNear);
+		__m128 t6 = _mm_mul_ps(_mm_set1_ps(zNear), _mm_set1_ps(zFar));
+		t6 = _mm_div_ps(t6, t5);
+		t6 = _mm_mul_ps(_mm_set1_ps(-1), t6);
 
-		__m128 grand1 = _mm_div_ps(t0, nmmintrin::_Tan(t1));
-		__m128 grand2 = _mm_mul_ps(_mm_div_ps(t0, t2), grand1);
+		__m128 t7 = _mm_set1_ps(zFar);
+		t7 = _mm_div_ps(t7, t5);
+		t7 = _mm_mul_ps(_mm_set1_ps(-1), t7);
 
-		__m128 grand3 = _mm_sub_ps(t4,t3);
-		grand3 = _mm_div_ps(t4,grand3);
-		
-		__m128 grand4 = _mm_sub_ps(t4,t3);
-		grand4 = _mm_div_ps(_mm_mul_ps(t4, _mm_mul_ps(_mm_set1_ps(-1), t3)), grand4);
+		float grand1 = _mm_extract_psn(t4, 3);
+		float grand2 = _mm_extract_psn(t6, 3);
+		float grand3 = _mm_extract_psn(t7, 3);
 
-		float fn1 = _mm_extract_psn(grand1, 3);
-		float fn2 = _mm_extract_psn(grand2, 3);
-		float fn3 = _mm_extract_psn(grand3, 3);
-		float fn4 = _mm_extract_psn(grand4, 3);
+		Matrix4 returnVal(
+			{grand1 * aspect,0,0,0},
+			{0, grand1, 0,0},
+			{0,0,grand3, -1},
+			{0,0,grand2, 0}
+		);
 
-		return Matrix4{
-			{fn1,0,0,0},
-			{0,fn2,0,0},
-			{0,0,fn3,1},
-			{0,0,fn4,0}
-		};
+		returnVal = returnVal.Transpose();
+
+		return returnVal;
+
 	}
 
 
-	Matrix4 LookAt(vec3 camPos, vec3 camTarget) {
+	Matrix4 LookAt(vec3 camPos, vec3 camTarget, vec3 up) {
 		//CamDirection equals to the z yaw.
-		vec3 camDir = (camTarget - camPos).Normalize();
+		vec3 camDir = (camPos-camTarget).Normalize();
 		//Cam roll - x
-		vec3 camRight = Cross(vec3::Up, camDir);
+		vec3 camRight = Cross(up, camDir);
+
 		vec3 camUp = Cross(camDir, camRight);
 
-		vec4 row1{ camDir,0 };
-		vec4 row2{ camRight,0 };
-		vec4 row3{ camUp,0 };
+		vec4 row1{ camRight, 0};
+		vec4 row2{ camUp,0 };
+		vec4 row3{ camDir,0 };
 		vec4 row4{ 0,0,0,1 };
 
 		vec4 col1{ 1,0,0,0 };
@@ -177,13 +181,14 @@ namespace FRSML {
 		vec4 col3{ 0,0,1,0 };
 		vec4 col4{ camPos, -1 };
 
-		col4.MainVector() = _mm_sub_ps(_mm_set_ps1(0), col4.MainVector());
+		col4 = vec4(-1) * col4;
 
 		Matrix4 mat1{ row1,row2,row3,row4 };
 		Matrix4 mat2{ col1,col2,col3,col4 };
+
 		mat2 = mat2.Transpose();
 
-		return mat1*mat2;
+		return mat1 * mat2;
 	}
 
 	Matrix4 CreateOrthoMatrix(float left,
@@ -375,7 +380,7 @@ namespace FRSML {
 	}
 
 	Matrix4 Matrix4::operator*(Matrix4 _para){
-		__m128 newRow[4];
+		__m128 newRow[4] = {};
 
 		__m128 row1 = _para.rows[0].MainVector();
 		__m128 row2 = _para.rows[1].MainVector();
@@ -395,7 +400,8 @@ namespace FRSML {
 			c1 = _mm_add_ps(c1, c2);
 
 			c2 = _mm_mul_ps(t3, row3);
-			__m128 c3 = _mm_mul_ps(t4, row4);
+			__m128 c3 = {};
+			c3 = _mm_mul_ps(t4, row4);
 			c2 = _mm_add_ps(c2, c3);
 			c2 = _mm_add_ps(c1, c2);
 
@@ -450,7 +456,7 @@ namespace FRSML {
 			__m128 t3 = _mm_shuffle_ps(rows[3].MainVector(), rows[3].MainVector(), _MM_SHUFFLE(0,2,1,3));
 			__m128 t4 = _mm_shuffle_ps(rows[2].MainVector(), rows[2].MainVector(), _MM_SHUFFLE(0, 2, 1, 3));
 			__m128 t5 = _mm_shuffle_ps(rows[3].MainVector(), rows[3].MainVector(), _MM_SHUFFLE(1, 0, 2, 3));
-			template0 = _mm_mul_ps(_mm_set_ps1(rows[0].X()), t1);
+			template0 = _mm_mul_ps(_mm_set_ps1(rows[0].X), t1);
 			template0 = _mm_mul_ps(template0, _mm_sub_ps(_mm_mul_ps(t2, t3), _mm_mul_ps(t4, t5)));
 		
 		};
@@ -461,7 +467,7 @@ namespace FRSML {
 			__m128 t3 = _mm_shuffle_ps(rows[3].MainVector(), rows[3].MainVector(), _MM_SHUFFLE(1, 0, 3, 2));
 			__m128 t4 = _mm_shuffle_ps(rows[2].MainVector(), rows[2].MainVector(), _MM_SHUFFLE(1, 0, 3, 2));
 			__m128 t5 = _mm_shuffle_ps(rows[3].MainVector(), rows[3].MainVector(), _MM_SHUFFLE(0, 3, 1, 2));
-			template1 = _mm_mul_ps(_mm_set_ps1(rows[0].Y()), t1);
+			template1 = _mm_mul_ps(_mm_set_ps1(rows[0].Y), t1);
 			template1 = _mm_mul_ps(template1, _mm_sub_ps(_mm_mul_ps(t2, t3), _mm_mul_ps(t4, t5)));
 		}
 
@@ -471,7 +477,7 @@ namespace FRSML {
 			__m128 t3 = _mm_shuffle_ps(rows[3].MainVector(), rows[3].MainVector(), _MM_SHUFFLE(0, 3, 2, 1));
 			__m128 t4 = _mm_shuffle_ps(rows[2].MainVector(), rows[2].MainVector(), _MM_SHUFFLE(0, 3, 2, 1));
 			__m128 t5 = _mm_shuffle_ps(rows[3].MainVector(), rows[3].MainVector(), _MM_SHUFFLE(2, 0, 3, 1));
-			template2 = _mm_mul_ps(_mm_set_ps1(rows[0].Z()), t1);
+			template2 = _mm_mul_ps(_mm_set_ps1(rows[0].Z), t1);
 			template2 = _mm_mul_ps(template2, _mm_sub_ps(_mm_mul_ps(t2, t3), _mm_mul_ps(t4, t5)));
 		}
 
@@ -481,7 +487,7 @@ namespace FRSML {
 			__m128 t3 = _mm_shuffle_ps(rows[3].MainVector(), rows[3].MainVector(), _MM_SHUFFLE(2, 1, 3, 0));
 			__m128 t4 = _mm_shuffle_ps(rows[2].MainVector(), rows[2].MainVector(), _MM_SHUFFLE(2, 1, 3, 0));
 			__m128 t5 = _mm_shuffle_ps(rows[3].MainVector(), rows[3].MainVector(), _MM_SHUFFLE(1, 3, 2, 0));
-			template3 = _mm_mul_ps(_mm_set_ps1(rows[0].W()), t1);
+			template3 = _mm_mul_ps(_mm_set_ps1(rows[0].W), t1);
 			template3 = _mm_mul_ps(template3, _mm_sub_ps(_mm_mul_ps(t2, t3), _mm_mul_ps(t4, t5)));
 		}
 
@@ -501,9 +507,9 @@ namespace FRSML {
 		
 		Matrix4 temp = Identity;
 
-		temp.rows[0].W() = trans.X();
-		temp.rows[1].W() = trans.Y();
-		temp.rows[3].W() = trans.Z();
+		temp.rows[0].W = trans.X;
+		temp.rows[1].W = trans.Y;
+		temp.rows[3].W = trans.Z;
 
 		temp *= base;
 
@@ -518,22 +524,22 @@ namespace FRSML {
 		float t2 = Sin(rot);
 
 		if (dir == vec3::Left) {
-			temp[2][2] = t;
-			temp[2][3] = -t2;
-			temp[3][2] = t2;
-			temp[3][3] = t;
-		}
-		else if (dir == vec3::Up) {
-			temp[1][1] = t;
-			temp[1][3] = t2;
-			temp[3][1] = -t2;
-			temp[3][3] = t;
-		}
-		else if (dir == vec3::Forward) {
 			temp[1][1] = t;
 			temp[1][2] = -t2;
 			temp[2][1] = t2;
 			temp[2][2] = t;
+		}
+		else if (dir == vec3::Up) {
+			temp[0][0] = t;
+			temp[0][2] = t2;
+			temp[2][0] = -t2;
+			temp[2][2] = t;
+		}
+		else if (dir == vec3::Forward) {
+			temp[0][0] = t;
+			temp[0][1] = -t2;
+			temp[1][0] = t2;
+			temp[1][1] = t;
 		}
 
 		temp *= base;
@@ -546,13 +552,24 @@ namespace FRSML {
 
 		Matrix4 temp = Identity;
 
-		temp.rows[0].X() = scale;
-		temp.rows[1].Y() = scale;
-		temp.rows[3].Z() = scale;
+		temp.rows[0].X = scale;
+		temp.rows[1].Y = scale;
+		temp.rows[3].Z = scale;
 
 		temp *= base;
 
 		return temp;
+	}
+
+	vec4 operator * (vec4 _para1, Matrix4 _para2){
+
+		vec4 temp;
+		Matrix4 temp1{ _para1,temp,temp,temp };
+
+		temp1 = temp1.Transpose();
+		temp1 *= temp1*_para2;
+
+		return temp1.cols[0];
 	}
 
 }
