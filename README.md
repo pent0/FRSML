@@ -89,6 +89,8 @@ A small linear math library using SSE4 technology and upper.
 
 # NEWS:
 
+- Ah, ver 2.0 is released. Information will coming soon. Lot of changes
+
 A branch contains Pascal implementation of FRSML is available at the objfpc-FRSML branch. 
 
  **************************
