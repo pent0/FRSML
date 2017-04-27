@@ -8,6 +8,10 @@
    - Fix LookAt function
    - Replace the old Sin function with the new one (The reason is because the old function give unpercision result)
    - Normal math won't be used any SSE because of unnecessary.
+   
+   Working now : ->-
+   
+  ![alt tag](https://raw.githubusercontent.com/bentokun/FRSML/master/result_vk.png)
 
 ## UPDATE:
  
