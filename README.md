@@ -1,4 +1,4 @@
-# FRSML
+# FRSML 2.0
 
 A small linear math library using SSE4 technology and upper.
 
