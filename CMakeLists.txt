@@ -12,9 +12,9 @@ message(STATUS "Loading include file!!")
 
 include (ComplierTarget)
 
-set (FRSML_VERSION_MAJOR_PUBLIC 1)
-set (FRSML_VERSION_MINOR_PUBLIC 2)
-set (FRSML_WORKINGCODE 2017021965M_V11_03)
+set (FRSML_VERSION_MAJOR_PUBLIC 2)
+set (FRSML_VERSION_MINOR_PUBLIC 0)
+set (FRSML_WORKINGCODE 2017042786L_V20_0)
 
 message(STATUS "Starting generated projekt")
 
