@@ -74,7 +74,7 @@ namespace FRSML {
 		{ 0,0,0,1 }
 	};
 
-	TFAPI float** value_ptr(mat4 mat);
+	TFAPI float* value_ptr(mat4 mat);
 
 	TFAPI std::ostream& operator <<(std::ostream& stream, mat4 matrix);
 
