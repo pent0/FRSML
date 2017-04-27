@@ -4,13 +4,13 @@ set(HEADERS
 	AssertSSE.h
 	CPUId.h
 	FRSVar.h
-	Matrix4x4.h
+	Matrix.h
 	Standard.h
 	Vector.h)
 
 set(SRCS
 	FRSVar.cpp
-	Matrix4x4.cpp
+	Matrix.cpp
 	Standard.cpp
 	Vector4f.cpp
 	Vector4i.cpp
