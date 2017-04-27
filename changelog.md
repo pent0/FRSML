@@ -1,13 +1,13 @@
 
 # WHAT IS NEW IN FRSML 2.0
-	- Totally compatible with Vulkan mapping and OpenGl. How?
-		- Directly use x, y, z, w keyword, remove SSE struct from class, to make OPENGL or Vulkan able to
+   - Totally compatible with Vulkan mapping and OpenGl. How?
+	- Directly use x, y, z, w keyword, remove SSE struct from class, to make OPENGL or Vulkan able to
 		get the value from the static offset
-	- Reduce shift-typing keyword, to make typing more easier 
-	- Matrix4 now only has columns value
-	- Fix LookAt function
-	- Replace the old Sin function with the new one (The reason is because the old function give unpercision result)
-	- Normal math won't be used any SSE because of unnecessary.
+   - Reduce shift-typing keyword, to make typing more easier 
+   - Matrix4 now only has columns value
+   - Fix LookAt function
+   - Replace the old Sin function with the new one (The reason is because the old function give unpercision result)
+   - Normal math won't be used any SSE because of unnecessary.
 
 ## UPDATE:
   
