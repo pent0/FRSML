@@ -2,13 +2,12 @@
 
 namespace FRSML {
 	Quaternion Quaternion::Normalize() {
+		__m128 mainQuat = GenerateXYZW();
+
 		__m128 inverse_normalize = _mm_rsqrt_ps(_mm_dp_ps(mainQuat, mainQuat, 0xFF));
 		return Quaternion(_mm_mul_ps(mainQuat, inverse_normalize));
 	}
 
-	Quaternion Quaternion::operator+(Quaternion tar1) {
-		return Quaternion(_mm_add_ps(this->mainQuat, tar1.mainQuat));
-	}
 
 	Quaternion Quaternion::Euler(vec3 euler) {
 
@@ -76,45 +75,33 @@ namespace FRSML {
 	}
 
 
-	float& Quaternion::X() {
-		return mainQuat.m128_f32[2];
-	}
-
-	float& Quaternion::Y() {
-		return mainQuat.m128_f32[1];
-	}
-	
-	float& Quaternion::Z() {
-		return mainQuat.m128_f32[0];
-	}
-	
-	float& Quaternion::W() {
-		return mainQuat.m128_f32[3];
-	}
-
 	Quaternion Quaternion::operator *(Quaternion tar1) {
+
+		__m128 mainQuat = GenerateXYZW();
+		__m128 mainQuat2 = tar1.GenerateXYZW();
+
 		__m128 t1 = _mm_shuffle_ps(mainQuat, mainQuat, _MM_SHUFFLE(3, 3, 3, 3));
 		__m128 t2 = _mm_shuffle_ps(mainQuat, mainQuat, _MM_SHUFFLE(2, 2, 2, 2));
 		__m128 t3 = _mm_shuffle_ps(mainQuat, mainQuat, _MM_SHUFFLE(1, 1, 1, 1));
 		__m128 t4 = _mm_shuffle_ps(mainQuat, mainQuat, _MM_SHUFFLE(0, 0, 0, 0));
 	
 		__m128 grand0; {
-			__m128 c1 = _mm_shuffle_ps(tar1.mainQuat, tar1.mainQuat, _MM_SHUFFLE(3, 2, 1, 0));
+			__m128 c1 = _mm_shuffle_ps(mainQuat2, mainQuat2, _MM_SHUFFLE(3, 2, 1, 0));
 			grand0 = _mm_mul_ps(t1, c1);
 		};
 
 		__m128 grand1; {
-			__m128 c1 = _mm_shuffle_ps(tar1.mainQuat, tar1.mainQuat, _MM_SHUFFLE(2, 3, 0, 1));
+			__m128 c1 = _mm_shuffle_ps(mainQuat2, mainQuat2, _MM_SHUFFLE(2, 3, 0, 1));
 			grand1 = _mm_mul_ps(t2, c1);
 		};
 
 		__m128 grand2; {
-			__m128 c1 = _mm_shuffle_ps(tar1.mainQuat, tar1.mainQuat, _MM_SHUFFLE(1, 0, 3, 2));
+			__m128 c1 = _mm_shuffle_ps(mainQuat2, mainQuat2, _MM_SHUFFLE(1, 0, 3, 2));
 			grand2 = _mm_mul_ps(t3, c1);
 		};
 
 		__m128 grand3; {
-			__m128 c1 = _mm_shuffle_ps(tar1.mainQuat, tar1.mainQuat, _MM_SHUFFLE(0, 1, 2, 3));
+			__m128 c1 = _mm_shuffle_ps(mainQuat2, mainQuat2, _MM_SHUFFLE(0, 1, 2, 3));
 			grand3 = _mm_mul_ps(t4, c1);
 		};
 
@@ -129,17 +116,19 @@ namespace FRSML {
 	}
 
 	Quaternion Dot(Quaternion _para1, Quaternion _para2) {
-		return  _mm_dp_ps(_para1.MainQuat(), _para2.MainQuat(), 0xFF);
+		return  _mm_dp_ps(_para1.GenerateXYZW(), _para2.GenerateXYZW(), 0xFF);
 	}	
 	
 	Quaternion Angle(Quaternion _para1, Quaternion _para2) {
 		Quaternion _t1 = _para1.Normalize();
 		Quaternion _t2 = _para2.Normalize();
 		_t1 = Dot(_t1, _t2);
-		return nmmintrin::_Acos(_t1.MainQuat());
+		return nmmintrin::_Acos(_t1.GenerateXYZW());
 	}
 
 	Quaternion::operator mat4() {
+
+		__m128 mainQuat = GenerateXYZW();
 
 		Quaternion tmp = Normalize();
 		__m128 quatX = _mm_shuffle_ps(mainQuat, mainQuat, _MM_SHUFFLE(2, 2, 2, 2));

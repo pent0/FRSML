@@ -4,42 +4,38 @@
 #include <smmintrin.h>
 
 #include "Standard.h"
+#include "Vector.h"
 #include "Matrix.h"
 
 namespace FRSML {
 
 	using namespace nmmintrin;
 
-	class TFAPI Quaternion {
+	struct TFAPI Quaternion : public vec4 {
 	public:
-		Quaternion(float x = 0, float y = 0, float z = 0, float w = 1){
-			mainQuat = _mm_set_ps(w, x, y, z);
+
+		Quaternion(float x = 0, float y = 0, float z = 0, float w = 1) {
+			this->x = x;
+			this->y = y;
+			this->z = z;
+			this->w = w;
 		}
 
-		Quaternion(__m128 quatVal) {
-			mainQuat = quatVal;
-		}
-		
+		Quaternion(__m128 _para) :vec4(_para) {};
+
 		operator mat4();
 
-		__m128& MainQuat() {
-			return mainQuat;
+		__m128& GenerateXYZW() {
+			return _mm_set_ps(w, x, y, z);
 		}
-
-		float& X(); float& Y(); float& Z(); float& W();
 
 		inline static Quaternion Euler(vec3 euler);
 		inline static Quaternion Rotate(vec3 axis, float angle);
-
-		//Add two quaternion
-		inline Quaternion operator +(Quaternion tar1);
 
 		//Multi-quat!! Get it?
 		inline Quaternion operator *(Quaternion tar1);
 		Quaternion Normalize();
 
-	private:
-		__m128 mainQuat;
 	};
 
 	//Get the dot product of two quat
