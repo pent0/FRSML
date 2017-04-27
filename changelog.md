@@ -10,6 +10,10 @@
    - Normal math won't be used any SSE because of unnecessary.
 
 ## UPDATE:
+ 
+### 27/4/2017 ----------------------
+	
+  + FRSML ver 2 is out. However the quaternion is the thing that i haven't touched for months, and its my next milestone.
   
 ### 16/4/2017 :) -------------------
 
