@@ -1,4 +1,12 @@
 
+# THE NEW FRSML 3.0
+   - Still compatible with Vulkan and OpenGL, but some new class is in	
+		+ Add a Rectangle and Point struct
+		+ Fixing issues with Matrix4 about the multiplying
+	- Clean the project, rename namespace to lowercase for compatible writing code
+	- Merge the struct to single file
+	- Remove the PASCAL version 
+
 # WHAT IS NEW IN FRSML 2.0
    - Totally compatible with Vulkan mapping and OpenGl. How?
 	- Directly use x, y, z, w keyword, remove SSE struct from class, to make OPENGL or Vulkan able to

@@ -1,4 +1,4 @@
-# FRSML 2.0
+# FRSML 3.0
 
 A small linear math library using SSE4 technology and upper.
 
@@ -84,14 +84,6 @@ A small linear math library using SSE4 technology and upper.
 		writeln(ex.X,' ',ex.Y,' ',ex.Z);
 	end.
 ```
-
- **************************
-
-# NEWS:
-
-- Ah, ver 2.0 is released. Information will coming soon. Lot of changes
-
-A branch contains Pascal implementation of FRSML is available at the objfpc-FRSML branch. 
 
  **************************
 
