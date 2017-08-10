@@ -13,5 +13,5 @@ set (SOURCES
 	Standard.cpp
 	vector.cpp)
 
-add_library(FRSML MODULE ${SRCS} ${HEADERS})
+add_library(FRSML MODULE ${SOURCES} ${HEADERS})
 	
