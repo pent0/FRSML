@@ -1,470 +1,432 @@
-#include "Matrix.h"
-#include <cmath>
+#include "math_internal.h"
 
-namespace FRSML {
-
+namespace frs {
 	mat4::mat4() {
-		cols[0] = vec4(1, 0, 0, 0);
-		cols[1] = vec4(0, 1, 0, 0);
-		cols[2] = vec4(0, 0, 1, 0);
-		cols[3] = vec4(0, 0, 0, 1);
-
+		cols[0] = vec4::vec4(1, 0, 0, 0);
+		cols[1] = vec4::vec4(0, 1, 0, 0);
+		cols[2] = vec4::vec4(0, 0, 1, 0);
+		cols[3] = vec4::vec4(0, 0, 0, 1);
 	}
 
-	mat4::mat4(vec4 tCols[4]) {
-		cols[0] = tCols[0];
-		cols[1] = tCols[1];
-		cols[2] = tCols[2];
-		cols[3] = tCols[3];
-
+	mat4::mat4(vec4 p_cols[4]) {
+		cols[0] = p_cols[0];
+		cols[1] = p_cols[1];
+		cols[2] = p_cols[2];
+		cols[3] = p_cols[3];
 	}
 
-	mat4::mat4(float* col1, float* col2, float* col3, float* col4) {
-		cols[0] = vec4(col1);
-		cols[1] = vec4(col2);
-		cols[2] = vec4(col3);
-		cols[3] = vec4(col4);
-
-	}
-
-	mat4::mat4(float** colss) {
-
-		for (uint32_t i = 0; i < 4; i++) {
-			cols[i] = vec4(colss[0][i], colss[1][i],
-				colss[2][i], colss[3][i]);
+	mat4::mat4(float p_floats[16]) {
+		for (u32 i = 0; i < 4; i++) {
+			cols[i] = vec4::vec4(p_floats[i],
+				p_floats[i + 4], p_floats[i + 8], p_floats[i + 12]);
 		}
-
-
 	}
 
-	mat4::mat4(vec4 col1, vec4 col2, vec4 col3, vec4 col4) {
-		cols[0] = col1;
-		cols[1] = col2;
-		cols[2] = col3;
-		cols[3] = col4;
+	inline mat4 mat4::operator +(mat4 p_mat) {
+		mat4 t_mat4 = mat4::mat4();
 
+		t_mat4.cols[0] = cols[0] + p_mat.cols[0];
+		t_mat4.cols[1] = cols[1] + p_mat.cols[1];
+		t_mat4.cols[2] = cols[2] + p_mat.cols[2];
+		t_mat4.cols[3] = cols[3] + p_mat.cols[3];
+
+		return t_mat4;
 	}
 
-	mat4 Translate(mat4 base, vec3 trans) {
+	inline mat4 mat4::operator -(mat4 p_mat) {
+		mat4 t_mat4 = mat4::mat4();
 
-		mat4 temp = Identity;
+		t_mat4.cols[0] = cols[0] - p_mat.cols[0];
+		t_mat4.cols[1] = cols[1] - p_mat.cols[1];
+		t_mat4.cols[2] = cols[2] - p_mat.cols[2];
+		t_mat4.cols[3] = cols[3] - p_mat.cols[3];
 
-		temp.cols[3].x = trans.x;
-		temp.cols[3].y = trans.y;
-		temp.cols[3].z = trans.z;
-
-		temp *= base;
-
-		return temp;
-
+		return t_mat4;
 	}
 
-	mat4 Rotate(mat4 base, float rot, vec3 dir) {
+	inline mat4 mat4::operator *(mat4 p_mat) {
+		vec4 t_new_cols[4];
 
-		mat4 temp{};
+#if 1
 
-		float t = FRSML::Cos(rot);
-		float t2 = FRSML::Sin(rot);
+		__m128 t_col1 = to_pack4(p_mat.cols[0]);
+		__m128 t_col2 = to_pack4(p_mat.cols[1]);
+		__m128 t_col3 = to_pack4(p_mat.cols[2]);
+		__m128 t_col4 = to_pack4(p_mat.cols[3]);
 
-		if (dir == vec3::Left) {
-			temp[1][1] = t;
-			temp[2][1] = -t2;
-			temp[1][2] = t2;
-			temp[2][2] = t;
-		}
-		else if (dir == vec3::Up) {
-			temp[0][0] = t;
-			temp[2][0] = t2;
-			temp[0][2] = -t2;
-			temp[2][2] = t;
-		}
-		else if (dir == vec3::Forward) {
-			temp[0][0] = t;
-			temp[1][0] = -t2;
-			temp[0][1] = t2;
-			temp[1][1] = t;
-		}
+		for (u32 i = 0; i < 4; i++) {
+			__m128 t_col_x = _mm_set1_ps(cols[i].x);
+			__m128 t_col_y = _mm_set1_ps(cols[i].y);
+			__m128 t_col_z = _mm_set1_ps(cols[i].z);
+			__m128 t_col_w = _mm_set1_ps(cols[i].w);
 
-		temp *= base;
-
-		return temp;
-
-	}
-
-	mat4 Scale(mat4 base, float scale) {
-		mat4 val{};
-
-		val[0][0] = val[1][1] = val[2][2] = scale;
-
-		return base*val;
-	}
-
-	float** value_ptr(mat4 mat) {
-
-		float** value = (float**)malloc(4 * sizeof(float*));
-		
-		for (uint32_t i = 0; i < 4; i++) {
-			value[i] = (float*)malloc(4 * sizeof(float));
-		}
-
-		for (uint32_t i = 0; i < 4; i++) {
-			for (uint32_t j = 0; j < 4; j++) {
-				value[i][j] = mat[i][j];
-			}
-		}
-
-		return value;
-
-	}
-
-	mat4 mat4::Inverse() {
-
-		vec4 protectorRows[4];
-		vec4 identityRows[4];
-
-		__m128 mainVec[4] = {};
-
-		identityRows[0] = vec4(1, 0, 0, 0);
-		identityRows[1] = vec4(0, 1, 0, 0);
-		identityRows[2] = vec4(0, 0, 1, 0);
-		identityRows[3] = vec4(0, 0, 0, 1);
-
-		for (uint32_t i = 0; i < 4; i++) {
-
-			protectorRows[i] = vec4(this->cols[0][i],
-				this->cols[1][i],
-				this->cols[2][i],
-				this->cols[3][i]);
-
-		}
-
-
-		mainVec[0] = mainVec[0];
-		mainVec[1] = mainVec[1];
-		mainVec[2] = mainVec[2];
-		mainVec[3] = mainVec[3];
-
-#pragma region STEP1
-
-		__m128 t1 = _mm_shuffle_ps(mainVec[0], mainVec[0], _MM_SHUFFLE(3, 3, 3, 3));
-		protectorRows[0] /= t1; identityRows[0] /= t1;
-
-		__m128 t2 = _mm_shuffle_ps(mainVec[1], mainVec[1], _MM_SHUFFLE(3, 3, 3, 3));
-		protectorRows[1] -= protectorRows[0] * t2;
-		identityRows[1] -= identityRows[0] * t2;
-
-		t2 = _mm_shuffle_ps(mainVec[2], mainVec[2], _MM_SHUFFLE(3, 3, 3, 3));
-		protectorRows[2] -= protectorRows[0] * t2;
-		identityRows[2] -= identityRows[0] * t2;
-
-		t2 = _mm_shuffle_ps(mainVec[3], mainVec[3], _MM_SHUFFLE(3, 3, 3, 3));
-		protectorRows[3] -= protectorRows[0] * t2;
-		identityRows[3] -= identityRows[0] * t2;
-
-#pragma endregion
-		//Divide the first row with the first element itself in protector, also take the first element got there to be divided with first row of identity
-		//Subtract things. Hard to imagine, but we just got the first element got self to multi... Can't tell enough
-#pragma region STEP2
-		t1 = _mm_shuffle_ps(mainVec[1], mainVec[1], _MM_SHUFFLE(2, 2, 2, 2));
-		protectorRows[1] /= t1; identityRows[1] /= t1;
-
-		t2 = _mm_shuffle_ps(mainVec[0], mainVec[0], _MM_SHUFFLE(2, 2, 2, 2));
-		protectorRows[0] -= protectorRows[1] * t2;
-		identityRows[0] -= identityRows[1] * t2;
-
-		t2 = _mm_shuffle_ps(mainVec[2], mainVec[2], _MM_SHUFFLE(2, 2, 2, 2));
-		protectorRows[2] -= protectorRows[1] * t2;
-		identityRows[2] -= identityRows[1] * t2;
-
-		t2 = _mm_shuffle_ps(mainVec[3], mainVec[3], _MM_SHUFFLE(2, 2, 2, 2));
-		protectorRows[3] -= protectorRows[1] * t2;
-		identityRows[3] -= identityRows[1] * t2;
-#pragma endregion
-		//Divide the second with the first element itself in protector, also take the second element got there to be divided with second row of identity
-		//Like up there
-#pragma region STEP3
-		t1 = _mm_shuffle_ps(mainVec[2], mainVec[2], _MM_SHUFFLE(1, 1, 1, 1));
-		protectorRows[2] /= t1; identityRows[2] /= t1;
-
-		t2 = _mm_shuffle_ps(mainVec[0], mainVec[0], _MM_SHUFFLE(1, 1, 1, 1));
-		protectorRows[0] -= protectorRows[2] * t2;
-		identityRows[0] -= identityRows[2] * t2;
-
-		t2 = _mm_shuffle_ps(mainVec[1], mainVec[1], _MM_SHUFFLE(1, 1, 1, 1));
-		protectorRows[1] -= protectorRows[2] * t2;
-		identityRows[1] -= identityRows[2] * t2;
-
-		t2 = _mm_shuffle_ps(mainVec[3], mainVec[3], _MM_SHUFFLE(1, 1, 1, 1));
-		protectorRows[3] -= protectorRows[2] * t2;
-		identityRows[3] -= identityRows[2] * t2;
-#pragma endregion
-		//Divide the third with the first element itself in protector, also take the third element got there to be divided with second row of identity
-		//Like up there
-#pragma region STEP4
-		t1 = _mm_shuffle_ps(mainVec[3], mainVec[3], _MM_SHUFFLE(0, 0, 0, 0));
-		protectorRows[3] /= t1; identityRows[3] /= t1;
-
-		t2 = _mm_shuffle_ps(mainVec[0], mainVec[0], _MM_SHUFFLE(0, 0, 0, 0));
-		protectorRows[0] -= protectorRows[3] * t2;
-		identityRows[0] -= identityRows[3] * t2;
-
-		t2 = _mm_shuffle_ps(mainVec[1], mainVec[1], _MM_SHUFFLE(0, 0, 0, 0));
-		protectorRows[1] -= protectorRows[3] * t2;
-		identityRows[1] -= identityRows[3] * t2;
-
-		t2 = _mm_shuffle_ps(mainVec[2], mainVec[2], _MM_SHUFFLE(0, 0, 0, 0));
-		protectorRows[2] -= protectorRows[3] * t2;
-		identityRows[2] -= identityRows[3] * t2;
-#pragma endregion
-		//Do the same step again, we got the input matrix become identity matrix! And the identity become inverse matrix of input!
-		return mat4(protectorRows).Transpose();
-
-
-	}
-
-	mat4 mat4::operator *(mat4 _para) {
-
-		__m128 newCols[4] = {};
-
-		__m128 col1 = _mm_set_ps(_para.cols[0].x,
-			_para.cols[0].y,
-			_para.cols[0].z,
-			_para.cols[0].w);
-
-		__m128 col2 = _mm_set_ps(_para.cols[1].x,
-			_para.cols[1].y,
-			_para.cols[1].z,
-			_para.cols[1].w);
-
-		__m128 col3 = _mm_set_ps(_para.cols[2].x,
-			_para.cols[2].y,
-			_para.cols[2].z,
-			_para.cols[2].w);
-
-		__m128 col4 = _mm_set_ps(_para.cols[3].x,
-			_para.cols[3].y,
-			_para.cols[3].z,
-			_para.cols[3].w);;
-
-		for (uint32_t i = 0; i < 4; i++) {
-			
-			__m128 colPara1 = _mm_set1_ps(cols[i].x);
-			__m128 colPara2 = _mm_set1_ps(cols[i].y);
-			__m128 colPara3 = _mm_set1_ps(cols[i].z);
-			__m128 colPara4 = _mm_set1_ps(cols[i].w);;
-
-			__m128 t1 = _mm_mul_ps(col1, colPara1);
-			__m128 t2 = _mm_mul_ps(col2, colPara2);
-			__m128 t3 = _mm_mul_ps(col3, colPara3);
-			__m128 t4 = _mm_mul_ps(col4, colPara4);
+			__m128 t1 = _mm_mul_ps(t_col1, t_col_x);
+			__m128 t2 = _mm_mul_ps(t_col2, t_col_y);
+			__m128 t3 = _mm_mul_ps(t_col3, t_col_z);
+			__m128 t4 = _mm_mul_ps(t_col4, t_col_w);
 
 			t1 = _mm_add_ps(t1, t2);
 			t3 = _mm_add_ps(t3, t4);
-			t4 = _mm_add_ps(t1, t3);
+			t1 = _mm_add_ps(t1, t3);
 
-			newCols[i] = t4;
+			t_new_cols[i] = to_vec4(t1);
+		}
+#else
+		for (u32 i = 0; i < 4; i++) {
+			vec4 t1 = p_mat.cols[0] * cols[i].x;
+			vec4 t2 = p_mat.cols[1] * cols[i].y;
+			vec4 t3 = p_mat.cols[2] * cols[i].z;
+			vec4 t4 = p_mat.cols[3] * cols[i].w;
+
+			t_new_cols[i] = t1 + t2 + t3 + t4;
+		}
+#endif
+		return mat4(t_new_cols);
+	}
+
+	long mat4::determinant() {
+#if 1
+		vec4 t_rows[4];
+
+		t_rows[0] = vec4::vec4(cols[0].x, cols[1].x,
+			cols[2].x, cols[3].x);
+		t_rows[1] = vec4::vec4(cols[0].y, cols[1].y,
+			cols[2].y, cols[3].y);
+		t_rows[2] = vec4::vec4(cols[0].z, cols[1].z,
+			cols[2].z, cols[3].z);
+		t_rows[3] = vec4::vec4(cols[0].w, cols[1].w,
+			cols[2].w, cols[3].w);
+
+		__m128 t_mainVec[4];
+
+		for (u32 i = 0; i < 4; i++) {
+			t_mainVec[i] = to_pack4(t_rows[i]);
+		}
+
+		__m128 t_template0; {
+			__m128 t1 = _mm_shuffle_ps(t_mainVec[1], t_mainVec[1], _MM_SHUFFLE(2, 1, 0, 3));
+			__m128 t2 = _mm_shuffle_ps(t_mainVec[2], t_mainVec[2], _MM_SHUFFLE(1, 0, 2, 3));
+			__m128 t3 = _mm_shuffle_ps(t_mainVec[3], t_mainVec[3], _MM_SHUFFLE(0, 2, 1, 3));
+			__m128 t4 = _mm_shuffle_ps(t_mainVec[2], t_mainVec[2], _MM_SHUFFLE(0, 2, 1, 3));
+			__m128 t5 = _mm_shuffle_ps(t_mainVec[3], t_mainVec[3], _MM_SHUFFLE(1, 0, 2, 3));
+
+			t_template0 = _mm_mul_ps(_mm_set1_ps(t_rows[0].x), t1);
+			t_template0 = _mm_mul_ps(t_template0, _mm_sub_ps(_mm_mul_ps(t2, t3), _mm_mul_ps(t4, t5)));
+		}
+
+		__m128 t_template1; {
+			__m128 t1 = _mm_shuffle_ps(t_mainVec[1], t_mainVec[1], _MM_SHUFFLE(3, 1, 0, 2));
+			__m128 t2 = _mm_shuffle_ps(t_mainVec[2], t_mainVec[2], _MM_SHUFFLE(0, 3, 1, 2));
+			__m128 t3 = _mm_shuffle_ps(t_mainVec[3], t_mainVec[3], _MM_SHUFFLE(1, 0, 3, 2));
+			__m128 t4 = _mm_shuffle_ps(t_mainVec[2], t_mainVec[2], _MM_SHUFFLE(1, 0, 3, 2));
+			__m128 t5 = _mm_shuffle_ps(t_mainVec[3], t_mainVec[3], _MM_SHUFFLE(0, 3, 1, 2));
+
+			t_template1 = _mm_mul_ps(_mm_set1_ps(t_rows[0].y), t1);
+			t_template1 = _mm_mul_ps(t_template1, _mm_sub_ps(_mm_mul_ps(t2, t3), _mm_mul_ps(t4, t5)));
+		}
+
+		__m128 t_template2; {
+			__m128 t1 = _mm_shuffle_ps(t_mainVec[1], t_mainVec[1], _MM_SHUFFLE(3, 2, 0, 1));
+			__m128 t2 = _mm_shuffle_ps(t_mainVec[2], t_mainVec[2], _MM_SHUFFLE(2, 0, 3, 1));
+			__m128 t3 = _mm_shuffle_ps(t_mainVec[3], t_mainVec[3], _MM_SHUFFLE(0, 3, 2, 1));
+			__m128 t4 = _mm_shuffle_ps(t_mainVec[2], t_mainVec[2], _MM_SHUFFLE(0, 3, 2, 1));
+			__m128 t5 = _mm_shuffle_ps(t_mainVec[3], t_mainVec[3], _MM_SHUFFLE(2, 0, 3, 1));
+
+			t_template2 = _mm_mul_ps(_mm_set1_ps(t_rows[0].z), t1);
+			t_template2 = _mm_mul_ps(t_template2, _mm_sub_ps(_mm_mul_ps(t2, t3), _mm_mul_ps(t4, t5)));
+		}
+
+		__m128 t_template3; {
+			__m128 t1 = _mm_shuffle_ps(t_mainVec[1], t_mainVec[1], _MM_SHUFFLE(3, 2, 1, 0));
+			__m128 t2 = _mm_shuffle_ps(t_mainVec[2], t_mainVec[2], _MM_SHUFFLE(1, 3, 2, 0));
+			__m128 t3 = _mm_shuffle_ps(t_mainVec[3], t_mainVec[3], _MM_SHUFFLE(2, 1, 3, 0));
+			__m128 t4 = _mm_shuffle_ps(t_mainVec[2], t_mainVec[2], _MM_SHUFFLE(2, 1, 3, 0));
+			__m128 t5 = _mm_shuffle_ps(t_mainVec[3], t_mainVec[3], _MM_SHUFFLE(1, 3, 2, 0));
+
+			t_template3 = _mm_mul_ps(_mm_set1_ps(t_rows[0].w), t1);
+			t_template3 = _mm_mul_ps(t_template3, _mm_sub_ps(_mm_mul_ps(t2, t3), _mm_mul_ps(t4, t5)));
+		}
+
+		__m128 t_res = _mm_add_ps(t_template0, _mm_add_ps(t_template1, _mm_add_ps(t_template2, t_template3)));
+
+		__m128 t_r1 = _mm_shuffle_ps(t_res, t_res, MASK3);
+		__m128 t_r2 = _mm_shuffle_ps(t_res, t_res, MASK2);
+		__m128 t_r3 = _mm_shuffle_ps(t_res, t_res, MASK1);
+
+		t_r1 = _mm_add_ss(t_r1, _mm_add_ss(t_r2, t_r3));
+
+		return static_cast<long>(_mm_cvtss_f32(t_r1));
+#else
+		for (int i = 0; i < 4; ++i) {
+			bool found = false;
+
+			for (int j = i; j < 4; ++j) {
+				if (((i == 0) && (cols[j].x)) ||
+					((i == 1) && (cols[j].y)) ||
+					((i == 2) && (cols[j].z)) ||
+					((i == 3) && (cols[j].w))) {
+					if (i != j) {
+						vec4 t_row = cols[i];
+						cols[i] = cols[j];
+						cols[j] = t_row;
+					}
+
+					found = true;
+					break;
+				}
+			}
+
+
+			if (!found) return 0;
+
+			for (int j = i + 1; j < 4; ++j) {
+				while (true) {
+					float del = 
+						cols[j][i] / cols[i][i];
+
+					for (int k = i; k < 4; ++k) {
+						switch (k) {
+						case 0:
+							cols[j].x -= del * cols[i].x;
+							break;
+						case 1:
+							cols[j].y -= del * cols[i].y;
+							break;
+						case 2:
+							cols[j].z -= del * cols[i].z;
+							break;
+						case 3:
+							cols[j].w -= del * cols[i].w;
+							break;
+						}
+					}
+
+					if (cols[j][i] == 0) {
+						break;
+					}
+					else {
+						vec4 t_row = cols[i];
+						cols[i] = cols[j];
+						cols[j] = t_row;
+					}
+				}
+			}
 
 		}
 
-		return mat4{
-			newCols[0], newCols[1], newCols[2], newCols[3]
-		};
+		long res = 1;
 
-	}
-
-	mat4 mat4::operator +(mat4 _para) {
-
-		vec4 newCols[4] = {};
-
-		for (uint32_t i = 0; i < 4; i++) {
-			newCols[i] = cols[i] + _para.cols[i];
+		for (int i = 0; i < 4; ++i) {
+			res *= (long)cols[i][i];
 		}
 
-		return mat4{ newCols[0], newCols[1], newCols[2], newCols[3] };
+		return res;
+#endif
 	}
 
-	mat4 mat4::operator -(mat4 _para){
-		vec4 newCols[4] = {};
+	mat4 mat4::inverse() {
 
-		for (uint32_t i = 0; i < 4; i++) {
-			newCols[i] = cols[i] - _para.cols[i];
+		__m128 t_rows_i[4];
+		__m128 t_rows[4];
+
+		t_rows_i[0] = _mm_set_ps(1, 0, 0, 0);
+		t_rows_i[1] = _mm_set_ps(0, 1, 0, 0);
+		t_rows_i[2] = _mm_set_ps(0, 0, 1, 0);
+		t_rows_i[3] = _mm_set_ps(0, 0, 0, 1);
+
+		t_rows[0] = _mm_set_ps(cols[0].x, cols[1].x,
+			cols[2].x, cols[3].x);
+		t_rows[1] = _mm_set_ps(cols[0].y, cols[1].y,
+			cols[2].y, cols[3].y);
+		t_rows[2] = _mm_set_ps(cols[0].z, cols[1].z,
+			cols[2].z, cols[3].z);
+		t_rows[3] = _mm_set_ps(cols[0].w, cols[1].w,
+			cols[2].w, cols[3].w);
+
+		__m128 t1, t2;
+
+		t1 = _mm_shuffle_ps(t_rows[0], t_rows[0], GET_MASK(3));
+		t_rows[0] = _mm_div_ps(t_rows[0], t1);
+		t_rows_i[0] = _mm_div_ps(t_rows_i[0], t1);
+
+		t2 = _mm_shuffle_ps(t_rows[1], t_rows[1], GET_MASK(3));
+		t_rows[1] = _mm_sub_ps(t_rows[1], _mm_mul_ps(t_rows[0], t2));
+		t_rows_i[1] = _mm_sub_ps(t_rows_i[1], _mm_mul_ps(t_rows_i[0], t2));
+
+		t2 = _mm_shuffle_ps(t_rows[2], t_rows[2], GET_MASK(3));
+		t_rows[2] = _mm_sub_ps(t_rows[2], _mm_mul_ps(t_rows[0], t2));
+		t_rows_i[2] = _mm_sub_ps(t_rows_i[2], _mm_mul_ps(t_rows_i[0], t2));
+
+		t2 = _mm_shuffle_ps(t_rows[3], t_rows[3], GET_MASK(3));
+		t_rows[3] = _mm_sub_ps(t_rows[3], _mm_mul_ps(t_rows[0], t2));
+		t_rows_i[3] = _mm_sub_ps(t_rows_i[3], _mm_mul_ps(t_rows_i[0], t2));
+
+
+		t1 = _mm_shuffle_ps(t_rows[1], t_rows[1], GET_MASK(2));
+		t_rows[1] = _mm_div_ps(t_rows[1], t1);
+		t_rows_i[1] = _mm_div_ps(t_rows_i[1], t1);
+
+		t2 = _mm_shuffle_ps(t_rows[0], t_rows[0], GET_MASK(2));
+		t_rows[0] = _mm_sub_ps(t_rows[0], _mm_mul_ps(t_rows[1], t2));
+		t_rows_i[0] = _mm_sub_ps(t_rows_i[0], _mm_mul_ps(t_rows_i[1], t2));
+
+		t2 = _mm_shuffle_ps(t_rows[2], t_rows[2], GET_MASK(2));
+		t_rows[2] = _mm_sub_ps(t_rows[2], _mm_mul_ps(t_rows[1], t2));
+		t_rows_i[2] = _mm_sub_ps(t_rows_i[2], _mm_mul_ps(t_rows_i[1], t2));
+
+		t2 = _mm_shuffle_ps(t_rows[3], t_rows[3], GET_MASK(2));
+		t_rows[3] = _mm_sub_ps(t_rows[3], _mm_mul_ps(t_rows[1], t2));
+		t_rows_i[3] = _mm_sub_ps(t_rows_i[3], _mm_mul_ps(t_rows_i[1], t2));
+
+
+		t1 = _mm_shuffle_ps(t_rows[2], t_rows[2], GET_MASK(1));
+		t_rows[2] = _mm_div_ps(t_rows[2], t1);
+		t_rows_i[2] = _mm_div_ps(t_rows_i[2], t1);
+
+		t2 = _mm_shuffle_ps(t_rows[0], t_rows[0], GET_MASK(1));
+		t_rows[0] = _mm_sub_ps(t_rows[0], _mm_mul_ps(t_rows[2], t2));
+		t_rows_i[0] = _mm_sub_ps(t_rows_i[0], _mm_mul_ps(t_rows_i[2], t2));
+
+		t2 = _mm_shuffle_ps(t_rows[1], t_rows[1], GET_MASK(1));
+		t_rows[1] = _mm_sub_ps(t_rows[2], _mm_mul_ps(t_rows[2], t2));
+		t_rows_i[1] = _mm_sub_ps(t_rows_i[2], _mm_mul_ps(t_rows_i[2], t2));
+
+		t2 = _mm_shuffle_ps(t_rows[3], t_rows[3], GET_MASK(1));
+		t_rows[3] = _mm_sub_ps(t_rows[3], _mm_mul_ps(t_rows[2], t2));
+		t_rows_i[3] = _mm_sub_ps(t_rows_i[3], _mm_mul_ps(t_rows_i[2], t2));
+
+
+		t1 = _mm_shuffle_ps(t_rows[3], t_rows[3], GET_MASK(0));
+		t_rows[3] = _mm_div_ps(t_rows[3], t1);
+		t_rows_i[3] = _mm_div_ps(t_rows_i[3], t1);
+
+		t2 = _mm_shuffle_ps(t_rows[0], t_rows[0], GET_MASK(0));
+		t_rows[0] = _mm_sub_ps(t_rows[0], _mm_mul_ps(t_rows[3], t2));
+		t_rows_i[0] = _mm_sub_ps(t_rows_i[0], _mm_mul_ps(t_rows_i[3], t2));
+
+		t2 = _mm_shuffle_ps(t_rows[2], t_rows[2], GET_MASK(0));
+		t_rows[2] = _mm_sub_ps(t_rows[2], _mm_mul_ps(t_rows[3], t2));
+		t_rows_i[2] = _mm_sub_ps(t_rows_i[2], _mm_mul_ps(t_rows_i[3], t2));
+
+		t2 = _mm_shuffle_ps(t_rows[1], t_rows[1], GET_MASK(0));
+		t_rows[1] = _mm_sub_ps(t_rows[1], _mm_mul_ps(t_rows[3], t2));
+		t_rows_i[1] = _mm_sub_ps(t_rows_i[1], _mm_mul_ps(t_rows_i[3], t2));
+
+		vec4 t_vecs[4];
+
+		for (u32 i = 0; i < 4; i++) {
+			t_vecs[i] = to_vec4(t_rows_i[i]);
 		}
 
-		return mat4{ newCols[0], newCols[1], newCols[2], newCols[3] };
+		return mat4(t_vecs).transpose();
+
 	}
 
-	mat4 mat4::Transpose() {
+	mat4 mat4::transpose() {
+		vec4 t_rows[4];
 
-		vec4 rows[4];
+		t_rows[0] = vec4::vec4(cols[0].x, cols[1].x,
+			cols[2].x, cols[3].x);
+		t_rows[1] = vec4::vec4(cols[0].y, cols[1].y,
+			cols[2].y, cols[3].y);
+		t_rows[2] = vec4::vec4(cols[0].z, cols[1].z,
+			cols[2].z, cols[3].z);
+		t_rows[3] = vec4::vec4(cols[0].w, cols[1].w,
+			cols[2].w, cols[3].w);
 
-		for (uint32_t i = 0; i < 4; i++) {
+		return mat4(t_rows);
+	}
 
-			rows[i] = vec4(this->cols[0].GenerateXYZW().m128_f32[3 - i],
-				this->cols[1].GenerateXYZW().m128_f32[3 - i],
-				this->cols[2].GenerateXYZW().m128_f32[3 - i],
-				this->cols[3].GenerateXYZW().m128_f32[3 - i]);
+	mat4 mat4::translate(vec3 p_trans) {
+		mat4 t_mat = mat4::mat4();
 
+		t_mat.cols[3].x = p_trans.x;
+		t_mat.cols[3].y = p_trans.y;
+		t_mat.cols[3].z = p_trans.z;
+
+		return t_mat * (*this);
+	}
+
+	mat4 mat4::rotate(float p_angle, vec3 p_dir) {
+		mat4 t_mat;
+
+		float t = cos(p_angle);
+		float t2 = sin(p_angle);
+
+		if (p_dir == vec3(-1, 0, 0)) {
+			t_mat.cols[1].y = t;
+			t_mat.cols[2].x = -t2;
+			t_mat.cols[1].z = t2;
+			t_mat.cols[2].y = t;
+		}
+		else if (p_dir == vec3(0, 1, 0)) {
+			t_mat.cols[0].x = t;
+			t_mat.cols[2].x = t2;
+			t_mat.cols[0].z = -t2;
+			t_mat.cols[2].z = t;
+		}
+		else if (p_dir == vec3(0, 0, 1)) {
+			t_mat.cols[0].x = t;
+			t_mat.cols[1].x = -t2;
+			t_mat.cols[0].y = t2;
+			t_mat.cols[1].y = -t;
 		}
 
-		return mat4(rows);
-
+		return t_mat * (*this);
 	}
 
-	float mat4::Determinant() {
+	mat4 mat4::scale(float p_scale) {
+		mat4 t_mat = mat4::mat4();
+		t_mat.cols[0].x = t_mat.cols[1].y = t_mat.cols[2].z = p_scale;
 
-		vec4 rows[4] = {};
-
-		for (uint32_t i = 0; i < 4; i++) {
-
-			rows[i] = vec4(this->cols[0].GenerateXYZW().m128_f32[3 - i],
-				this->cols[1].GenerateXYZW().m128_f32[3 - i],
-				this->cols[2].GenerateXYZW().m128_f32[3 - i],
-				this->cols[3].GenerateXYZW().m128_f32[3 - i]);
-
-		}
-
-		__m128 mainVec[4] = {};
-
-		mainVec[1] = mainVec[1];
-		mainVec[2] = mainVec[2];
-		mainVec[3] = mainVec[3];
-
-		__m128 template0; {
-			__m128 t1 = _mm_shuffle_ps(mainVec[1], mainVec[1], _MM_SHUFFLE(2, 1, 0, 3));
-			__m128 t2 = _mm_shuffle_ps(mainVec[2], mainVec[2], _MM_SHUFFLE(1, 0, 2, 3));
-			__m128 t3 = _mm_shuffle_ps(mainVec[3], mainVec[3], _MM_SHUFFLE(0, 2, 1, 3));
-			__m128 t4 = _mm_shuffle_ps(mainVec[2], mainVec[2], _MM_SHUFFLE(0, 2, 1, 3));
-			__m128 t5 = _mm_shuffle_ps(mainVec[3], mainVec[3], _MM_SHUFFLE(1, 0, 2, 3));
-			template0 = _mm_mul_ps(_mm_set_ps1(rows[0].x), t1);
-			template0 = _mm_mul_ps(template0, _mm_sub_ps(_mm_mul_ps(t2, t3), _mm_mul_ps(t4, t5)));
-
-		};
-
-		__m128 template1; {
-			__m128 t1 = _mm_shuffle_ps(mainVec[1], mainVec[1], _MM_SHUFFLE(3, 1, 0, 2));
-			__m128 t2 = _mm_shuffle_ps(mainVec[2], mainVec[2], _MM_SHUFFLE(0, 3, 1, 2));
-			__m128 t3 = _mm_shuffle_ps(mainVec[3], mainVec[3], _MM_SHUFFLE(1, 0, 3, 2));
-			__m128 t4 = _mm_shuffle_ps(mainVec[2], mainVec[2], _MM_SHUFFLE(1, 0, 3, 2));
-			__m128 t5 = _mm_shuffle_ps(mainVec[3], mainVec[3], _MM_SHUFFLE(0, 3, 1, 2));
-			template1 = _mm_mul_ps(_mm_set_ps1(rows[0].y), t1);
-			template1 = _mm_mul_ps(template1, _mm_sub_ps(_mm_mul_ps(t2, t3), _mm_mul_ps(t4, t5)));
-		}
-
-		__m128 template2; {
-			__m128 t1 = _mm_shuffle_ps(mainVec[1], mainVec[1], _MM_SHUFFLE(3, 2, 0, 1));
-			__m128 t2 = _mm_shuffle_ps(mainVec[2], mainVec[2], _MM_SHUFFLE(2, 0, 3, 1));
-			__m128 t3 = _mm_shuffle_ps(mainVec[3], mainVec[3], _MM_SHUFFLE(0, 3, 2, 1));
-			__m128 t4 = _mm_shuffle_ps(mainVec[2], mainVec[2], _MM_SHUFFLE(0, 3, 2, 1));
-			__m128 t5 = _mm_shuffle_ps(mainVec[3], mainVec[3], _MM_SHUFFLE(2, 0, 3, 1));
-			template2 = _mm_mul_ps(_mm_set_ps1(rows[0].z), t1);
-			template2 = _mm_mul_ps(template2, _mm_sub_ps(_mm_mul_ps(t2, t3), _mm_mul_ps(t4, t5)));
-		}
-
-		__m128 template3; {
-			__m128 t1 = _mm_shuffle_ps(mainVec[1], mainVec[1], _MM_SHUFFLE(3, 2, 1, 0));
-			__m128 t2 = _mm_shuffle_ps(mainVec[2], mainVec[2], _MM_SHUFFLE(1, 3, 2, 0));
-			__m128 t3 = _mm_shuffle_ps(mainVec[3], mainVec[3], _MM_SHUFFLE(2, 1, 3, 0));
-			__m128 t4 = _mm_shuffle_ps(mainVec[2], mainVec[2], _MM_SHUFFLE(2, 1, 3, 0));
-			__m128 t5 = _mm_shuffle_ps(mainVec[3], mainVec[3], _MM_SHUFFLE(1, 3, 2, 0));
-			template3 = _mm_mul_ps(_mm_set_ps1(rows[0].w), t1);
-			template3 = _mm_mul_ps(template3, _mm_sub_ps(_mm_mul_ps(t2, t3), _mm_mul_ps(t4, t5)));
-		}
-
-		__m128 grandDad = _mm_add_ps(template0,
-			_mm_add_ps(template1, _mm_add_ps(template2, template3)));
-
-		__m128 m1 = _mm_shuffle_ps(grandDad, grandDad, _MM_SHUFFLE(3, 3, 3, 3));
-		__m128 m2 = _mm_shuffle_ps(grandDad, grandDad, _MM_SHUFFLE(2, 2, 2, 2));
-		__m128 m3 = _mm_shuffle_ps(grandDad, grandDad, _MM_SHUFFLE(1, 1, 1, 1));
-
-		m1 = _mm_add_ss(m1, _mm_add_ss(m2, m3));
-
-		return _mm_cvtss_f32(m1);
+		return (t_mat) * (*this);
 	}
 
-	mat4 LookAt(vec3 camPos, vec3 camTarget, vec3 up) {
-		//CamDirection equals to the z yaw.
-		vec3 camDir = (camPos - camTarget).Normalize();
-		vec3 camRight = Cross(camDir, up).Normalize();
-		vec3 camUp = Cross(camRight, camDir);
+	mat4 perspective_matrix(float p_zoom,
+		vec2 p_extent, float p_zNear, float p_zFar) {
+		float t_aspect = p_extent.x / p_extent.y;
 
-		mat4 mat1{ 
-			vec4(-camRight.x, camUp.x, camDir.x, 0),
-			vec4(-camRight.y, camUp.y, camDir.y, 0),
-			vec4(-camRight.z, camUp.z, camDir.z, 0),
-			vec4(-Dot(camRight, camPos).x, -Dot(camUp, camPos).y, -Dot(camDir, camPos).z, 1)
-		};
+		float t1 = p_zoom / 2;
+		t1 = 1 / tan(t1);
 
-		return mat1;
+		float t2 = p_zFar - p_zNear;
+		float t3 = p_zFar * p_zNear;
+
+		t3 = t3 / t2 * -1;
+
+		float t4 = p_zFar * t2;
+		t4 *= -1;
+
+		float t_res = t1;
+		float t_res2 = t3;
+		float t_res3 = t4;
+
+		vec4 t_cols[4];
+
+		t_cols[0] = vec4::vec4(t_res * t_aspect, 0, 0, 0);
+		t_cols[1] = vec4::vec4(0, t_res, 0, 0);
+		t_cols[2] = vec4::vec4(0, 0, t_res3, -1);
+		t_cols[3] = vec4::vec4(0, 0, t_res2, 0);
+
+		return mat4(t_cols);
 	}
 
-	mat4 CreateOrthoMatrix(float left,
-		float right, float bottom,
-		float top, float zNear, float zFar) {
+	mat4 ortho_matrix(float p_left, float p_right, float p_bottom, float p_top,
+		float p_zNear, float p_zFar) {
+		float t1 = 2 / (p_right - p_left);
+		float t2 = 2 / (p_top - p_bottom);
+		float t3 = -(p_right + p_left) / (p_right - p_left);
+		float t4 = -(p_top + p_bottom) / (p_top - p_bottom);
+		float t5 = -2 / (p_zNear - p_zFar);
+		float t6 = -(p_zFar + p_zNear) / (p_zFar - p_zNear);
 
-		float t1 = 2 / (right - left);
-		float t2 = 2 / (top - bottom);
-		float t3 = -(right + left) / (right - left);
-		float t4 = -(top + bottom) / (top - bottom);
-		float t5 = -2 / (zFar - zNear);
-		float t6 = -(zFar + zNear) / (zFar - zNear);
+		vec4 t_cols[4];
 
-		return mat4{
-			{ t1,0,0,0 },
-			{ 0,t2,0,0 },
-			{ 0,0,t5,0 },
-			{ t3,t4,t6,1 }
-		};
+		t_cols[0] = vec4::vec4(t1, 0, 0, 0);
+		t_cols[1] = vec4::vec4(0, t2, 0, 0);
+		t_cols[2] = vec4::vec4(0, 0, t5, 0);
+		t_cols[3] = vec4::vec4(t3, t4, t6, 1);
 
+		return mat4(t_cols);
 	}
-
-	mat4 CreatePerspectiveMatrix(float zoom,
-		vec2 extent,
-		float zNear,
-		float zFar) {
-
-		float aspect = extent.y / extent.x;
-
-		__m128 t1 = _mm_set1_ps(1);
-		__m128 t2 = _mm_set1_ps(zoom / 2);
-		//__m128 t3 = _mm_set1_ps(PI / 180);
-		__m128 t4 = _mm_mul_ps(t2, /*t3*/ t1);
-		t4 = nmmintrin::_Tan(t4);
-		t4 = _mm_div_ps(t1, t4);
-		__m128 t5 = _mm_set1_ps(zFar - zNear);
-		__m128 t6 = _mm_mul_ps(_mm_set1_ps(zNear), _mm_set1_ps(zFar));
-		t6 = _mm_div_ps(t6, t5);
-		t6 = _mm_mul_ps(_mm_set1_ps(-1), t6);
-
-		__m128 t7 = _mm_set1_ps(zFar);
-		t7 = _mm_div_ps(t7, t5);
-		t7 = _mm_mul_ps(_mm_set1_ps(-1), t7);
-
-		float grand1 = _mm_extract_psn(t4, 3);
-		float grand2 = _mm_extract_psn(t6, 3);
-		float grand3 = _mm_extract_psn(t7, 3);
-
-		mat4 returnVal(
-		{ grand1 * aspect,0,0,0 },
-		{ 0, grand1, 0,0 },
-		{ 0,0,grand3, -1 },
-		{ 0,0,grand2, 0 }
-		);
-
-		return returnVal;
-
-	}
-
-	std::ostream& operator <<(std::ostream& stream, mat4 matrix) {
-		for (int i = 0; i < 4; i++) {
-			for (int j = 0; j < 4; j++)
-				stream << matrix[i][j] << " ";
-			stream << "\n";
-		}
-
-		stream << "\n";
-
-		return stream;
-	}
-
 }

@@ -1,148 +1,142 @@
-#include "Quaternion.h"
+#include "math_internal.h"
+#include "standard.h"
 
-namespace FRSML {
-	Quaternion Quaternion::Normalize() {
-		__m128 mainQuat = GenerateXYZW();
+namespace frs {
+	quaternion::quaternion() : vec4() {};
+	quaternion::quaternion(float w, float x, float y, float z) :
+		vec4(x, y, z, w) {};
 
-		__m128 inverse_normalize = _mm_rsqrt_ps(_mm_dp_ps(mainQuat, mainQuat, 0xFF));
-		return Quaternion(_mm_mul_ps(mainQuat, inverse_normalize));
+	inline quaternion quaternion::operator * (quaternion p_quat) {
+		__m128 t_main1 = to_pack4(static_cast<vec4>(*this));
+		__m128 t_main2 = to_pack4(static_cast<vec4>(p_quat));
+
+		__m128 t1 = _mm_shuffle_ps(t_main1, t_main1, MASK3);
+		__m128 t2 = _mm_shuffle_ps(t_main1, t_main1, MASK2);
+		__m128 t3 = _mm_shuffle_ps(t_main1, t_main1, MASK1);
+		__m128 t4 = _mm_shuffle_ps(t_main1, t_main1, MASK0);
+
+		__m128 t_res0; {
+			__m128 c0 = _mm_shuffle_ps(t_main2, t_main2, _MM_SHUFFLE(3, 2, 1, 0));
+			t_res0 = _mm_mul_ps(t1, c0);
+		}
+
+		__m128 t_res1; {
+			__m128 c1 = _mm_shuffle_ps(t_main2, t_main2, _MM_SHUFFLE(2, 3, 0, 1));
+			t_res1 = _mm_mul_ps(t2, c1);
+		}
+
+		__m128 t_res2; {
+			__m128 c2 = _mm_shuffle_ps(t_main2, t_main2, _MM_SHUFFLE(1, 0, 3, 2));
+			t_res2 = _mm_mul_ps(t3, c2);
+		}
+
+		__m128 t_res3; {
+			__m128 c3 = _mm_shuffle_ps(t_main2, t_main2, _MM_SHUFFLE(0, 1, 2, 3));
+			t_res3 = _mm_mul_ps(t4, c3);
+		}
+
+		t_res1 = _mm_mul_ps(t_res0, _mm_set_ps(-1, 1, -1, 1));
+		t_res2 = _mm_mul_ps(t_res1, _mm_set_ps(-1, 1, 1, -1));
+		t_res3 = _mm_mul_ps(t_res2, _mm_set_ps(-1, -1, 1, 1));
+
+		t_res0 = _mm_add_ps(t_res0, _mm_add_ps(t_res1, _mm_add_ps(t_res2, t_res3)));
+
+		vec4 t_res = to_vec4(t_res0);
+
+		return quaternion(t_res.w, t_res.x, t_res.y, t_res.z);
 	}
 
+	quaternion quaternion::euler(vec3 p_euler) {
+		__m128 t_temp = _mm_div_ps(_mm_mul_ps(to_pack4(p_euler), _mm_set1_ps(PI)), _mm_set1_ps(180));
 
-	Quaternion Quaternion::Euler(vec3 euler) {
-
-		//return (float)(FRS_float(radians)*HALFWISEANGLE / PI)
-
-		__m128 tmp = _mm_div_ps(_mm_mul_ps(euler.GenerateXYZW() ,_mm_set1_ps(PI)),_mm_set1_ps(180));
-
-		__m128 t1 = _mm_shuffle_ps(tmp, tmp, _MM_SHUFFLE(2, 2, 2, 2));
-		__m128 t2 = _mm_shuffle_ps(tmp, tmp, _MM_SHUFFLE(1, 1, 1, 1));
-		__m128 t3 = _mm_shuffle_ps(tmp, tmp, _MM_SHUFFLE(0, 0, 0, 0));
+		__m128 t1 = _mm_shuffle_ps(t_temp, t_temp, MASK2);
+		__m128 t2 = _mm_shuffle_ps(t_temp, t_temp, MASK1);
+		__m128 t3 = _mm_shuffle_ps(t_temp, t_temp, MASK0);
 
 		t1 = _mm_div_ps(t1, _mm_set1_ps(2));
 		t2 = _mm_div_ps(t2, _mm_set1_ps(2));
 		t3 = _mm_div_ps(t3, _mm_set1_ps(2));
 
+		__m128 t4 = nmmintrin::_cos(t3);
+		__m128 t5 = nmmintrin::_sin(t3);
+		__m128 t6 = nmmintrin::_cos(t1);
+		__m128 t7 = nmmintrin::_sin(t1);
+		__m128 t8 = nmmintrin::_cos(t2);
+		__m128 t9 = nmmintrin::_sin(t2);
 
-		__m128 t4 = _Cos(t3);
-		__m128 t5 = _Sin(t3);
-		__m128 t6 = _Cos(t1);
-		__m128 t7 = _Sin(t1);
-		__m128 t8 = _Cos(t2);
-		__m128 t9 = _Sin(t2);
+		__m128 t_quatW = _mm_mul_ps(t4, _mm_mul_ps(t6, t8));
+		t_quatW = _mm_add_ps(t_quatW, _mm_mul_ps(t5, _mm_mul_ps(t7, t9)));
 
-		__m128 quatW = _mm_mul_ps(t4, _mm_mul_ps(t6, t8));
-		quatW = _mm_add_ps(quatW,_mm_mul_ps(t5, _mm_mul_ps(t7, t9)));
+		__m128 t_quatX = _mm_mul_ps(t4, _mm_mul_ps(t7, t8));
+		t_quatX = _mm_sub_ps(t_quatX, _mm_mul_ps(t5, _mm_mul_ps(t6, t9)));
 
-		__m128 quatX = _mm_mul_ps(t4, _mm_mul_ps(t7, t8));
-		quatX = _mm_sub_ps(quatX, _mm_mul_ps(t5, _mm_mul_ps(t6, t9)));
+		__m128 t_quatY = _mm_mul_ps(t4, _mm_mul_ps(t6, t9));
+		t_quatY = _mm_add_ps(t_quatY, _mm_mul_ps(t5, _mm_mul_ps(t7, t8)));
 
-		__m128 quatY = _mm_mul_ps(t4, _mm_mul_ps(t6, t9));
-		quatY = _mm_add_ps(quatY, _mm_mul_ps(t5, _mm_mul_ps(t7, t8)));
-	
-		__m128 quatZ = _mm_mul_ps(t5, _mm_mul_ps(t6, t8));
-		quatZ = _mm_sub_ps(quatZ, _mm_mul_ps(t4, _mm_mul_ps(t7, t9)));
+		__m128 t_quatZ = _mm_mul_ps(t5, _mm_mul_ps(t6, t8));
+		t_quatZ = _mm_sub_ps(t_quatZ, _mm_mul_ps(t4, _mm_mul_ps(t7, t9)));
 
+		float w = _mm_cvtss_f32(t_quatW);
+		float x = _mm_cvtss_f32(t_quatX);
+		float y = _mm_cvtss_f32(t_quatY);
+		float z = _mm_cvtss_f32(t_quatZ);
 
-		float w = _mm_cvtss_f32(quatW);
-		float x = _mm_cvtss_f32(quatX);
-		float y = _mm_cvtss_f32(quatY);
-		float z = _mm_cvtss_f32(quatZ);
-
-		return Quaternion(x, y, z, w);
+		return quaternion(w, x, y, z);
 	}
 
-	Quaternion Quaternion::Rotate(vec3 axis, float angle) {
-		__m128 tmp = axis.Normalize().GenerateXYZW();
+	quaternion quaternion::rotate(vec3 p_axis, float p_angle) {
+		__m128 tmp = to_pack4(p_axis.normalize());
 
-		__m128 tmp2 = (_mm_div_ps(_mm_set1_ps(angle), _mm_set1_ps(2)));
+		__m128 tmp2 = (_mm_div_ps(_mm_set1_ps(p_angle), _mm_set1_ps(2)));
 		__m128 tmp3 = _mm_shuffle_ps(tmp, tmp, _MM_SHUFFLE(2, 2, 2, 2));
 		__m128 tmp4 = _mm_shuffle_ps(tmp, tmp, _MM_SHUFFLE(1, 1, 1, 1));
 		__m128 tmp5 = _mm_shuffle_ps(tmp, tmp, _MM_SHUFFLE(0, 0, 0, 0));
 
-		__m128 quatW = _Cos(tmp2);
-		__m128 quatX = _mm_mul_ps(_Sin(tmp2),tmp3);
-		__m128 quatY = _mm_mul_ps(_Sin(tmp2), tmp4);
-		__m128 quatZ = _mm_mul_ps(_Sin(tmp2), tmp5);
+		__m128 quatW = nmmintrin::_cos(tmp2);
+		__m128 quatX = _mm_mul_ps(nmmintrin::_sin(tmp2), tmp3);
+		__m128 quatY = _mm_mul_ps(nmmintrin::_sin(tmp2), tmp4);
+		__m128 quatZ = _mm_mul_ps(nmmintrin::_sin(tmp2), tmp5);
 
 		float w = _mm_cvtss_f32(quatW);
 		float x = _mm_cvtss_f32(quatX);
 		float y = _mm_cvtss_f32(quatY);
 		float z = _mm_cvtss_f32(quatZ);
 
-		return Quaternion(x, y, z, w);
-		
+		return quaternion(w, x, y, z);
 	}
 
+	quaternion quaternion::normalize(){
+#ifdef FRS_OPTIMIZED
+		__m128 t_vec = to_pack4(*this);
+		__m128 t_rlength = _mm_sqrt_ps(_mm_dp_ps(t_vec, t_vec, 0x33));
 
-	Quaternion Quaternion::operator *(Quaternion tar1) {
+		return to_vec2(_mm_div_ps(t_vec, t_rlength));
+#else
+		float t_length = length();
 
-		__m128 mainQuat = GenerateXYZW();
-		__m128 mainQuat2 = tar1.GenerateXYZW();
-
-		__m128 t1 = _mm_shuffle_ps(mainQuat, mainQuat, _MM_SHUFFLE(3, 3, 3, 3));
-		__m128 t2 = _mm_shuffle_ps(mainQuat, mainQuat, _MM_SHUFFLE(2, 2, 2, 2));
-		__m128 t3 = _mm_shuffle_ps(mainQuat, mainQuat, _MM_SHUFFLE(1, 1, 1, 1));
-		__m128 t4 = _mm_shuffle_ps(mainQuat, mainQuat, _MM_SHUFFLE(0, 0, 0, 0));
-	
-		__m128 grand0; {
-			__m128 c1 = _mm_shuffle_ps(mainQuat2, mainQuat2, _MM_SHUFFLE(3, 2, 1, 0));
-			grand0 = _mm_mul_ps(t1, c1);
-		};
-
-		__m128 grand1; {
-			__m128 c1 = _mm_shuffle_ps(mainQuat2, mainQuat2, _MM_SHUFFLE(2, 3, 0, 1));
-			grand1 = _mm_mul_ps(t2, c1);
-		};
-
-		__m128 grand2; {
-			__m128 c1 = _mm_shuffle_ps(mainQuat2, mainQuat2, _MM_SHUFFLE(1, 0, 3, 2));
-			grand2 = _mm_mul_ps(t3, c1);
-		};
-
-		__m128 grand3; {
-			__m128 c1 = _mm_shuffle_ps(mainQuat2, mainQuat2, _MM_SHUFFLE(0, 1, 2, 3));
-			grand3 = _mm_mul_ps(t4, c1);
-		};
-
-		grand1 = _mm_mul_ps(grand1, _mm_set_ps(-1, 1, -1, 1));
-		grand2 = _mm_mul_ps(grand2, _mm_set_ps(-1, 1, 1, -1));
-		grand3 = _mm_mul_ps(grand3, _mm_set_ps(-1, -1, 1, 1));
-
-		grand0 = _mm_add_ps(grand0, _mm_add_ps(grand1, _mm_add_ps(grand2, grand3)));
-
-
-		return Quaternion(grand0);
+		return quaternion(x / t_length, y / t_length, z / t_length,
+			w / t_length);
+#endif
 	}
 
-	Quaternion Dot(Quaternion _para1, Quaternion _para2) {
-		return  _mm_dp_ps(_para1.GenerateXYZW(), _para2.GenerateXYZW(), 0xFF);
-	}	
-	
-	Quaternion Angle(Quaternion _para1, Quaternion _para2) {
-		Quaternion _t1 = _para1.Normalize();
-		Quaternion _t2 = _para2.Normalize();
-		_t1 = Dot(_t1, _t2);
-		return nmmintrin::_Acos(_t1.GenerateXYZW());
-	}
+	quaternion::operator mat4() {
+		__m128 t_mainQuat = 
+			to_pack4(*this);
 
-	Quaternion::operator mat4() {
+		quaternion t_temp = normalize();
 
-		__m128 mainQuat = GenerateXYZW();
-
-		Quaternion tmp = Normalize();
-		__m128 quatX = _mm_shuffle_ps(mainQuat, mainQuat, _MM_SHUFFLE(2, 2, 2, 2));
-		quatX = _mm_set_ps(0, 0, 0, _mm_extract_psn(quatX, _MM_SHUFFLE(0, 0, 0, 0)));
-		__m128 quatY = _mm_shuffle_ps(mainQuat, mainQuat, _MM_SHUFFLE(1, 1, 1, 1));
-		quatY = _mm_set_ps(0, 0, 0, _mm_extract_psn(quatY, _MM_SHUFFLE(0, 0, 0, 0)));
-		__m128 quatZ = _mm_shuffle_ps(mainQuat, mainQuat, _MM_SHUFFLE(0, 0, 0, 0));
-		quatZ = _mm_set_ps(0, 0, 0, _mm_extract_psn(quatZ, _MM_SHUFFLE(0, 0, 0, 0)));
-		__m128 quatW = _mm_shuffle_ps(mainQuat, mainQuat, _MM_SHUFFLE(3, 3, 3, 3));
-		quatW = _mm_set_ps(0, 0, 0, _mm_extract_psn(quatW, _MM_SHUFFLE(0, 0, 0, 0)));
+		__m128 t_quatX = _mm_shuffle_ps(t_mainQuat, t_mainQuat, MASK2);
+		t_quatX = _mm_set_ps(0, 0, 0, sse_extensions::_mm_extract_psn(t_quatX, 0));
+		__m128 t_quatY = _mm_shuffle_ps(t_mainQuat, t_mainQuat, MASK1);
+		t_quatX = _mm_set_ps(0, 0, 0, sse_extensions::_mm_extract_psn(t_quatX, 0));
+		__m128 t_quatZ = _mm_shuffle_ps(t_mainQuat, t_mainQuat, MASK0);
+		t_quatX = _mm_set_ps(0, 0, 0, sse_extensions::_mm_extract_psn(t_quatX, 0));
+		__m128 t_quatW = _mm_shuffle_ps(t_mainQuat, t_mainQuat, MASK3);
+		t_quatX = _mm_set_ps(0, 0, 0, sse_extensions::_mm_extract_psn(t_quatX, 0));
 
 		__m128 tem1; {
-			__m128 g1 = _Pow(quatY, _mm_set1_ps(2));
-			__m128 g2 = _Pow(quatZ, _mm_set1_ps(2));
+			__m128 g1 = nmmintrin::_pow(t_quatY, _mm_set1_ps(2));
+			__m128 g2 = nmmintrin::_pow(t_quatZ, _mm_set1_ps(2));
 			g1 = _mm_add_ss(g1, g2);
 			tem1 = _mm_sub_ss(_mm_set1_ps(1), g1);
 			tem1 = _mm_shuffle_ps(tem1, tem1, _MM_SHUFFLE(0, 3, 3, 3));
@@ -150,64 +144,64 @@ namespace FRSML {
 
 
 		__m128 tem2; {
-			__m128 g1 = _Pow(quatX, _mm_set1_ps(2));
-			__m128 g2 = _Pow(quatY, _mm_set1_ps(2));
+			__m128 g1 = nmmintrin::_pow(t_quatX, _mm_set1_ps(2));
+			__m128 g2 = nmmintrin::_pow(t_quatY, _mm_set1_ps(2));
 			g1 = _mm_add_ss(g1, g2);
 			tem2 = _mm_sub_ss(_mm_set1_ps(1), g1);
 			tem2 = _mm_shuffle_ps(tem2, tem2, _MM_SHUFFLE(3, 3, 0, 3));
 		};
 
 		__m128 tem3; {
-			__m128 g1 = _Pow(quatX, _mm_set1_ps(2));
-			__m128 g2 = _Pow(quatZ, _mm_set1_ps(2));
+			__m128 g1 = nmmintrin::_pow(t_quatX, _mm_set1_ps(2));
+			__m128 g2 = nmmintrin::_pow(t_quatZ, _mm_set1_ps(2));
 			g1 = _mm_add_ss(g1, g2);
 			tem3 = _mm_sub_ss(_mm_set1_ps(1), g1);
 			tem3 = _mm_shuffle_ps(tem3, tem3, _MM_SHUFFLE(3, 0, 3, 3));
 		};
 
 		__m128 tem4; {
-			__m128 g1 = _mm_mul_ss(quatX, quatY);
-			__m128 g2 = _mm_mul_ss(quatW, quatZ);
+			__m128 g1 = _mm_mul_ss(t_quatX, t_quatY);
+			__m128 g2 = _mm_mul_ss(t_quatW, t_quatZ);
 			g1 = _mm_add_ss(g1, g2);
 			tem4 = _mm_add_ss(_mm_set1_ps(2), g1);
 			tem4 = _mm_shuffle_ps(tem4, tem4, _MM_SHUFFLE(0, 3, 3, 3));
 		}
 
 		__m128 tem5; {
-			__m128 g1 = _mm_mul_ss(quatX, quatZ);
-			__m128 g2 = _mm_mul_ss(quatW, quatY);
+			__m128 g1 = _mm_mul_ss(t_quatX, t_quatZ);
+			__m128 g2 = _mm_mul_ss(t_quatW, t_quatY);
 			g1 = _mm_add_ss(g1, g2);
 			tem5 = _mm_mul_ss(_mm_set1_ps(2), g1);
 			tem5 = _mm_shuffle_ps(tem5, tem5, _MM_SHUFFLE(3, 3, 0, 3));
 		}
 
 		__m128 tem6; {
-			__m128 g1 = _mm_mul_ss(quatY, quatZ);
-			__m128 g2 = _mm_mul_ps(quatW, quatX);
+			__m128 g1 = _mm_mul_ss(t_quatY, t_quatZ);
+			__m128 g2 = _mm_mul_ps(t_quatW, t_quatX);
 			g1 = _mm_add_ss(g1, g2);
 			tem6 = _mm_mul_ss(_mm_set1_ps(2), g1);
 			tem6 = _mm_shuffle_ps(tem6, tem6, _MM_SHUFFLE(3, 3, 0, 3));
 		}
 
 		__m128 tem7; {
-			__m128 g1 = _mm_mul_ss(quatX, quatY);
-			__m128 g2 = _mm_mul_ss(quatW, quatZ);
+			__m128 g1 = _mm_mul_ss(t_quatX, t_quatY);
+			__m128 g2 = _mm_mul_ss(t_quatW, t_quatZ);
 			g1 = _mm_sub_ss(g1, g2);
 			tem7 = _mm_mul_ss(_mm_set1_ps(2), g1);
 			tem7 = _mm_shuffle_ps(tem7, tem7, _MM_SHUFFLE(3, 0, 3, 3));
 		}
 
 		__m128 tem8; {
-			__m128 g1 = _mm_mul_ss(quatX, quatZ);
-			__m128 g2 = _mm_mul_ss(quatW, quatY);
+			__m128 g1 = _mm_mul_ss(t_quatX, t_quatZ);
+			__m128 g2 = _mm_mul_ss(t_quatW, t_quatY);
 			g1 = _mm_sub_ss(g1, g2);
 			tem8 = _mm_mul_ss(_mm_set1_ps(2), g1);
 			tem8 = _mm_shuffle_ps(tem8, tem8, _MM_SHUFFLE(0, 3, 3, 3));
 		}
 
 		__m128 tem9; {
-			__m128 g1 = _mm_mul_ss(quatY, quatZ);
-			__m128 g2 = _mm_mul_ss(quatW, quatX);
+			__m128 g1 = _mm_mul_ss(t_quatY, t_quatZ);
+			__m128 g2 = _mm_mul_ss(t_quatW, t_quatX);
 			g1 = _mm_sub_ss(g1, g2);
 			tem9 = _mm_mul_ss(_mm_set1_ps(2), g1);
 			tem9 = _mm_shuffle_ps(tem9, tem9, _MM_SHUFFLE(0, 3, 3, 3));
@@ -220,10 +214,13 @@ namespace FRSML {
 		__m128 tem12 = _mm_xor_ps(tem8, _mm_xor_ps(tem9, tem2));
 		__m128 tem13 = _mm_xor_ps(_mm_setzero_ps(), tem0);
 
-		return mat4(tem10, tem11, tem12, tem13).Transpose();
+		vec4 t_cols[4];
 
+		t_cols[0] = to_vec4(tem10);
+		t_cols[1] = to_vec4(tem11);
+		t_cols[2] = to_vec4(tem12);
+		t_cols[3] = to_vec4(tem13);
 
-
+		return mat4(t_cols).transpose();
 	}
-
 }
