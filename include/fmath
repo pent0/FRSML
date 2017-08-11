@@ -1,6 +1,22 @@
 #pragma once
 
-#include "type.h"
+typedef unsigned char u8;
+typedef unsigned short u16;
+typedef unsigned int u32;
+typedef unsigned long u64;
+
+typedef char int8;
+typedef int int32;
+typedef short int16;
+typedef unsigned long int64;
+
+typedef unsigned int uint32;
+typedef unsigned short uint16;
+typedef unsigned long uint64;
+typedef unsigned char uint8;
+
+typedef unsigned long long size64;
+typedef unsigned int size32;
 
 #ifdef _WIN32
 	#ifdef FRS_EXPORTS
