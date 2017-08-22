@@ -15,7 +15,7 @@ A small linear math library using SSE4 technology and upper.
 
 ```C++
 	
-     #include <FRSML>
+     #include <fmath>
 	
      std::cout << "FRSML Vulkan Math Library ~_^" << std::endl;
 
