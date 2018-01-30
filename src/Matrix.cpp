@@ -1,6 +1,10 @@
+#include <frsml/matrix.h>
+#include <frsml/vector.h>
+#include <frsml/standard.h>
+
 #include "math_internal.h"
 
-namespace frs {
+namespace frsml {
 	mat4::mat4() {
 		cols[0] = vec4::vec4(1, 0, 0, 0);
 		cols[1] = vec4::vec4(0, 1, 0, 0);

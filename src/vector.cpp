@@ -1,3 +1,6 @@
+#include <frsml/vector.h>
+
+#include "sse/sse_standard.h"
 #include "math_internal.h"
 
 namespace frs {

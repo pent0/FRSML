@@ -1,6 +1,8 @@
+#include <frsml/point.h>
+
 #include "math_internal.h"
 
-namespace frs {
+namespace frsml {
 	point::point() : x(0), y(0) {};
 
 	point::point(float p_x, float p_y) : x(p_x), y(p_y) {};

@@ -1,3 +1,6 @@
+#include <frsml/rect.h>
+#include <frsml/point.h>
+
 #include "math_internal.h"
 
 namespace frs {

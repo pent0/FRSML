@@ -4,9 +4,8 @@
 
 #pragma once
 
+#include <frsml/internal.h>
 #include <nmmintrin.h>
-
-#include "..\include\fmath.h"
 
 #ifdef WIN32
 #include <Windows.h>
@@ -36,7 +35,11 @@
 
 #define GET_MASK(p_num) MASK##p_num
 
-namespace frs {
+namespace frsml {
+
+	class vec2;
+	class vec3;
+	class vec4;
 
 	DOUBLE_CONST(1, 1.0f);
 	DOUBLE_CONST(half, 0.5f);

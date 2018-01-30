@@ -1,6 +1,8 @@
+#include <frsml/vector.h>
+
 #include "math_internal.h"
 
-namespace frs {
+namespace frsml {
 	__m128 to_pack4(vec2 p_vec) {
 		return _mm_set_ps(0, 0, p_vec.x, p_vec.y);
 	}
