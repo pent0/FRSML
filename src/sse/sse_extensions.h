@@ -1,6 +1,6 @@
 #pragma once
 
-#include "math_internal.h"
+#include "../math_internal.h"
 
 namespace frs {
 	namespace sse_extensions {

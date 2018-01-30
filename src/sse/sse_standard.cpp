@@ -3,6 +3,43 @@
 
 namespace frsml {
 	namespace nmmintrin {
+
+		__m128 _floor(__m128 p_para) {
+			__m128 one = _mm_set1_ps(1.0f);
+			__m128 t = _mm_cvtepi32_ps(_mm_cvttps_epi32(p_para));
+
+			__m128 r = _mm_sub_ps(t, _mm_and_ps(_mm_cmplt_ps(p_para, t), one));
+
+			return r;
+		}
+
+
+		__m128 _mod(__m128 x, __m128 y) {
+			if (_mm_movemask_ps(_mm_cmpeq_ps(x, y))) {
+				return x;
+			}
+
+			__m128 m = _mm_sub_ps(x, _mm_mul_ps(y, _floor(_mm_div_ps(x, y))));
+
+			if (_mm_movemask_ps(_mm_cmpgt_ps(y, _mm_set1_ps(0)))) {
+				if (_mm_movemask_ps(_mm_cmpge_ps(m, y)))
+					return _mm_set1_ps(0);
+
+				if (_mm_movemask_ps(_mm_cmplt_ps(m, _mm_set1_ps(0))))
+					return _mm_add_ps(y, m);
+			}
+			else {
+				if (_mm_movemask_ps(_mm_cmple_ps(m, y)))
+					return _mm_set1_ps(0);
+
+				if (_mm_movemask_ps(_mm_cmpgt_ps(m, _mm_set1_ps(0))))
+					return _mm_add_ps(y, m);
+			}
+
+			return m;
+		}
+
+
 		__m128i _abs(__m128i p_para) {
 			return _mm_abs_epi32(p_para);
 		}
@@ -58,31 +95,14 @@ namespace frsml {
 		}
 
 		inline __m128 balance_to_pi_distance(__m128 p_para) {
-			__m128 piarr2 = _mm_set1_ps(PI * 2);
-			__m128 piarrsg = _mm_set1_ps(-PI);
-			__m128 piarr = _mm_set1_ps(PI);
-			__m128 piarrd2 = _mm_div_ps(_mm_set1_ps(PI), _mm_set1_ps(2));
-
-			__m128 t3 = p_para; __m128 t4, t5;
-
-			while (_mm_movemask_ps(_mm_cmpgt_ps(t3, piarr))) {
-				t4 = _mm_cmpgt_ps(t3, piarr);
-				t5 = _mm_and_ps(t4, piarr2);
-				t3 = _mm_sub_ps(t3, t5);
-			}
-
-			while (_mm_movemask_ps(_mm_cmplt_ps(t3, piarrsg))) {
-				t4 = _mm_cmplt_ps(t3, piarrsg);
-				t5 = _mm_and_ps(t4, piarr2);
-				t3 = _mm_add_ps(t3, t5);
-			}
-
-			return t3;
+			return _mm_sub_ps(_mod(_mm_add_ps(p_para, _mm_set1_ps(PI)), _mm_set1_ps(PI2)), _mm_set1_ps(PI));
 		}
 
 		inline __m128 _sin(__m128 p_para)
 		{
 			__m128 t0 = balance_to_pi_distance(p_para);
+
+
 			__m128 t1 = _mm_div_ps(_mm_set1_ps(4), _mm_set1_ps(PI));
 			__m128 t2 = _mm_div_ps(_mm_set1_ps(-4), _mm_mul_ps(_mm_set1_ps(PI), _mm_set1_ps(PI)));
 
@@ -98,6 +118,7 @@ namespace frsml {
 
 			return t7;
 		}
+
 
 		inline __m128 _cos(__m128 p_para) {
 			__m128 t1 = _mm_add_ps(p_para, _mm_set1_ps(PID2));
@@ -182,7 +203,7 @@ namespace frsml {
 			__m128 t7 = _mm_cmpgt_ps(_absf(p_x), _absf(p_y));
 			__m128 t8 = _mm_and_ps(t7, _mm_sub_ps(_mm_set1_ps(1.570796327f), t1));
 			__m128 t9 = _mm_and_ps(sse_extensions::_mm_not_ps(t7), t1);
-
+			
 			t1 = _mm_or_ps(t8, t9);
 
 			t7 = _mm_cmplt_ps(p_y, _mm_set1_ps(0));
@@ -325,6 +346,7 @@ namespace frsml {
 
 			return x;
 		}
+	}
 	}
 
 

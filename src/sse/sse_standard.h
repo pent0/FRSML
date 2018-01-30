@@ -14,6 +14,7 @@ namespace frsml {
 		__m128 FRS_MATH_API _sqrtf(__m128 p_num);
 		__m128i FRS_MATH_API _sqrt(__m128i p_num);
 		__m128 FRS_MATH_API _signf(__m128 p_num);
+		__m128 FRS_MATH_API _mod(__m128 x, __m128 y);
 		inline __m128 FRS_MATH_API balance_to_pi_distance(__m128 p_para);
 		inline __m128 FRS_MATH_API _sin(__m128 p_para);
 		inline __m128 FRS_MATH_API _cos(__m128 p_para);

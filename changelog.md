@@ -17,7 +17,7 @@
    - Matrix4 now only has columns value
    - Fix LookAt function
    - Replace the old Sin function with the new one (The reason is because the old function give unpercision result)
-   - Normal math won't be used any SSE because of unnecessary.
+   - Normal math won't use any SSE because of unnecessaries.
    
    Working now : ->-
    

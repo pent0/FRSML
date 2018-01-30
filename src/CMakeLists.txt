@@ -24,7 +24,8 @@ set (SOURCES
 	quat.cpp
 	rect.cpp
 	standard.cpp
-	vector.cpp)
+	vector.cpp
+	noise.cpp)
 
 add_library(FRSML MODULE ${SOURCES} ${HEADERS} ${EXTERNAL_HEADER})
 	
