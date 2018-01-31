@@ -1,33 +1,33 @@
-# FRSML 3.1 Milestone: 3.33% / 100
-   - Add noise functions:  11.1% - Map = 3.33/30%
-		+ Simplex Noise: 0% (Resources?)
-		+ Perlin (1d,2d,3d): 60% - Map = 11.1%/33.3% 
-			* Gradient functions: 10/10%
-				. SSE: 5/5%
-				. Norm: 5/5%
-			* Perlin 3D Functions: 50/50%
-				. SSE: 25/25%
-				. Norm: 25/25%
-			* Perlin 1D, 2D Wrapper: 0/10%
-				. SSE: 0%
-				. Norm: 0%
-			* Interfaces: 0/5%
-			* Seed to permutations: 0%/25% (PNG incomplete)
-		+ Octawaves: 0% (Perlin incompleted)
-   - Add mat2 and mat3 - 0% - Map = 0%/5%
-   - Fast pseudo number generator - 0% - Map = /10%
-   - Smooth damp implementation - 0% - Map = / 5%
-   - Implement NEON optimizations - 0% - Map = / 50%
+# FRSML 3.1 Milestone: **3.33% / 100**
+   - Add noise functions:  **11.1% - Map = 3.33/30%**
+		+ Simplex Noise: **0% (Resources?)**
+		+ Perlin (1d,2d,3d): **60% - Map = 11.1%/33.3%**
+			* Gradient functions: **10/10%**
+				. SSE: **5/5%**
+				. Norm: **5/5%**
+			* Perlin 3D Functions: **50/50%**
+				. SSE: **25/25%**
+				. Norm: **25/25%**
+			* Perlin 1D, 2D Wrapper: **0/10%**
+				. SSE: **0%**
+				. Norm: **0%**
+			* Interfaces: **0/5%**
+			* Seed to permutations: **0%/25%** (PNG incomplete)
+		+ Octawaves: **0%** (Perlin incompleted)
+   - Add mat2 and mat3 - **0% - Map = 0%/5%**
+   - Fast pseudo number generator - **0% - Map = /10%**
+   - Smooth damp implementation - **0% - Map = / 5%**
+   - Implement NEON optimizations - **0% - Map = / 50%**
 
 # FRSML 3.0.3 - 31/1/2018 10:51PM
-	- Correct the lerp, sin functions
-	- Add fade function
-	- Now you can use some functions of the library without optimizations
-		+ To do that, build the project without ticking any optimization option.
-	- Now you can compile the library dynamiclly or static. 
-		+ Compiler will produce two libraries: Once implements specific optimization, once is wrapper
-		+ For example: if you choose FRSML_SSE and dynamiclly build, compiler will produce *frsml_sse.dll* and *frsml.dll*
-		+ But you only have to link frsml.dll to use in your project (frsml_sse is depency)
+   - Correct the lerp, sin functions
+   - Add fade function
+   - Now you can use some functions of the library without optimizations
+	 * To do that, build the project without ticking any optimization option.
+   - Now you can compile the library dynamiclly or static. 
+	 * Compiler will produce two libraries: Once implements specific optimization, once is wrapper
+	 * For example: if you choose FRSML_SSE and dynamiclly build, compiler will produce *frsml_sse.dll* and *frsml.dll*
+	 * But you only have to link frsml.dll to use in your project (frsml_sse is depency)
 	
 # FRSML 3.0.2 - 30/1/2018 6:00PM
    - Last time origanized the header
