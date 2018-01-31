@@ -1,5 +1,5 @@
-#ifndef FRSML_IMPL_SSE_SSE_STANDARD
-#define FRSML_IMPL_SSE_SSE_STANDARD
+#ifndef FRSML_IMPL_SSE_SSE_STANDARD_H
+#define FRSML_IMPL_SSE_SSE_STANDARD_H
 
 #include "../math_internal.h"
 #include "sse_extensions.h"

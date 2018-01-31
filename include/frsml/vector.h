@@ -1,7 +1,7 @@
 #ifndef FRSML_VECTOR_H
 #define FRSML_VECTOR_H
 
-#include <frsml/internal.h>
+#include "internal.h"
 
 namespace frsml {
 
@@ -45,8 +45,8 @@ namespace frsml {
 		inline vec2 operator /(float p_num);
 		inline void operator /= (float p_num);
 
-		inline float length();
-		inline vec2 normalize();
+		inline float length() const;
+		inline vec2 normalize() const;
 
 		static vec2 up;
 		static vec2 down;
@@ -93,8 +93,8 @@ namespace frsml {
 		inline vec3 operator /(float p_num);
 		inline void operator /= (float p_num);
 
-		inline float length();
-		inline vec3 normalize();
+		inline float length() const;
+		inline vec3 normalize() const;
 	};
 
 	struct FRS_MATH_API vec4 : public vec3 {
@@ -136,8 +136,8 @@ namespace frsml {
 		inline vec4 operator /(float p_num);
 		inline void operator /= (float p_num);
 
-		inline float length();
-		inline vec4 normalize();
+		inline float length() const;
+		inline vec4 normalize() const;
 	};
 
 }

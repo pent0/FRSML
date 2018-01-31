@@ -1,14 +1,14 @@
 #ifndef FRSML_STANDARD_H
 #define FRSML_STANDARD_H
 
-#include <frsml/internal.h>
+#include "internal.h"
 
 namespace frsml {
 
-	class vec2;
-	class vec3;
-	class vec4;
-	class mat4;
+	struct vec2;
+	struct vec3;
+	struct vec4;
+	struct mat4;
 
 	vec2 FRS_MATH_API abs(vec2 p_vec);
 	vec3 FRS_MATH_API abs(vec3 p_vec);

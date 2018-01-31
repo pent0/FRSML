@@ -1,10 +1,10 @@
 #ifndef FRSML_NOISE_H
 #define FRSML_NOISE_H
 
-#include <frsml/internal.h>
+#include "internal.h"
 
 namespace frsml {
-	float perlin(float x, float y, float z, const char* seed);
+	float FRS_MATH_API perlin(float x, float y, float z, const char* seed);
 }
 
 #endif

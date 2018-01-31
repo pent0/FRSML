@@ -1,11 +1,11 @@
 #ifndef FRSML_RECT_H
 #define FRSML_RECT_H
 
-#include <frsml/internal.h>
+#include "internal.h"
 
 namespace frsml {
 
-	class point;
+	struct point;
 
 	struct FRS_MATH_API rect {
 		float x, y;

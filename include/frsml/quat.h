@@ -1,12 +1,13 @@
 #ifndef FRSML_QUATERNION_H
 #define FRSML_QUATERNION_H
 
-#include <frsml/internal.h>
-#include <frsml/vector.h>
+#include "internal.h"
+#include "vector.h"
+#include "matrix.h"
 
 namespace frsml {
 	
-	class mat4;
+	struct mat4;
 
 	struct FRS_MATH_API quat: public vec4 {
 		quat();
@@ -14,12 +15,12 @@ namespace frsml {
 
 		quat operator * (quat p_quat);
 
-		quat normalize();
+		quat normalize() const;
 
 		static quat euler(vec3 p_euler);
 		static quat rotate(vec3 p_axis, float p_angle);
 
-		operator mat4();
+		explicit operator frsml::mat4() const;
 	};
 }
 

@@ -1,5 +1,4 @@
-
-- Resources for function
+- Resources 
 
 * https://people.math.sfu.ca/~cbm/aands/abramowitz_and_stegun.pdf
 The Handbook of Mathematical Functions, where Nvidia got all the ref from
@@ -8,6 +7,8 @@ The Handbook of Mathematical Functions, where Nvidia got all the ref from
 Understance how function works and implement things that missing
 
 * http://answers.unity3d.com/questions/24756/formula-behind-smoothdamp.html
-Smooth damp is the thing that i want to understand for very long time
-This is the way Unity implement it. It behaves like a spring.
+Smooth damp 
+
+* http://flafla2.github.io/2014/08/09/perlinnoise.html
+Perlin Noise
 

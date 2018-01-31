@@ -1,8 +1,8 @@
 #ifndef FRSML_MATRIX_H
 #define FRSML_MATRIX_H
 
-#include <frsml/internal.h>
-#include <frsml/vector.h>
+#include "internal.h"
+#include "vector.h"
 
 namespace frsml {
 

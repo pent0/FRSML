@@ -4,21 +4,22 @@ A small linear math library using SSE4.
 
 ## What is FRSML
  
-  + FRSML (FranceSnack Math Library) is a project which targets Vulkan developers (so do I). The library does some linear math, and contains basic class for linear math like Vector3, Matrix4, Quaternion, and so on. All the math are done in SSE4.2, which I can confirm that my library would support Linux and Windows platform. In the feauture, the project may implement a easy way for devs to buffering indices, vertices, ... The library gets to the point where it stable now, but not so good, since many feautures i dream for haven't still been implemented.
+  - FRSML (FranceSnack Math Library) is a project which targets Vulkan developers
+  - The library does some linear math, and contains basic class for linear math like vec3,mat4,quat with fast optimizations.
+  - Works cross-platform
 
- **************************
 
 ## Build project:
 
   + Windows: Using solutions provied
   + Unix:    Clone and build the project using CMake and your favorite compiler.
    
- **************************
-
 ## Using the library
  
-  + Link the library with the project you like, and take all the headers in the include folder to work with.
-  + Detail:
-      - Compile the project and link the library with the porject you want.
-      - You can compile the library as static or dynamic.
+  - Now you can compile the library dynamiclly or static. 
+		+ Compiler will produce two libraries: Once implements specific optimization, once is wrapper
+		+ For example: if you choose FRSML_SSE and dynamiclly build, compiler will produce *frsml_sse.dll* and *frsml.dll*
+		+ But you only have to link frsml.dll to use in your project (frsml_sse is depency)
+
+   - Please include the headers in the include/frsml folder
                      

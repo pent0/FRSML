@@ -120,7 +120,7 @@ namespace frsml {
 		y /= p_num;
 	}
 
-	inline float vec2::length() {
+	inline float vec2::length() const {
 #ifdef FRSML_SSE
 		__m128 t_vec = to_pack4(*this);
 
@@ -130,7 +130,7 @@ namespace frsml {
 #endif
 	}
 
-	inline vec2 vec2::normalize() {
+	inline vec2 vec2::normalize() const {
 #ifdef FRSML_SSE
 		__m128 t_vec = to_pack4(*this);
 		__m128 t_rlength = _mm_sqrt_ps(_mm_dp_ps(t_vec, t_vec, 0x33));
@@ -272,7 +272,7 @@ namespace frsml {
 		z /= p_num;
 	}
 
-	inline float vec3::length() {
+	inline float vec3::length() const {
 #ifdef FRSML_SSE
 		__m128 t_vec = to_pack4(*this);
 
@@ -282,7 +282,7 @@ namespace frsml {
 #endif
 	}
 
-	inline vec3 vec3::normalize() {
+	inline vec3 vec3::normalize() const {
 #ifdef FRSML_SSE
 		__m128 t_vec = to_pack4(*this);
 		__m128 t_rlength = _mm_sqrt_ps(_mm_dp_ps(t_vec, t_vec, 0x33));
@@ -446,7 +446,7 @@ namespace frsml {
 		w /= p_num;
 	}
 
-	inline float vec4::length() {
+	inline float vec4::length() const {
 #ifdef FRSML_SSE
 		__m128 t_vec = to_pack4(*this);
 
@@ -457,7 +457,7 @@ namespace frsml {
 #endif
 	}
 
-	inline vec4 vec4::normalize() {
+	inline vec4 vec4::normalize() const {
 #ifdef FRSML_SSE
 		__m128 t_vec = to_pack4(*this);
 		__m128 t_rlength = _mm_sqrt_ps(_mm_dp_ps(t_vec, t_vec, 0x33));

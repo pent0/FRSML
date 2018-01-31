@@ -48,7 +48,7 @@ namespace frsml {
 			return std::atanf(p_num);
 		}
 
-		float  _atan2(float p_x, float p_y) {
+		float  _atan2(float p_y, float p_x) {
 			return std::atan2f(p_y, p_x);
 		}
 

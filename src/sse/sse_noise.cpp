@@ -36,9 +36,9 @@ namespace frsml {
 				__m128i t12 = _mm_cvtps_epi32(t3);
 				__m128i t13 = _mm_cvtps_epi32(t4);
 
-				__m128i xi = _mm_and_si128(xi, t1r);
-				__m128i yi = _mm_and_si128(yi, t1r);
-				__m128i zi = _mm_and_si128(zi, t1r);
+				__m128i xi = _mm_and_si128(t11, t1r);
+				__m128i yi = _mm_and_si128(t12, t1r);
+				__m128i zi = _mm_and_si128(t13, t1r);
 
 				__m128 xf = _mm_sub_ps(t2, _mm_round_ps(t2, 0x3));
 				__m128 yf = _mm_sub_ps(t3, _mm_round_ps(t3, 0x3));

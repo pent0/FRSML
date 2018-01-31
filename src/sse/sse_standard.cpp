@@ -365,7 +365,4 @@ namespace frsml {
 			return x;
 		}
 	}
-	}
-
-
 }

@@ -51,7 +51,7 @@ namespace frsml {
 	inline mat4 mat4::operator *(mat4 p_mat) {
 		vec4 t_new_cols[4];
 
-#if 1
+#ifdef FRSML_SSE
 
 		__m128 t_col1 = to_pack4(p_mat.cols[0]);
 		__m128 t_col2 = to_pack4(p_mat.cols[1]);
@@ -89,7 +89,7 @@ namespace frsml {
 	}
 
 	long mat4::determinant() {
-#if 1
+#ifdef FRSML_SSE
 		vec4 t_rows[4];
 
 		t_rows[0] = vec4::vec4(cols[0].x, cols[1].x,

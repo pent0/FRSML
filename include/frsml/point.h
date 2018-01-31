@@ -1,7 +1,7 @@
 #ifndef FRSML_POINT_H
 #define FRSML_POINT_H
 
-#include <frsml/internal.h>
+#include "internal.h"
 
 namespace frsml {
 	struct FRS_MATH_API point {

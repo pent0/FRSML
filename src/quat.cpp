@@ -1,6 +1,8 @@
 #include <frsml/quat.h>
 #include <frsml/vector.h>
+#include <frsml/matrix.h>
 
+#include "sse/sse_extensions.h"
 #include "sse/sse_standard.h"
 #include "math_internal.h"
 
@@ -108,7 +110,7 @@ namespace frsml {
 		return quat(w, x, y, z);
 	}
 
-	quat quat::normalize(){
+	quat quat::normalize() const {
 #ifdef FRS_OPTIMIZED
 		__m128 t_vec = to_pack4(*this);
 		__m128 t_rlength = _mm_sqrt_ps(_mm_dp_ps(t_vec, t_vec, 0x33));
@@ -122,7 +124,7 @@ namespace frsml {
 #endif
 	}
 
-	quat::operator mat4() {
+	quat::operator frsml::mat4() const {
 		__m128 t_mainQuat = 
 			to_pack4(*this);
 

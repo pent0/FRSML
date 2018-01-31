@@ -1,9 +1,10 @@
 #include <frsml/rect.h>
 #include <frsml/point.h>
+#include <frsml/standard.h>
 
 #include "math_internal.h"
 
-namespace frs {
+namespace frsml {
 	rect::rect() : x(0), y(0), width(0), height(0) {};
 
 	rect::rect(float p_x, float p_y, float p_width, float p_height) :

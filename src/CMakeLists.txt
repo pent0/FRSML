@@ -1,23 +1,7 @@
-set (HEADER_DIR ${CMAKE_SOURCE_DIR}/include/frsml)
-
-set (EXTERNAL_HEADER
-	${HEADER_DIR}/config.h
-	${HEADER_DIR}/internal.h
-	${HEADER_DIR}/matrix.h
-	${HEADER_DIR}/vector.h
-	${HEADER_DIR}/quat.h
-	${HEADER_DIR}/rect.h
-	${HEADER_DIR}/noise.h
-	${HEADER_DIR}/standard.h)
-
 set (HEADER
-	math_internal.h
-	sse/sse_extensions.h
-	sse/sse_standard.h)
+	math_internal.h)
 
 set (SOURCES 
-	sse/sse_extensions.cpp
-	sse/sse_standard.cpp
 	math_internal.cpp
 	matrix.cpp
 	point.cpp
@@ -27,5 +11,18 @@ set (SOURCES
 	vector.cpp
 	noise.cpp)
 
-add_library(FRSML MODULE ${SOURCES} ${HEADERS} ${EXTERNAL_HEADER})
+add_subdirectory(norm)
+add_subdirectory(sse)
+
+if (DEFINED DYNAMIC_FRSML)
+	add_library(frsml MODULE ${SOURCES} ${HEADERS})
+else()
+	add_library(frsml ${SOURCES} ${HEADERS})
+endif()
+
+if (DEFINED SSE_FRSML)
+	target_link_libraries(frsml frsml_sse)
+else()
+	target_link_libraries(frsml frsml_normal)
+endif()
 	

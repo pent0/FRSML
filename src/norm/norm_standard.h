@@ -1,5 +1,5 @@
-#ifndef FRSML_IMPL_NORM_NORM_STANDARD
-#define FRSML_IMPL_NORM_NORM_STANDARD
+#ifndef FRSML_IMPL_NORM_NORM_STANDARD_H
+#define FRSML_IMPL_NORM_NORM_STANDARD_H
 
 #include "../math_internal.h"
 
@@ -27,7 +27,7 @@ namespace frsml {
 		float  _asin(float p_num);
 		float  _acos(float p_num);
 		float  _atan(float p_num);
-		float  _atan2(float p_x, float p_y);
+		float  _atan2(float p_y, float p_x);
 		float  _sqrt(float p_num);
 
 		float  _fade(float p_num);

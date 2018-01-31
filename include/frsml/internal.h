@@ -1,6 +1,13 @@
 #ifndef FRSML_INTERNAL_H
 #define FRSML_INTERNAL_H
 
+#ifndef FRSML_CONFIG_H
+#define FRSML_CONFIG_H
+
+#include "config.h"
+
+#endif
+
 typedef unsigned char u8;
 typedef unsigned short u16;
 typedef unsigned int u32;
@@ -25,8 +32,8 @@ typedef unsigned int size32;
 #define PISQ 9.86960440108935861883449099987615114f
 
 #ifdef _WIN32
-	#ifdef FRS_DYNAMIC
-		#ifdef FRS_DYNAMIC_EXPORT
+	#ifdef FRSML_DYNAMIC
+		#ifdef FRSML_DYNAMIC_EXPORTS
 			#define FRS_MATH_API __declspec(dllexport)
 		#else
 			#define FRS_MATH_API __declspec(dllimport)

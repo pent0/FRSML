@@ -1,5 +1,5 @@
-#ifndef FRSML_IMPL_SSE_SSE_NOISE
-#define FRSML_IMPL_SSE_SSE_NOISE
+#ifndef FRSML_IMPL_SSE_SSE_NOISE_H
+#define FRSML_IMPL_SSE_SSE_NOISE_H
 
 #include "../math_internal.h"
 

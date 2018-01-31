@@ -1,17 +1,42 @@
-# FRSML 3.1 Milestone 
-   - Add noise functions: Simplex, Perlin (1d,2d,3d) 
-   - Add mat2 and mat3
-   - Smooth damp implementation
-   - Implement AVX and NEON optimizations
+# FRSML 3.1 Milestone: 3.33% / 100
+   - Add noise functions:  11.1% - Map = 3.33/30%
+		+ Simplex Noise: 0% (Resources?)
+		+ Perlin (1d,2d,3d): 60% - Map = 11.1%/33.3% 
+			* Gradient functions: 10/10%
+				. SSE: 5/5%
+				. Norm: 5/5%
+			* Perlin 3D Functions: 50/50%
+				. SSE: 25/25%
+				. Norm: 25/25%
+			* Perlin 1D, 2D Wrapper: 0/10%
+				. SSE: 0%
+				. Norm: 0%
+			* Interfaces: 0/5%
+			* Seed to permutations: 0%/25% (PNG incomplete)
+		+ Octawaves: 0% (Perlin incompleted)
+   - Add mat2 and mat3 - 0% - Map = 0%/5%
+   - Fast pseudo number generator - 0% - Map = /10%
+   - Smooth damp implementation - 0% - Map = / 5%
+   - Implement NEON optimizations - 0% - Map = / 50%
+
+# FRSML 3.0.3 - 31/1/2018 10:51PM
+	- Correct the lerp, sin functions
+	- Add fade function
+	- Now you can use some functions of the library without optimizations
+		+ To do that, build the project without ticking any optimization option.
+	- Now you can compile the library dynamiclly or static. 
+		+ Compiler will produce two libraries: Once implements specific optimization, once is wrapper
+		+ For example: if you choose FRSML_SSE and dynamiclly build, compiler will produce *frsml_sse.dll* and *frsml.dll*
+		+ But you only have to link frsml.dll to use in your project (frsml_sse is depency)
 	
-# FRSML 3.0.2
+# FRSML 3.0.2 - 30/1/2018 6:00PM
    - Last time origanized the header
 
 # THE NEW FRSML 3.0
    - Still compatible with Vulkan and OpenGL, but some new class is in	
 		+ Add a Rectangle and Point struct
-		+ Fixing issues with Matrix4 about the multiplying
-	- Clean the project, rename namespace to lowercase for compatible writing code
+		+ Fix issues with Matrix4 about the multiplying
+	- Clean the project, rename namespace to lowercase
 	- Merge the struct to single file
 	- Remove the PASCAL version 
 
@@ -27,7 +52,7 @@
    
    Working now : ->-
    
-  ![alt tag](https://raw.githubusercontent.com/bentokun/FRSML/master/result_vk.png)
+  ![alt tag](https://raw.githubusercontent.com/bentokun/FRSML/master/RESULT.png)
 
 ## UPDATE:
  
@@ -63,8 +88,6 @@
 		- Will it take the rows or cols value: I dont even know? It's poorly documented
 		- Therefore, i put the cols value public. ~~When i test the uniform (which i lost my precious time because of the math library throw exception that took 5 hours to figure out the error that make fstream fck failed), i will dive into it and can edit the struct.~~ Confirm that it take the public value first.
 		
-		
-	* Also, MSVS 2017 has a really nice logo! ^_^
   
 ### 15/4/2017 ................
   

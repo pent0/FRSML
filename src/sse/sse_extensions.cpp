@@ -1,6 +1,6 @@
 #include "sse_extensions.h"
 
-namespace frs {
+namespace frsml {
 	namespace sse_extensions {
 		float _mm_extract_psn(__m128 p_para, int p_pos) {
 			__m128 t_shuffle;

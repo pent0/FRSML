@@ -2,7 +2,8 @@
 	MATH INTERNAL HEADER
 */
 
-#pragma once
+#ifndef FRSML_IMPL_MATH_INTERNAL_H
+#define FRSML_IMPL_MATH_INTERNAL_H
 
 #include <frsml/internal.h>
 #include <nmmintrin.h>
@@ -37,23 +38,23 @@
 
 namespace frsml {
 
-	class vec2;
-	class vec3;
-	class vec4;
+	struct vec2;
+	struct vec3;
+	struct vec4;
 
 	FLOAT_CONST(1, 1.0f);
 	FLOAT_CONST(half, 0.5f);
 
-	FLOAT_CONST(cephes_log2, 1.44269504088896341);
-	FLOAT_CONST(cephes_c1, 0.693359375);
-	FLOAT_CONST(cephes_c2, -2.12194440e-4);
+	FLOAT_CONST(cephes_log2, 1.44269504088896341f);
+	FLOAT_CONST(cephes_c1, 0.693359375f);
+	FLOAT_CONST(cephes_c2, -2.12194440e-4f);
 
-	FLOAT_CONST(cephes_p0, 1.9875691500E-4);
-	FLOAT_CONST(cephes_p1, 1.3981999507E-3);
-	FLOAT_CONST(cephes_p2, 8.3334519073E-3);
-	FLOAT_CONST(cephes_p3, 4.1665795894E-2);
-	FLOAT_CONST(cephes_p4, 1.6666665459E-1);
-	FLOAT_CONST(cephes_p5, 5.0000001201E-1);
+	FLOAT_CONST(cephes_p0, 1.9875691500E-4f);
+	FLOAT_CONST(cephes_p1, 1.3981999507E-3f);
+	FLOAT_CONST(cephes_p2, 8.3334519073E-3f);
+	FLOAT_CONST(cephes_p3, 4.1665795894E-2f);
+	FLOAT_CONST(cephes_p4, 1.6666665459E-1f);
+	FLOAT_CONST(cephes_p5, 5.0000001201E-1f);
 
 	INT_CONST(min_norm_pos, 0x00800000);
 	INT_CONST(mant_mask, 0x7f800000);
@@ -63,21 +64,21 @@ namespace frsml {
 	INT_CONST(inv_sign_mask, ~0x80000000);
 
 	//The min, max of the exp return
-	FLOAT_CONST(exp_upper, 88.3762626647949);
-	FLOAT_CONST(exp_lower, -88.3762626647949);
+	FLOAT_CONST(exp_upper, 88.3762626647949f);
+	FLOAT_CONST(exp_lower, -88.3762626647949f);
 
-	FLOAT_CONST(cephes_SQRTHF, 0.707106781186547524);
-	FLOAT_CONST(cephes_log_p0, 7.0376836292E-2);
-	FLOAT_CONST(cephes_log_p1, -1.1514610310E-1);
-	FLOAT_CONST(cephes_log_p2, 1.1676998740E-1);
-	FLOAT_CONST(cephes_log_p3, -1.2420140846E-1);
-	FLOAT_CONST(cephes_log_p4, +1.4249322787E-1);
-	FLOAT_CONST(cephes_log_p5, -1.6668057665E-1);
-	FLOAT_CONST(cephes_log_p6, +2.0000714765E-1);
-	FLOAT_CONST(cephes_log_p7, -2.4999993993E-1);
-	FLOAT_CONST(cephes_log_p8, +3.3333331174E-1);
-	FLOAT_CONST(cephes_log_q1, -2.12194440e-4);
-	FLOAT_CONST(cephes_log_q2, 0.693359375);
+	FLOAT_CONST(cephes_SQRTHF, 0.707106781186547524f);
+	FLOAT_CONST(cephes_log_p0, 7.0376836292E-2f);
+	FLOAT_CONST(cephes_log_p1, -1.1514610310E-1f);
+	FLOAT_CONST(cephes_log_p2, 1.1676998740E-1f);
+	FLOAT_CONST(cephes_log_p3, -1.2420140846E-1f);
+	FLOAT_CONST(cephes_log_p4, +1.4249322787E-1f);
+	FLOAT_CONST(cephes_log_p5, -1.6668057665E-1f);
+	FLOAT_CONST(cephes_log_p6, +2.0000714765E-1f);
+	FLOAT_CONST(cephes_log_p7, -2.4999993993E-1f);
+	FLOAT_CONST(cephes_log_p8, +3.3333331174E-1f);
+	FLOAT_CONST(cephes_log_q1, -2.12194440e-4f);
+	FLOAT_CONST(cephes_log_q2, 0.693359375f);
 
 	INT_CONST(triplemask, 0x7f);
 
@@ -93,3 +94,5 @@ namespace frsml {
 	vec4 FRS_MATH_API to_vec4(__m128 p_vec);
 
 }
+
+#endif
