@@ -17,9 +17,9 @@ A small linear math library using SSE4.
 ## Using the library
  
   - Now you can compile the library dynamiclly or static. 
-		+ Compiler will produce two libraries: Once implements specific optimization, once is wrapper
-		+ For example: if you choose FRSML_SSE and dynamiclly build, compiler will produce *frsml_sse.dll* and *frsml.dll*
-		+ But you only have to link frsml.dll to use in your project (frsml_sse is depency)
+	* Compiler will produce two libraries: Once implements specific optimization, once is wrapper
+	* For example: if you choose FRSML_SSE and dynamiclly build, compiler will produce *frsml_sse.dll* and *frsml.dll*
+	* But you only have to link frsml.dll to use in your project (frsml_sse is depency)
 
    - Please include the headers in the include/frsml folder
                      
