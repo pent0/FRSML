@@ -1,4 +1,5 @@
-#pragma once
+#ifndef FRSML_IMPL_SSE_SSE_EXTENSIONS
+#define FRSML_IMPL_SSE_SSE_EXTENSIONS
 
 #include "../math_internal.h"
 
@@ -11,3 +12,4 @@ namespace frs {
 	}
 }
 
+#endif

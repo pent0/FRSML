@@ -94,6 +94,24 @@ namespace frsml {
 			return _mm_mul_ps(f, _mm_set1_ps(-1));
 		}
 
+		__m128 _fade(__m128 x) {
+			__m128 t1 = _pow(x, _mm_set1_ps(3));
+			__m128 t2 = _mm_mul_ps(x, _mm_set1_ps(6));
+			
+			t2 = _mm_sub_ps(t2, _mm_set1_ps(15));
+			t2 = _mm_mul_ps(t2, x);
+			t2 = _mm_add_ps(t2, _mm_set1_ps(10));
+
+			return _mm_mul_ps(t1, t2);
+		}
+
+		__m128 _lerp(__m128 a, __m128 b, __m128 t) {
+			__m128 t1 = _mm_sub_ps(b, a);
+			__m128 t2 = _mm_mul_ps(t, t1);
+
+			return _mm_add_ps(t2, a);
+		}
+
 		inline __m128 balance_to_pi_distance(__m128 p_para) {
 			return _mm_sub_ps(_mod(_mm_add_ps(p_para, _mm_set1_ps(PI)), _mm_set1_ps(PI2)), _mm_set1_ps(PI));
 		}

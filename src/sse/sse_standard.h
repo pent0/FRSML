@@ -1,4 +1,5 @@
-#pragma once
+#ifndef FRSML_IMPL_SSE_SSE_STANDARD
+#define FRSML_IMPL_SSE_SSE_STANDARD
 
 #include "../math_internal.h"
 #include "sse_extensions.h"
@@ -15,6 +16,9 @@ namespace frsml {
 		__m128i FRS_MATH_API _sqrt(__m128i p_num);
 		__m128 FRS_MATH_API _signf(__m128 p_num);
 		__m128 FRS_MATH_API _mod(__m128 x, __m128 y);
+		__m128 FRS_MATH_API _fade(__m128 x);
+		__m128 FRS_MATH_API _lerp(__m128 a, __m128 b, __m128 t);
+
 		inline __m128 FRS_MATH_API balance_to_pi_distance(__m128 p_para);
 		inline __m128 FRS_MATH_API _sin(__m128 p_para);
 		inline __m128 FRS_MATH_API _cos(__m128 p_para);
@@ -29,3 +33,5 @@ namespace frsml {
 		inline __m128 FRS_MATH_API _log(__m128 p_para);
 	}
 }
+
+#endif

@@ -1,6 +1,6 @@
-# FRSML 3.1 Milestone
-   - Change all float type to double, removing limits 
+# FRSML 3.1 Milestone 
    - Add noise functions: Simplex, Perlin (1d,2d,3d) 
+   - Add mat2 and mat3
    - Smooth damp implementation
    - Implement AVX and NEON optimizations
 	

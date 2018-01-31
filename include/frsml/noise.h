@@ -4,7 +4,7 @@
 #include <frsml/internal.h>
 
 namespace frsml {
-	float perlin(float x, float y, float z);
+	float perlin(float x, float y, float z, const char* seed);
 }
 
 #endif

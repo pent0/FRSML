@@ -1,4 +1,5 @@
 #include <frsml/standard.h>
+#include <frsml/vector.h>
 
 #include "sse/sse_standard.h"
 
@@ -19,9 +20,7 @@ namespace frsml {
 	}
 
 	float log(float x, float base) {
-		return _mm_cvtss_f32(
-			_mm_div_ps(nmmintrin::_exp(_mm_set1_ps(x))
-				, nmmintrin::_log(_mm_set1_ps(base))));
+		return exp(x) / log(base);
 	}
 
 	float pow(float x, float y) {
@@ -68,6 +67,11 @@ namespace frsml {
 	float cot(float p_num) {
 		return _mm_cvtss_f32(nmmintrin::_cot(_mm_set1_ps(p_num)));
 	}
+
+	float fade(float p_num) {
+		return pow(p_num, 3) * (p_num * (p_num * 6 - 15) + 10);
+	}
+
 
 	void sin_cos(float p_x, float* p_s, float* p_c) {
 		__m128 t_both = _mm_set_ps(0, 0, p_x + PID2, p_x);

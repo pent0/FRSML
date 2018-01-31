@@ -1,9 +1,10 @@
 #include <frsml/vector.h>
+#include <frsml/standard.h>
 
 #include "sse/sse_standard.h"
 #include "math_internal.h"
 
-namespace frs {
+namespace frsml {
 
 	vec2 vec2::up = vec2(0, 1);
 	vec2 vec2::down = vec2(0, -1);
@@ -120,7 +121,7 @@ namespace frs {
 	}
 
 	inline float vec2::length() {
-#ifdef FRS_OPTIMIZED
+#ifdef FRSML_SSE
 		__m128 t_vec = to_pack4(*this);
 
 		return _mm_cvtss_f32(_mm_sqrt_ss(_mm_dp_ps(t_vec, t_vec, 0x31)));
@@ -130,7 +131,7 @@ namespace frs {
 	}
 
 	inline vec2 vec2::normalize() {
-#ifdef FRS_OPTIMIZED
+#ifdef FRSML_SSE
 		__m128 t_vec = to_pack4(*this);
 		__m128 t_rlength = _mm_sqrt_ps(_mm_dp_ps(t_vec, t_vec, 0x33));
 
@@ -272,7 +273,7 @@ namespace frs {
 	}
 
 	inline float vec3::length() {
-#ifdef FRS_OPTIMIZED
+#ifdef FRSML_SSE
 		__m128 t_vec = to_pack4(*this);
 
 		return _mm_cvtss_f32(_mm_sqrt_ss(_mm_dp_ps(t_vec, t_vec, 0x31)));
@@ -282,7 +283,7 @@ namespace frs {
 	}
 
 	inline vec3 vec3::normalize() {
-#ifdef FRS_OPTIMIZED
+#ifdef FRSML_SSE
 		__m128 t_vec = to_pack4(*this);
 		__m128 t_rlength = _mm_sqrt_ps(_mm_dp_ps(t_vec, t_vec, 0x33));
 
@@ -446,7 +447,7 @@ namespace frs {
 	}
 
 	inline float vec4::length() {
-#ifdef FRS_OPTIMIZED
+#ifdef FRSML_SSE
 		__m128 t_vec = to_pack4(*this);
 
 		return _mm_cvtss_f32(_mm_sqrt_ss(_mm_dp_ps(t_vec, t_vec, 0x31)));
@@ -457,7 +458,7 @@ namespace frs {
 	}
 
 	inline vec4 vec4::normalize() {
-#ifdef FRS_OPTIMIZED
+#ifdef FRSML_SSE
 		__m128 t_vec = to_pack4(*this);
 		__m128 t_rlength = _mm_sqrt_ps(_mm_dp_ps(t_vec, t_vec, 0x33));
 

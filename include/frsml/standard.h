@@ -59,6 +59,8 @@ namespace frsml {
 	float FRS_MATH_API minf(float p_num, float p_num1);
 	float FRS_MATH_API sqrt(float p_num);
 
+	float FRS_MATH_API fade(float p_num);
+
 	mat4 FRS_MATH_API  perspective_matrix(float p_zoom,
 		vec2 p_extent, float p_zNear, float p_zFar);
 
