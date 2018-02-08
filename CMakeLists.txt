@@ -18,6 +18,8 @@ else()
     detect_architecture("__x86_64__" x86_64)
     detect_architecture("__i386__" x86)
     detect_architecture("__arm__" ARM)
+    
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -msse4.1")
 endif()
 
 if (NOT DEFINED ARCHITECTURE)
