@@ -19,6 +19,18 @@
    - Smooth damp implementation - **0% - Map = / 5%**
    - Implement NEON optimizations - **0% - Map = / 50%**
 
+# FRSML 3.0.4 Milestone: **28%/100%**
+   - Implement non-optimization methods:
+		+ Matrix: **70%/100% - Map = 28%/40%**
+		+ Quaternion: **0/100% - Map = 0/50%**
+
+	- CMake for users: 0/10%
+		+ Add FindFRSML.cmake module: 0/5%
+		+ Add SSE flag: 0/5%
+
+# FRSML 3.0.3.1 -8/2/2018 11:08PM
+   - Correct non-optimization functions (some compiler gives error about **x**f not presented)
+
 # FRSML 3.0.3 - 31/1/2018 10:51PM
    - Correct the lerp, sin functions
    - Add fade function

@@ -102,7 +102,7 @@ namespace frsml {
 
 	float cot(float p_num) {
 #ifdef FRSML_SSE
-		return _mm_cvtss_f32(nmmintrin::_cot(_mm_set1_ps(p_num)))
+		return _mm_cvtss_f32(nmmintrin::_cot(_mm_set1_ps(p_num)));
 #else
 		return 1 / tan(p_num);
 #endif
@@ -135,7 +135,7 @@ namespace frsml {
 #ifdef FRSML_SSE
 		return _mm_cvtss_f32(nmmintrin::_asin(_mm_set1_ps(p_num)));
 #else
-		return norm::asin(p_num);
+		return norm::_asin(p_num);
 #endif
 	}
 
@@ -143,7 +143,7 @@ namespace frsml {
 #ifdef FRSML_SSE
 		return _mm_cvtss_f32(nmmintrin::_acos(_mm_set1_ps(p_num)));
 #else
-		return norm::acos(p_num);
+		return norm::_acos(p_num);
 #endif
 	}
 
@@ -151,7 +151,7 @@ namespace frsml {
 #ifdef FRSML_SSE
 		return _mm_cvtss_f32(nmmintrin::_atan(_mm_set1_ps(p_num)));
 #else
-		return norm::atan(p_num);
+		return norm::_atan(p_num);
 #endif
 	}
 
@@ -159,7 +159,7 @@ namespace frsml {
 #ifdef FRSML_SSE
 		return _mm_cvtss_f32(nmmintrin::_atan2(_mm_set1_ps(p_y), _mm_set1_ps(p_x)));
 #else
-		return norm::atan2(p_y, p_x);
+		return norm::_atan2(p_y, p_x);
 #endif
 	}
 
@@ -175,7 +175,7 @@ namespace frsml {
 #ifdef FRSML_SSE
 		return _mm_cvtss_f32(nmmintrin::_sqrtf(_mm_set1_ps(p_num)));
 #else
-		return norm::sqrt(p_num);
+		return norm::_sqrt(p_num);
 #endif
 	}
 

@@ -5,11 +5,11 @@
 namespace frsml {
 	namespace norm {
 		float  _exp(float x) {
-			return std::expf(x);
+			return std::exp(x);
 		}
 
 		float  _log(float x) {
-			return std::logf(x);
+			return std::log(x);
 		}
 
 		float  _log2(float x) {
@@ -25,35 +25,35 @@ namespace frsml {
 		}
 
 		float  _sin(float p_num) {
-			return std::sinf(p_num);
+			return std::sin(p_num);
 		}
 
 		float  _cos(float p_num) {
-			return std::cosf(p_num);
+			return std::cos(p_num);
 		}
 
 		float  _tan(float p_num) {
-			return std::tanf(p_num);
+			return std::tan(p_num);
 		}
 
 		float  _asin(float p_num) {
-			return std::asinf(p_num);
+			return std::asin(p_num);
 		}
 
 		float  _acos(float p_num) {
-			return std::acosf(p_num);
+			return std::acos(p_num);
 		}
 
 		float  _atan(float p_num) {
-			return std::atanf(p_num);
+			return std::atan(p_num);
 		}
 
 		float  _atan2(float p_y, float p_x) {
-			return std::atan2f(p_y, p_x);
+			return std::atan2(p_y, p_x);
 		}
 
 		float  _sqrt(float p_num) {
-			return std::sqrtf(p_num);
+			return std::sqrt(p_num);
 		}
 
 		float  _fade(float p_num) {

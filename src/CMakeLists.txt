@@ -14,13 +14,13 @@ set (SOURCES
 add_subdirectory(norm)
 add_subdirectory(sse)
 
-if (DEFINED DYNAMIC_FRSML)
+if (DYNAMIC_FRSML)
 	add_library(frsml MODULE ${SOURCES} ${HEADERS})
 else()
 	add_library(frsml ${SOURCES} ${HEADERS})
 endif()
 
-if (DEFINED SSE_FRSML)
+if (SSE_FRSML)
 	target_link_libraries(frsml frsml_sse)
 else()
 	target_link_libraries(frsml frsml_normal)
